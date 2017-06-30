@@ -20,16 +20,15 @@ class CreateMusicsTable extends Migration
 			$table->string('slug');
 			$table->string('name');
 			$table->string('image');
-			$table->tinyInteger('featured');
+			$table->boolean('featured')->featured(false);
 			$table->text('description');
 			$table->string('size');
 			$table->integer('user_id');
 			$table->integer('artist_id');
 			$table->integer('category_id');
-			$table->integer('views');
-			$table->integer('play');
-			$table->integer('download');
-			$table->boolean('publish');
+			$table->integer('play')->default(0);;
+			$table->integer('download')->default(0);
+			$table->boolean('publish')->default(false);
 			$table->timestamps();
 		});
 	}

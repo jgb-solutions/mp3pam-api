@@ -78,6 +78,11 @@ class Music extends Model
 		return TKPM::route('music.get', ['music' => $this->id]);
 	}
 
+	public function artist()
+	{
+		return $this->belongsTo(Artist::class);
+	}
+
 	// // TNTSearch
 	// public static function insertToIndex($mp3)
 	// {
