@@ -16,5 +16,12 @@ class DatabaseSeeder extends Seeder
 
 		$this->call(CategoriesTableSeeder::class);
 		$this->command->info('Categories table seeded!');
+
+		$this->call(ArtistsTableSeeder::class);
+		$this->command->info('Artists table seeded!');
+
+		$this->call(MusicsTableSeeder::class);
+		$this->command->info('Musics table seeded!');
+
 	}
 }

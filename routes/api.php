@@ -11,6 +11,21 @@ group(['prefix' => 'v1'], function()
 	get('/user/{user}', 'MusicController@sayHello');
 	get('/users', 'UsersController@index');
 
+	// Musics routes
+	get('musics', ['as' => 'music','uses' => 'MusicController@index']);
+	get('musics/{id}',['as' => 'music.show','uses' => 'MusicController@show']);
+	get('music/{music}/modifye',['as' => 'music.edit','uses' => 'MusicController@edit']);
+	put('music/{music}/modifye',['as' => 'music.update','uses' => 'MusicController@update']);
+	post('music/{id}/imel-twit',['as' => 'music.emailAndTweet','uses' => 'MusicController@emailAndTweet']);
+	get('telechaje/music/{music}', ['as' => 'music.get','uses' => 'MusicController@getMusic']);
+	del('efase/music/{music}', ['as' => 'music.delete','uses' => 'MusicController@destroy']);
+	get('mete/music', ['as' => 'music.upload','uses' => 'MusicController@upload']);
+	get('jwe/music/{music}', ['as' => 'music.play','uses' => 'MusicController@play']);
+	get('achte/music', ['as' => 'buy.list', 'uses' => 'MusicController@listBuy']);
+	get('achte/music/{music}', ['as' => 'buy.show', 'uses' => 'MusicController@getBuy']);
+	post('achte/music/{music}', ['as' => 'buy.post','uses' => 'MusicController@postBuy']);
+	post('mete/music', ['as' => 'music.store', 'uses' => 'MusicController@store']);
+
 	// Pages
 	// get('/', ['as'=>'home','uses'=>'PagesController@index']);
 	// get('dekouvri', ['as'=>'discover','uses'=>'PagesController@discover']);
@@ -81,30 +96,6 @@ group(['prefix' => 'v1'], function()
 	// 	get('{slug}/videyo', [	'as' => 'cat.video','uses' => 'CategoryController@videos']);
 	// });
 
-	// // Musics routes
-	// get('mizik', ['as' => 'music','uses' => 'MusicController@index']);
-	// get('mizik/{music}/modifye',['as' => 'music.edit','uses' => 'MusicController@edit']);
-	// put('mizik/{music}/modifye',['as' => 'music.update','uses' => 'MusicController@update']);
-	// post('mizik/{id}/imel-twit',['as' => 'music.emailAndTweet','uses' => 'MusicController@emailAndTweet']);
-	// get('mizik/{id}/{slug?}',['as' => 'music.show','uses' => 'MusicController@show']);
-	// get('telechaje/mizik/{music}', ['as' => 'music.get','uses' => 'MusicController@getMusic']);
-	// delete('efase/mizik/{music}', ['as' => 'music.delete','uses' => 'MusicController@destroy']);
-	// get('mete/mizik', ['as' => 'music.upload','uses' => 'MusicController@upload']);
-	// get('jwe/mizik/{music}', ['as' => 'music.play','uses' => 'MusicController@play']);
-	// get('achte/mizik', ['as' => 'buy.list', 'uses' => 'MusicController@listBuy']);
-	// get('achte/mizik/{music}', ['as' => 'buy.show', 'uses' => 'MusicController@getBuy']);
-	// post('achte/mizik/{music}', ['as' => 'buy.post','uses' => 'MusicController@postBuy']);
-	// post('mete/mizik', ['as' => 'music.store', 'uses' => 'MusicController@store']);
-
-	// // Video routes
-	// get('videyo', ['as' => 'video','uses' => 'VideoController@index']);
-	// get('videyo/{video}/modifye',['as' => 'video.edit','uses' => 'VideoController@edit']);
-	// put('videyo/{video}/modifye',['as' => 'video.update','uses' => 'VideoController@update']);
-	// get('videyo/{id}/{slug?}', ['as' => 'video.show','uses' => 'VideoController@show']);
-	// get('telechaje/videyo/{id}', ['as' => 'video.get','uses' => 'VideoController@getVideo']);
-	// delete('efase/videyo/{video}', ['as' => 'video.delete','uses' => 'VideoController@destroy']);
-	// get('mete/videyo', ['as' => 'video.upload','uses' => 'VideoController@upload']);
-	// post('videyo', ['as' => 'video.store','uses' => 'VideoController@store']);
 
 	// // Admin routes
 	// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {

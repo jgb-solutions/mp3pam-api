@@ -7,7 +7,6 @@ use Auth;
 use Mail;
 use Swap;
 use Image;
-use Image;
 use Cache;
 use getID3;
 use Twitter;
@@ -200,13 +199,13 @@ class MP3Pam
 		return $html;
 	}
 
-	public static function image($in, $width = null, $height = null, $out)
-	{
-		Image::make(storage_path('app/public/tkpmizik-data/images/' . $in))
-			->resize($width, $height, function($constraint) {
-				$constraint->aspectratio();
-			})->save(storage_path("app/public/tkpmizik-data/images/$out/" . $in));
-	}
+	// public static function image($in, $width = null, $height = null, $out)
+	// {
+	// 	Image::make(storage_path('app/public/tkpmizik-data/images/' . $in))
+	// 		->resize($width, $height, function($constraint) {
+	// 			$constraint->aspectratio();
+	// 		})->save(storage_path("app/public/tkpmizik-data/images/$out/" . $in));
+	// }
 
 	public static function size($size, $round = 2)
 	{
@@ -387,15 +386,6 @@ class MP3Pam
 		return explode(' ', $name)[0];
 	}
 
-	public static function profileLink($username = null, $id = null )
-	{
-		if ($username) {
-			return route('user.public', ['username'=>$username]);
-		} else {
-			return route('user.public', ['id'=>$id]);
-		}
-	}
-
 	public static function tweet($obj, $type)
 	{
 		if ( $type === 'music' ) {
@@ -409,47 +399,10 @@ class MP3Pam
 		$status .= "$author $obj->title " . $obj->url .
 					" via @TKPMizik @TiKwenPam #" . $obj->category->slug;
 
-        	Twitter::postTweet([
-        		'status' => $status,
-        		'format' => 'json'
-        	]);
-	}
-
-	public static function asset($asset, $size = 'null')
-	{
-		$imgSize = [
-			'thumbs' 	=> config('site.image_upload_path') .'/thumbs/',
-			'images' 	=> config('site.image_upload_path') .'/',
-			'show'  		=> config('site.image_upload_path') .'/show/',
-			'tiny' 		=> config('site.image_upload_path') .'/thumbs/tiny/',
-			'profile' 	=> config('site.image_upload_path') .'/thumbs/profile/',
-			'null'		=> ''
-		];
-
-		$relativeUrl = $imgSize[$size] . $asset;
-
-		// if ( App::isLocal() ) {
-		// 	return asset($relativeUrl);
-		// } elseif (App::environment() == 'staging') {
-		// 	return asset($relativeUrl);
-		// }
-		if (App::environment('local', 'staging')) {
-			return asset($relativeUrl);
-		}
-
-		$cdnUrl = 'https://cdn.tkpmizik.com/';
-		// $cdnUrl = 'https://tkpmizik.com/';
-
-		return url($cdnUrl . $relativeUrl);
-	}
-
-	public static function route($path, $params = [])
-	{
-		if (App::environment('local', 'staging')) {
-			return url(route($path, $params));
-		}
-
-		return secure_url(route($path, $params, false));
+	        	Twitter::postTweet([
+	        		'status' => $status,
+	        		'format' => 'json'
+	        	]);
 	}
 
 	public static function profileImage($user)

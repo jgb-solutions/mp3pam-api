@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use HP, Storage;
 // use App\Traits\HaitiProjetTrait;
 use Illuminate\Database\Eloquent\Model;
+
+use HP, Storage;
 
 class Project extends Model
 {

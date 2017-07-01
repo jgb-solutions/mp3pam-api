@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\User;
+use App\Models\Artist;
+use App\Models\Music;
+use App\Models\Category;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -24,18 +29,20 @@
 // 	];
 // });
 
-$factory->define(App\Models\Music::class, function (Faker\Generator $faker) {
-	$admin = App\Models\User::whereAdmin(1)->first();
+$factory->define(Music::class, function (Faker\Generator $faker)
+{
+	$admin = User::whereAdmin(1)->first();
 	$name = $faker->name;
 
 	return [
 		'title'			=> $name,
 		'slug' 			=> str_slug($name),
 		'description' 	=> $faker->realText(500),
+		'size' 			=> rand(10000,99999),
 		'name' 		=> 'placeholder-music.mp3',
 		'image' 		=> 'placeholder-image.jpg',
 		'user_id' 		=> $admin->id,
-		'artist_id'		=> App\Models\Artist::first()->id,
-		'category_id' 	=> App\Models\Category::first()->id,
+		'artist_id'		=> Artist::first()->id,
+		'category_id' 	=> Category::first()->id,
 	];
 });

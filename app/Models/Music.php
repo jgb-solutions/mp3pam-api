@@ -1,30 +1,25 @@
 <?php
 
 namespace App\Models;
-// use Illuminate\Database\Eloquent\Model;
 
-// use TNTSearch;
-use TKPM;
-use App\Traits\MP34Trait;
+use Illuminate\Database\Eloquent\Model;
+use App\Helpers\MP3Pam;
 
 class Music extends Model
 {
-	use MP34Trait;
-
-	protected $table = 'mp3s';
-
-	protected $appends = [
-		'url',
-		'title',
-		'mp3',
-		'poster',
-		'download_url',
-		'emailAndTweetUrl'
-	];
+	// protected $appends = [
+	// 	'url',
+	// 	'title',
+	// 	'mp3',
+	// 	'poster',
+	// 	'download_url',
+	// 	'emailAndTweetUrl'
+	// ];
+	// protected $with = ['user'];
 
 	protected $fillable = [
+		'title',
 		'name',
-		'mp3name',
 		'image',
 		'user_id',
 		'description',
@@ -32,6 +27,84 @@ class Music extends Model
 		'size',
 		'slug'
 	];
+
+	// public function artist()
+	// {
+	// 	return $this->belongsTo(Artist::class);
+	// }
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+
+	public function artist()
+	{
+		return $this->belongsTo(Artist::class);
+	}
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
+	}
+
+	public function scopeSearch($query, $ids, $term)
+	{
+		// $query->whereIn('id', $ids)
+		$query
+			->where('name', 'like', "%$term%")
+			->orWhere('artist', 'like', "%$term%")
+			->orderBy('download', 'desc')
+			->orderBy('views', 'desc')
+			->take(20);
+	}
+
+	public function scopeRand($query)
+	{
+		$query->orderByRaw('RAND()');
+	}
+
+	public function scopeRelated($query, $obj, $nb_rows = 6)
+	{
+		$query
+			->whereCategoryId($obj->category_id)
+			->where('id', '!=', $obj->id)
+			->orderByRaw('RAND()') // get random rows from the DB
+			->take($nb_rows);
+	}
+
+	public function scopeLastMonth($query)
+	{
+		$today = Carbon::today();
+		$lastMonth = Carbon::today()->subMonth();
+
+		$query
+			->where('created_at',  '<',  $today)
+			->where('created_at', '>', $lastMonth);
+	}
+
+	public function scopePopular($query)
+	{
+		$query
+			->orderBy('download', 'desc')
+			->orderBy('views', 'desc');
+	}
+
+	public function getTitleAttribute()
+	{
+		$separator = $this->artist ? ' - ' : '';
+		return $this->artist . $separator . $this->name;
+	}
+
+	public function scopeFeatured($query)
+	{
+		$query->whereFeatured(1);
+	}
+
+	public function getEmailAndTweetUrlAttribute()
+	{
+		return MP3Pam::route('music.emailAndTweet', ['id'=>$this->id]);
+	}
 
 	public function scopePublished($query)
 	{
@@ -50,12 +123,12 @@ class Music extends Model
 
 	public function getUrlAttribute()
 	{
-		return TKPM::route('music.show', ['id' => $this->id,'name' => $this->slug ]);
+		return MP3Pam::route('music.show', ['id' => $this->id,'name' => $this->slug ]);
 	}
 
 	public function getMp3Attribute()
 	{
-		return TKPM::route('music.play', ['id' => $this->id]);
+		return MP3Pam::route('music.play', ['id' => $this->id]);
 	}
 
 	public function getPosterAttribute()
@@ -65,23 +138,19 @@ class Music extends Model
 
 	public function getImageUrlAttribute()
 	{
-		return url(TKPM::asset($this->image, 'show'));
+		return url(MP3Pam::asset($this->image, 'show'));
 	}
 
 	public function scopeUrl()
 	{
-		return TKPM::route('music.show', ['id' => $this->id, 'slug' => $this->slug]);
+		return MP3Pam::route('music.show', ['id' => $this->id, 'slug' => $this->slug]);
 	}
 
 	public function getDownloadUrlAttribute()
 	{
-		return TKPM::route('music.get', ['music' => $this->id]);
+		return MP3Pam::route('music.get', ['music' => $this->id]);
 	}
 
-	public function artist()
-	{
-		return $this->belongsTo(Artist::class);
-	}
 
 	// // TNTSearch
 	// public static function insertToIndex($mp3)

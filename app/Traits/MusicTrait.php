@@ -2,26 +2,31 @@
 
 namespace App\Traits;
 
-use TKPM;
+use App\Helpers\MP3Pam;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Music;
-use App\Models\Video;
+use App\Models\Artist;
 use App\Models\Category;
 
-trait MP34Trait
+trait MusicTrait
 {
-   public function user()
- 	{
-    	return $this->belongsTo(User::class);
- 	}
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
- 	public function category()
- 	{
-   	return $this->belongsTo(Category::class);
- 	}
+	public function artist()
+	{
+		return $this->belongsTo(Artist::class);
+	}
 
-   public function scopeSearch($query, $ids, $term)
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
+	}
+
+	public function scopeSearch($query, $ids, $term)
 	{
 		// $query->whereIn('id', $ids)
 		$query
@@ -76,6 +81,6 @@ trait MP34Trait
 
 	public function getEmailAndTweetUrlAttribute()
 	{
-		return TKPM::route('music.emailAndTweet', ['id'=>$this->id]);
+		return MP3Pam::route('music.emailAndTweet', ['id'=>$this->id]);
 	}
 }

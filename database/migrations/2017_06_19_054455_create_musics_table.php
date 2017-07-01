@@ -20,13 +20,13 @@ class CreateMusicsTable extends Migration
 			$table->string('slug');
 			$table->string('name');
 			$table->string('image');
-			$table->boolean('featured')->featured(false);
+			$table->boolean('featured')->default(false);
 			$table->text('description');
 			$table->string('size');
 			$table->integer('user_id');
 			$table->integer('artist_id');
 			$table->integer('category_id');
-			$table->integer('play')->default(0);;
+			$table->integer('play')->default(0);
 			$table->integer('download')->default(0);
 			$table->boolean('publish')->default(false);
 			$table->timestamps();

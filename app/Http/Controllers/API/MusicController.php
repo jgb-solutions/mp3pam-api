@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App;
 use Str;
 use Auth;
-use TKPM;
+use tk;
 use Cache;
 use Storage;
 use App\Models\User;
@@ -46,12 +46,12 @@ class MusicController extends Controller
 
 	public function index()
 	{
-		$data = [
-			'musics'	=> Music::remember(120)->latest()->published()->paginate(12),
-			// 'musics'	=> Music::latest()->published()->paginate(10),
-		];
+		// $data = [
+		// 	// 'musics'	=> Music::remember(120)->latest()->published()->paginate(12),
+		// 	'musics'	=> Music::latest()->published()->paginate(10),
+		// ];
 
-		return view('music.index', $data);
+		return Music::latest()->paginate(10);
 	}
 
 	public function listBuy()
@@ -245,40 +245,40 @@ class MusicController extends Controller
 	{
 		$key = '_music_show_' . $id;
 
-		$data = Cache::rememberForever($key, function() use ($id, $key) {
-			$music = Music::with('user', 'category')->findOrFail($id);
+		// $data = Cache::rememberForever($key, function() use ($id, $key) {
+			$music = Music::findOrFail($id);
 
-			if ($music->price == 'paid' && $music->publish) {
-				return redirect(route('buy.show', [
-					'id' => $music->id,
-					'slug' => $music->slug
-				]));
-			}
+			// if ($music->price == 'paid' && $music->publish) {
+			// 	return redirect(route('buy.show', [
+			// 		'id' => $music->id,
+			// 		'slug' => $music->slug
+			// 	]));
+			// }
 
-			if ($music->price == 'paid' && ! $music->publish) {
-				if (! Auth::check()) {
-					return redirect(route('login') );
-				}
+			// if ($music->price == 'paid' && ! $music->publish) {
+			// 	if (! Auth::check()) {
+			// 		return redirect(route('login') );
+			// 	}
 
-				if (Auth::check() && Auth::user()->owns($music)) {
-					return redirect(route('music.edit', $music->id));
-				}
-			}
+			// 	if (Auth::check() && Auth::user()->owns($music)) {
+			// 		return redirect(route('music.edit', $music->id));
+			// 	}
+			// }
 
 			// $music->views += 1;
 			// $music->save();
 
 			$related = Music::related($music)
-							->published()
-							->get(['id', 'name', 'image', 'play', 'download', 'views', 'slug']);
+				->published()
+				->get(['id', 'name', 'image', 'play', 'download', 'slug']);
 			// return $related;
 
-			$author = $music->user->username ? '@' . $music->user->username . ' &mdash;' : $music->user->name . ' &mdash; ';
+			// $author = $music->user->username;
 
 			$data = [
 				'music' 	=> $music,
 				'related' => $related,
-				'author'	=> $author,
+				// 'author'	=> $author,
 				'playlists' => []
 			];
 
@@ -289,10 +289,10 @@ class MusicController extends Controller
 				$data['playlists'] = $user->playlists;
 			}
 
-			return $data;
-		});
+		// 	return $data;
+		// });
 
-		return view('music.show', $data);
+		return $data;
 	}
 
 	public function edit(Music $music)

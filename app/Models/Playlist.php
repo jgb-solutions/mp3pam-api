@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 use TKPM;
 use Illuminate\Support\Collection;
 

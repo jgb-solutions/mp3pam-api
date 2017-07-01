@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\User;
+use App\Models\Artist;
 use Illuminate\Database\Seeder;
 
 class ArtistsTableSeeder extends Seeder
 {
 	public function run()
 	{
-		DB::table('users')->delete();
+		DB::table('artists')->delete();
 
 		$artists = [
 			[
