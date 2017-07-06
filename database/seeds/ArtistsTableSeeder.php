@@ -11,9 +11,9 @@ class ArtistsTableSeeder extends Seeder
 
 		$artists = [
 			[
-			  	'name' => '',
-				'stageName' => '',
-				'username' => '',
+			  	'name' => 'Daniel Darinus',
+				'stageName' => 'Fantom Tapajè',
+				'hash' => '',
 				'avatar' => '',
 				'bio' => '',
 			],

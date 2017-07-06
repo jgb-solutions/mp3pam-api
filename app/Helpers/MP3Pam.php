@@ -415,4 +415,13 @@ class MP3Pam
 			return TKPM::asset(config('site.logo'));
 		}
 	}
+
+	public static function getHash($model)
+	{
+		do {
+			$hash = rand(00000000, 99999999);
+		} while ( $model::whereHash($hash)->first() );
+
+		return $hash;
+	}
 }

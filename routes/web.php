@@ -10,7 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-	return view('pages.home');
+use App\Models\Artist;
+get('/', function () {
+	// return view('pages.home');
+	return App\Helpers\MP3Pam::getHash(Artist::class);
 });
+

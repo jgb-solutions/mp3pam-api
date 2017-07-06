@@ -90,12 +90,6 @@ class Music extends Model
 			->orderBy('views', 'desc');
 	}
 
-	public function getTitleAttribute()
-	{
-		$separator = $this->artist ? ' - ' : '';
-		return $this->artist . $separator . $this->name;
-	}
-
 	public function scopeFeatured($query)
 	{
 		$query->whereFeatured(1);
