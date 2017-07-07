@@ -17,17 +17,17 @@ class CreateMusicsTable extends Migration
 		{
 			$table->increments('id');
 			$table->string('title')->index();
-			$table->string('slug');
+			$table->integer('hash')->unsigned();
 			$table->string('name');
 			$table->string('image');
 			$table->boolean('featured')->default(false);
-			$table->text('description');
-			$table->string('size');
-			$table->integer('user_id');
-			$table->integer('artist_id');
-			$table->integer('category_id');
-			$table->integer('play')->default(0);
-			$table->integer('download')->default(0);
+			$table->text('detail');
+			$table->string('size', 20);
+			$table->integer('user_id')->unsigned();
+			$table->integer('artist_id')->unsigned();
+			$table->integer('category_id')->unsigned();
+			$table->integer('play')->unsigned()->default(0);
+			$table->integer('download')->unsigned()->default(0);
 			$table->boolean('publish')->default(false);
 			$table->timestamps();
 		});

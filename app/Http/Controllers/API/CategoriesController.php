@@ -1,27 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use Str;
 use Auth;
 use Cache;
 use Validator;
 use App\Models\User;
+use App\Models\Music;
 use App\Http\Requests;
 use App\Models\Category;
+use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCategoryRequest;
 
-class CategoryController extends Controller
+class CategoriesController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('admin')->except([
-			'show',
-			'musics',
-			'videos'
-		]);
+		// $this->middleware('admin')->except([
+		// 	'show',
+		// 	'musics',
+		// ]);
+	}
+
+	public function index()
+	{
+		return Category::allCategories();
 	}
 
 	public function getCreate()
@@ -64,47 +70,21 @@ class CategoryController extends Controller
 	{
 		$key = "category.$slug";
 
-		$data = Cache::rememberForever($key, function() use ($slug) {
-		   $cat = Category::with([
-						'musics' => function($query) {
-							$query->published()->latest()->take(20);
-						},
-						'videos' => function($query) {
-							$query->latest()->take(20);
-						}
-					])
-				->whereSlug($slug)
-				->firstOrFail();
-			// $cat = Category::whereSlug($slug)->first();
+		return MP3Pam::cache($key, function() use ($slug) {
+		   $category= Category::whereSlug($slug)->firstOrFail();
 
-			$musics = $cat->musics;
+			$musics = Music::byCategory($category)->paginate(10);
 			// $musics = $cat->musics()->published()->latest()->take(20)->get();
-			$videos = $cat->videos;
-			// $videos = $cat->videos()->latest()->take(20)->get();
 
-			$musics->each( function($music) {
-				$music->type = 'music';
-				$music->icon = 'music';
-			});
 
-			$videos->each( function($video) {
-				$video->type = 'video';
-				$video->icon = 'facetime-video';
-			});
-
-			$merged = $musics->merge($videos);
+			// $merged = $musics->merge($videos);
 
 			return [
-				'results' => $merged->shuffle(),
-				'cat' => $cat,
-				'title' => "Navige Tout $cat->name Yo",
+				'musics' => $musics,
+				'category' => $category,
 				'musiccount' => $musics->count(),
-				'videocount' => $videos->count(),
-				'author' => ''
 			];
 		});
-
-		return view('cats.show', $data);
 	}
 
 	public function musics($slug)
@@ -134,34 +114,6 @@ class CategoryController extends Controller
 		});
 
 		return view('cats.music', $data);
-	}
-
-	public function videos($slug)
-	{
-		if (request()->has('page')) {
-			$page = request()->get('page');
-		} else {
-			$page = 1;
-		}
-
-		$key = "category_videos_" . $slug . $page;
-
-		$data = Cache::rememberForever($key, function() use ($slug) {
-		   $cat = Category::with([
-				'videos' => function($query) {
-					$query->latest();
-				}
-			])
-			->whereSlug($slug)->first();
-
-			return [
-				'cat' 	=> $cat,
-				'videos' 	=> $cat->videos()->paginate(24),
-				'title' => $cat->name
-			];
-		});
-
-		return view('cats.video', $data);
 	}
 
 	public function edit(Category $category)

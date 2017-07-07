@@ -12,19 +12,18 @@ group(['prefix' => 'v1'], function()
 	get('/users', 'UsersController@index');
 
 	// Musics routes
-	get('musics', ['as' => 'music','uses' => 'MusicController@index']);
-	get('musics/{id}',['as' => 'music.show','uses' => 'MusicController@show']);
-	get('music/{music}/modifye',['as' => 'music.edit','uses' => 'MusicController@edit']);
-	put('music/{music}/modifye',['as' => 'music.update','uses' => 'MusicController@update']);
-	post('music/{id}/imel-twit',['as' => 'music.emailAndTweet','uses' => 'MusicController@emailAndTweet']);
-	get('telechaje/music/{music}', ['as' => 'music.get','uses' => 'MusicController@getMusic']);
-	del('efase/music/{music}', ['as' => 'music.delete','uses' => 'MusicController@destroy']);
+	get('musics', 'MusicController@index')->name('musics');
+	get('musics/{hash}', 'MusicController@show')->name('music.show');
+	get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicController@edit']);
+	put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicController@update']);
+	del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicController@destroy']);
 	get('mete/music', ['as' => 'music.upload','uses' => 'MusicController@upload']);
-	get('jwe/music/{music}', ['as' => 'music.play','uses' => 'MusicController@play']);
-	get('achte/music', ['as' => 'buy.list', 'uses' => 'MusicController@listBuy']);
-	get('achte/music/{music}', ['as' => 'buy.show', 'uses' => 'MusicController@getBuy']);
-	post('achte/music/{music}', ['as' => 'buy.post','uses' => 'MusicController@postBuy']);
+	get('play/{music}', 'MusicController@play')->name('music.play');
 	post('mete/music', ['as' => 'music.store', 'uses' => 'MusicController@store']);
+
+	// Categories routes
+	get('categories', 'CategoriesController@index')->name('category.index');
+	get('categories/{slug}', 'CategoriesController@show')->name('category.show');
 
 	// Pages
 	// get('/', ['as'=>'home','uses'=>'PagesController@index']);
@@ -89,12 +88,6 @@ group(['prefix' => 'v1'], function()
 	// get('@{username}/lis', ['as' => 'user.public.playlists','uses' => 'UsersController@playlists']);
 
 
-	// // Categories routes
-	// Route::group(['prefix' => 'kategori'], function() {
-	// 	get('{slug}', [	'as' => 'cat.show','uses' => 'CategoryController@show']);
-	// 	get('{slug}/mizik', [	'as' => 'cat.music','uses' => 'CategoryController@musics']);
-	// 	get('{slug}/videyo', [	'as' => 'cat.video','uses' => 'CategoryController@videos']);
-	// });
 
 
 	// // Admin routes

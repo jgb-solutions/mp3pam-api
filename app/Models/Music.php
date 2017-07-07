@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Storage;
 use App\Helpers\MP3Pam;
+use Illuminate\Database\Eloquent\Model;
 
 class Music extends Model
 {
-	// protected $appends = [
-	// 	'url',
-	// 	'title',
-	// 	'mp3',
-	// 	'poster',
-	// 	'download_url',
-	// 	'emailAndTweetUrl'
-	// ];
+	protected $appends = [
+		'url',
+		'play_url',
+		'image_url',
+		'download_url'
+	];
 	// protected $with = ['user'];
 
 	protected $fillable = [
@@ -28,10 +27,17 @@ class Music extends Model
 		'slug'
 	];
 
-	// public function artist()
-	// {
-	// 	return $this->belongsTo(Artist::class);
-	// }
+	protected $hidden = [
+		'id',
+		'updated_at',
+		'user_id',
+		'artist_id',
+		'category_id',
+		'publish',
+		'name',
+		'image',
+		'hash',
+	];
 
 	public function user()
 	{
@@ -46,6 +52,16 @@ class Music extends Model
 	public function category()
 	{
 		return $this->belongsTo(Category::class);
+	}
+
+	public function scopeByHash($query, $hash)
+	{
+		return $query->where('hash', $hash);
+	}
+
+	public function scopeByCategory($query, $category)
+	{
+		$query->where('category_id', $category->id);
 	}
 
 	public function scopeSearch($query, $ids, $term)
@@ -70,6 +86,7 @@ class Music extends Model
 			->whereCategoryId($obj->category_id)
 			->where('id', '!=', $obj->id)
 			->orderByRaw('RAND()') // get random rows from the DB
+			->published()
 			->take($nb_rows);
 	}
 
@@ -95,19 +112,9 @@ class Music extends Model
 		$query->whereFeatured(1);
 	}
 
-	public function getEmailAndTweetUrlAttribute()
-	{
-		return MP3Pam::route('music.emailAndTweet', ['id'=>$this->id]);
-	}
-
 	public function scopePublished($query)
 	{
 		$query->wherePublish(1);
-	}
-
-	public function scopePaid($query)
-	{
-		$query->wherePrice('paid');
 	}
 
 	public function scopeByPlay($query)
@@ -115,24 +122,35 @@ class Music extends Model
 		$query->orderBy('play', 'desc');
 	}
 
-	public function getUrlAttribute()
+	public function getFullTitleAttribute()
 	{
-		return MP3Pam::route('music.show', ['id' => $this->id,'name' => $this->slug ]);
+		return $this->artist->name . ' - ' . $this->title;
 	}
 
-	public function getMp3Attribute()
+	public function getUrlAttribute()
+	{
+		return MP3Pam::route('music.show', ['hash' => $this->hash]);
+	}
+
+	public function getMp3UrlAttribute()
+	{
+		$mp3Path = config('site.defaultMP3URL');
+		if ($this->name) $mp3Path = Storage::url($this->name);
+
+		return MP3Pam::asset($mp3Path);
+	}
+
+	public function getPlayUrlAttribute()
 	{
 		return MP3Pam::route('music.play', ['id' => $this->id]);
 	}
 
-	public function getPosterAttribute()
-	{
-		return $this->imageUrl;
-	}
-
 	public function getImageUrlAttribute()
 	{
-		return url(MP3Pam::asset($this->image, 'show'));
+		$imagePath = config('site.defaultThumbnail');
+		if ($this->image) $imagePath = Storage::url($this->image);
+
+		return MP3Pam::asset($imagePath);
 	}
 
 	public function scopeUrl()
@@ -142,7 +160,7 @@ class Music extends Model
 
 	public function getDownloadUrlAttribute()
 	{
-		return MP3Pam::route('music.get', ['music' => $this->id]);
+		return MP3Pam::route('music.get', ['music' => $this->hash]);
 	}
 
 

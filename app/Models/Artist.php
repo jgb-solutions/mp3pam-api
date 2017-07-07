@@ -8,6 +8,12 @@ class Artist extends Model
 {
 	protected $fillable = ['name', 'slug'];
 
+	protected $hidden = [
+		'id',
+		'updated_at',
+		'created_at',
+	];
+
 	public function musics()
 	{
 		return $this->hasMany(Music::class);

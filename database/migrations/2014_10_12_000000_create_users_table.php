@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
 			$table->string('username', 60)->unique();
 			$table->string('email', 60)->unique();
 			$table->string('password', 60);
-			$table->string('avatar')->default('default-avatar.jpg');
+			$table->string('avatar')->default(config('site.defaultThumbnail'));
 			$table->string('telephone', 20);
 			$table->boolean('admin')->boolean(false);
 			$table->rememberToken();

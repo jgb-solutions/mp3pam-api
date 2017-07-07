@@ -10,12 +10,12 @@ class UsersTableSeeder extends Seeder
 		DB::table('users')->delete();
 
 		$user = [
-		  	'name' 	=> env('ADMIN_NAME'),
-		  	'username' 	=> env('ADMIN_USERNAME'),
-		  	'email'     	=> env('ADMIN_EMAIL'),
-		  	'password'  => bcrypt(env('ADMIN_PASSWORD')),
-		  	'telephone'	=> env('ADMIN_TELEPHONE'),
-		  	'admin'	=> 1,
+		  	'name'  		=> env('ADMIN_NAME'),
+		  	'username'  	=> env('ADMIN_USERNAME'),
+		  	'email'     		=> env('ADMIN_EMAIL'),
+		  	'password'  	=> bcrypt(env('ADMIN_PASSWORD')),
+		  	'telephone'		=> env('ADMIN_TELEPHONE'),
+		  	'admin'		=> 1,
 		  	// 'active'	=> 1,
 		];
 

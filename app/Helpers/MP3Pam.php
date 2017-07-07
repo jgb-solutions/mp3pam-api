@@ -105,7 +105,7 @@ class MP3Pam
 	public static function logout($route)
 	{
 		Auth::logout();
-				return redirect($route);
+		return redirect($route);
 	}
 
 	public static function isActive($route)
@@ -122,28 +122,6 @@ class MP3Pam
 			'button_text' => $buttonText,
 			//'button_color', '#FF9B22',
 		];
-	}
-
-	public static function number($number)
-	{
-		return number_format($number, 2, '.', ',');
-	}
-
-	public static function convertRate($amount, $from = 'HTG', $to = 'USD')
-	{
-		$rate = Swap::latest("$from/$to")->getValue();
-
-		return $rate * $amount;
-	}
-
-	public static function usdToHTG($amount)
-	{
-		return static::convertRate($amount, 'USD', 'HTG');
-	}
-
-	public static function getRate($amount, $from = 'HTG', $to = 'USD')
-	{
-		return Swap::latest("$from/$to")->getValue();
 	}
 
 	public static function vote($obj, $obj_id, $vote_up, $vote_down)
@@ -263,10 +241,10 @@ class MP3Pam
 		$music->download += 1;
 		$music->save();
 
-		$mp3name = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
+		$mp3name = storage_path('app/public/' . $music->name);
 		header('Content-Description: File Transfer');
 	    	header('Content-Type: application/octet-stream');
-	    	header('Content-Disposition: attachment; filename=' . $music->name . '.mp3' );
+	    	header('Content-Disposition: attachment; filename=' . $music->fullTitle . '.mp3' );
 	    	header('Expires: 0');
 	    	header('Cache-Control: must-revalidate');
 	    	header('Pragma: public');
@@ -280,15 +258,17 @@ class MP3Pam
 		$music->play += 1;
 		$music->save();
 
-		$mp3name = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
+		return redirect($music->name);
 
-		header("Content-Type: audio/mpeg");
-	    	header("Content-Length: " . filesize($mp3name) );
-	    	header('Content-Disposition: filename=' . $music->name . '.music' );
-	    	header('X-Pad: avoid browser bug');
-	    	header('Cache-Control: no-cache');
-	    	readfile($mp3name);
-	    	exit;
+		// $mp3name = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
+
+		// header("Content-Type: audio/mpeg");
+		 //    	header("Content-Length: " . filesize($mp3name) );
+		 //    	header('Content-Disposition: filename=' . $music->name . '.music' );
+		 //    	header('X-Pad: avoid browser bug');
+		 //    	header('Cache-Control: no-cache');
+		 //    	readfile($mp3name);
+		 //    	exit;
 	}
 
 	public static function sendMail($view, $data, $type)
@@ -408,11 +388,11 @@ class MP3Pam
 	public static function profileImage($user)
 	{
 		if ($user->image) {
-			return TKPM::asset($user->image, 'thumbs');
+			return MP3Pam::asset($user->image, 'thumbs');
 		} elseif ($user->avatar) {
 			return $user->avatar;
 		} else {
-			return TKPM::asset(config('site.logo'));
+			return MP3Pam::asset(config('site.logo'));
 		}
 	}
 
@@ -420,8 +400,23 @@ class MP3Pam
 	{
 		do {
 			$hash = rand(00000000, 99999999);
-		} while ( $model::whereHash($hash)->first() );
+		} while ($model::whereHash($hash)->first());
 
 		return $hash;
+	}
+
+	public static function cache($key, $fn, $time = null)
+	{
+		// return Cache::get($key, function() use ($key, $fn, $time){
+			$value = $fn();
+
+			// if ($time) {
+			// 	Cache::put($key, $value, $time);
+			// } else {
+			// 	Cache::forever($key, $value);
+			// }
+
+			return $value;
+		// });
 	}
 }

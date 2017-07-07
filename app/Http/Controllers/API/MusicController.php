@@ -5,13 +5,13 @@ namespace App\Http\Controllers\API;
 use App;
 use Str;
 use Auth;
-use tk;
 use Cache;
 use Storage;
 use App\Models\User;
 use App\Models\Vote;
 use App\Models\Music;
 use App\Models\Category;
+use App\Helpers\MP3Pam;
 use App\Models\MusicList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,22 +24,17 @@ class MusicController extends Controller
 
 	public function __construct()
 	{
-		$this->middleware('auth')->except([
-			'index',
-			'listBuy',
-			'show',
-			'getMusic',
-			'getBuy',
-			'play',
-			'sayHello'
-		]);
+		// $this->middleware('auth')->except([
+		// 	'index',
+		// 	'listBuy',
+		// 	'show',
+		// 	'getMusic',
+		// 	'getBuy',
+		// 	'play',
+		// 	'sayHello'
+		// ]);
 
-		$this->middleware('musicOwner')->only(['edit', 'update']);
-	}
-
-	public function sayHello()
-	{
-		return 'Hello World';
+		// $this->middleware('musicOwner')->only(['edit', 'update']);
 	}
 
 	public function index()
@@ -104,7 +99,7 @@ class MusicController extends Controller
 		$price 		= $request->get('price');
 		$slug		= Str::slug($name);
 		$music 		= $request->file('music');
-		$music_size = TKPM::size($music->getClientsize());
+		$music_size = MP3Pam::size($music->getClientsize());
 		$music_ext 	= $music->getClientOriginalExtension();
 		$music_name =  Str::random(8) . time() . '.' . $music_ext;
 
@@ -123,9 +118,9 @@ class MusicController extends Controller
 		$img_success = Storage::disk('images')->put($img_name, $content);
 
 		if ($img_success) {
-			TKPM::image($img_name, 245, 250, 'thumbs');
-			TKPM::image($img_name, 100, null, 'thumbs/tiny');
-			TKPM::image($img_name, 640, 360, 'show');
+			MP3Pam::image($img_name, 245, 250, 'thumbs');
+			MP3Pam::image($img_name, 100, null, 'thumbs/tiny');
+			MP3Pam::image($img_name, 640, 360, 'show');
 		}
 
 		$admin_id = User::whereAdmin(1)->first()->id;
@@ -159,7 +154,7 @@ class MusicController extends Controller
 
 
 			/************** GETID3 **************/
-			TKPM::tag($music, $img_name, $img_type);
+			MP3Pam::tag($music, $img_name, $img_type);
 
 			/******* Flush the cache ********/
 			Cache::flush();
@@ -219,7 +214,7 @@ class MusicController extends Controller
 				'subject' => 'Felisitasyon!!! Ou fèk mete yon nouvo mizik pou vann.'
 			];
 
-			TKPM::sendMail('emails.user.buy', $data, 'music');
+			MP3Pam::sendMail('emails.user.buy', $data, 'music');
 		} else {
 			// Send an email to the new user letting them know their music has been uploaded
 			$data = [
@@ -227,11 +222,11 @@ class MusicController extends Controller
 				'subject' 	=> 'Felisitasyon!!! Ou fèk mete yon nouvo mizik'
 			];
 
-			TKPM::sendMail('emails.user.music', $data, 'music');
+			MP3Pam::sendMail('emails.user.music', $data, 'music');
 		}
 
 		if (! App::isLocal()) {
-			TKPM::tweet($music, 'music');
+			MP3Pam::tweet($music, 'music');
 		}
 
 		return [
@@ -239,56 +234,31 @@ class MusicController extends Controller
 		];
 	}
 
-	public function show($id, $slug = null)
+	public function show($hash, $slug = null)
 	{
-		$key = '_music_show_' . $id;
+		$key = '_music_' . $hash;
 
-		// $data = Cache::rememberForever($key, function() use ($id, $key) {
-			$music = Music::findOrFail($id);
+		return MP3Pam::cache($key, function() use ($hash, $key) {
+			$music = Music::with([
+				'user' => function($query) {
+					$query->select(['id', 'name', 'username', 'email', 'avatar', 'telephone']);
+				},
+				'artist' => function($query) {
+					$query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
+				},
+				'category'
+			])->byHash($hash)->firstOrFail();
 
-			// if ($music->price == 'paid' && $music->publish) {
-			// 	return redirect(route('buy.show', [
-			// 		'id' => $music->id,
-			// 		'slug' => $music->slug
-			// 	]));
-			// }
-
-			// if ($music->price == 'paid' && ! $music->publish) {
-			// 	if (! Auth::check()) {
-			// 		return redirect(route('login') );
-			// 	}
-
-			// 	if (Auth::check() && Auth::user()->owns($music)) {
-			// 		return redirect(route('music.edit', $music->id));
-			// 	}
-			// }
-
-			// $music->views += 1;
-			// $music->save();
-
-			$related = Music::related($music)
-				->published()
-				->get(['id', 'name', 'image', 'play', 'download', 'slug']);
+			$related = Music::related($music)->get(['id', 'name', 'image', 'play', 'download', 'hash']);
 			// return $related;
-
-			// $author = $music->user->username;
 
 			$data = [
 				'music' 	=> $music,
 				'related' => $related,
-				// 'author'	=> $author,
-				'playlists' => []
 			];
 
-			if (Auth::user()) {
-				$user = Auth::user();
-				$user->load('playlists.mList');
-
-				$data['playlists'] = $user->playlists;
-			}
-
-		// 	return $data;
-		// });
+			return $data;
+		});
 
 		return $data;
 	}
@@ -298,13 +268,11 @@ class MusicController extends Controller
 		$data = [
 			'music'	=> $music,
 			'title'	=> $music->name,
-			'cats'	=> Category::remember(999, 'allCategories')
-								->orderBy('name')
-								->get(),
+			'cats'	=> Category::allCategories(),
 			'user' => Auth::user()
 		];
 
-		return view('music.edit', $data);
+		return $data;
 	}
 
 	public function update(Music $music, UpdateMusicRequest $request)
@@ -336,9 +304,9 @@ class MusicController extends Controller
 			$img_success = Storage::disk('images')->put($img_name, $content);
 
 			if ($img_success) {
-				TKPM::image($img_name, 250, 250, 'thumbs');
-				TKPM::image($img_name, 100, null, 'thumbs/tiny');
-				TKPM::image($img_name, 640, 360, 'show');
+				MP3Pam::image($img_name, 250, 250, 'thumbs');
+				MP3Pam::image($img_name, 100, null, 'thumbs/tiny');
+				MP3Pam::image($img_name, 640, 360, 'show');
 			}
 		}
 
@@ -442,49 +410,26 @@ class MusicController extends Controller
 
 	}
 
-	public function getMusic(Music $music, Request $request)
+	public function download($hash, Request $request)
 	{
-		if ($music->paid) {
-			if (! Auth::check()) {
-				return redirect(route('login'))
-					->withMessage(config('site.message.login'))
-					->withStatus('warning');
-			}
+		$music = Music::byHash($hash)->firstOrFail();
+		// if ($music->download >= 100) {
+		// 	if ($request->has('token')) {
+		// 		MP3Pam::download($music);
+		// 	}
 
-			if (Auth::check()) {
-				$user = Auth::user();
+		// 	return view('music.download', compact('music'));
+		// }
 
-				$bought = musicSold::whereUserId($user->id)
-					 ->wheremusicId($music->id)
-					 ->first();
-
-				if (! $bought && ! $user->is_admin()){
-					return redirect("/music/buy/$music->id")
-						->withMessage( config('site.message.must-buy') );
-				}
-
-			}
-		}
-
-		if ($music->download >= 100) {
-			if ($request->has('token')) {
-				TKPM::download($music);
-			}
-
-			return view('music.download', compact('music'));
-		}
-
-		TKPM::download($music);
+		return MP3Pam::download($music);
 	}
 
 	public function play(Music $music)
 	{
-		if ($music->paid) {
-			return redirect(route('music.buy', ['$music->id']))
-				->withMessage(config('site.message.cant-play'));
-		}
+		$music->play += 1;
+		$music->save();
 
-		TKPM::stream($music);
+		return redirect($music->mp3_url);
 	}
 
 	public function upload()
