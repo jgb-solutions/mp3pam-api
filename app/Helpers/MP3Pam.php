@@ -241,7 +241,12 @@ class MP3Pam
 		$music->download += 1;
 		$music->save();
 
-		$mp3name = storage_path('app/public/' . $music->name);
+		if ($music->name) {
+			$mp3name = storage_path('app/public/' . $music->name);
+		} else {
+			$mp3name = public_path(config('site.defaultMP3URL'));
+		}
+
 		header('Content-Description: File Transfer');
 	    	header('Content-Type: application/octet-stream');
 	    	header('Content-Disposition: attachment; filename=' . $music->fullTitle . '.mp3' );
