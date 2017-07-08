@@ -22,6 +22,7 @@ class CreateMusicsTable extends Migration
 			$table->string('image');
 			$table->boolean('featured')->default(false);
 			$table->text('detail');
+			$table->text('lyrics');
 			$table->string('size', 20);
 			$table->integer('user_id')->unsigned();
 			$table->integer('artist_id')->unsigned();

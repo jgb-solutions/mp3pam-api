@@ -1,6 +1,6 @@
 <?php
 
 return [
-	'defaultMP3URL' 	=> 'user_1/2017/06/13/placeholder-music.mp3',
-	'defaultThumbnail' 	=> 'user_1/2017/06/13/placeholder-image.jpg'
+	'defaultMP3URL' 	=> 'assets/audio/placeholder-music.mp3',
+	'defaultThumbnail' 	=> 'assets/images/placeholder-image.jpg'
 ];

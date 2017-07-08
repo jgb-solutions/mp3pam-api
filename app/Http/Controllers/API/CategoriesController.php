@@ -73,7 +73,9 @@ class CategoriesController extends Controller
 		return MP3Pam::cache($key, function() use ($slug) {
 		   $category= Category::whereSlug($slug)->firstOrFail();
 
-			$musics = Music::byCategory($category)->paginate(10);
+			$musics = Music::byCategory($category)->paginate(10, [
+				'id', 'hash', 'title', 'featured', 'size', 'play', 'download', 'created_at'
+			]);
 			// $musics = $cat->musics()->published()->latest()->take(20)->get();
 
 
@@ -82,7 +84,7 @@ class CategoriesController extends Controller
 			return [
 				'musics' => $musics,
 				'category' => $category,
-				'musiccount' => $musics->count(),
+				// 'musiccount' => $musics->count(),
 			];
 		});
 	}
