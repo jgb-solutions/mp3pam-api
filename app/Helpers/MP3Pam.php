@@ -413,19 +413,26 @@ class MP3Pam
 	public static function cache($key, $fn, $time = null)
 	{
 		if (env('CACHE', false)) {
-			return Cache::get($key, function() use ($key, $fn, $time) {
+			// generate new key variable depening on the page
+			// the user is viewing. And set and default key in case
+			// they are not viewing a paginated page
+			$page = request()->has('page') ? request('page') : 1;
+			$newKey = $key . $page;
+
+			// Cache any kind of content of any model
+			return Cache::get($newKey, function() use ($newKey, $fn, $time) {
 				$value = $fn();
 
 				if ($time) {
-					Cache::put($key, $value, $time);
+					Cache::put($newKey, $value, $time);
 				} else {
-					Cache::forever($key, $value);
+					Cache::forever($newKey, $value);
 				}
 
 				return $value;
 			});
-		} else {
-			return $fn();
 		}
+
+		return $fn();
 	}
 }
