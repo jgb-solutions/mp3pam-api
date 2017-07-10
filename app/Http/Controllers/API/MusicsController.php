@@ -2,23 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App;
-use Str;
-use Auth;
-use Cache;
-use Storage;
-use App\Models\User;
-use App\Models\Vote;
 use App\Models\Music;
-use App\Models\Category;
 use App\Helpers\MP3Pam;
-use App\Models\MusicList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMusicRequest;
 use App\Http\Requests\UpdateMusicRequest;
 
-class MusicController extends Controller
+class MusicsController extends Controller
 {
 	protected $user;
 
@@ -44,7 +35,10 @@ class MusicController extends Controller
 		// 	'musics'	=> Music::latest()->published()->paginate(10),
 		// ];
 
-		return Music::latest()->paginate(10);
+		return MP3Pam::cache('musics_index', function() {
+			return Music::latest()->paginate(10);
+		});
+
 	}
 
 	public function listBuy()

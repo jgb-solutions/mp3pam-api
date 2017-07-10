@@ -5,4 +5,4 @@ get('/', function () {
 });
 
 // Musics routes
-get('telechaje/{music}', ['as' => 'music.get','uses' => 'MusicController@download']);
+get('t/{music}', ['as' => 'music.get','uses' => 'MusicsController@download']);

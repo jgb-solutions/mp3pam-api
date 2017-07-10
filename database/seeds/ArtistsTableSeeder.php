@@ -14,8 +14,6 @@ class ArtistsTableSeeder extends Seeder
 			  	'name' => 'Daniel Darinus',
 				'stageName' => 'Fantom Tapajè',
 				'hash' => App\Helpers\MP3Pam::getHash(Artist::class),
-				'avatar' => '',
-				'bio' => '',
 			],
 		];
 

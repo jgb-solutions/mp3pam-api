@@ -8,22 +8,30 @@
 group(['prefix' => 'v1'], function()
 {
 	//  get all the users
-	get('/user/{user}', 'MusicController@sayHello');
+	get('/user/{user}', 'UsersController@show');
 	get('/users', 'UsersController@index');
 
 	// Musics routes
-	get('musics', 'MusicController@index')->name('musics');
-	get('musics/{hash}', 'MusicController@show')->name('music.show');
-	get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicController@edit']);
-	put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicController@update']);
-	del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicController@destroy']);
-	get('mete/music', ['as' => 'music.upload','uses' => 'MusicController@upload']);
-	get('play/{music}', 'MusicController@play')->name('music.play');
-	post('mete/music', ['as' => 'music.store', 'uses' => 'MusicController@store']);
+	get('musics', 'MusicsController@index')->name('musics');
+	get('musics/{hash}', 'MusicsController@show')->name('music.show');
+	get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicsController@edit']);
+	put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicsController@update']);
+	del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicsController@destroy']);
+	get('mete/music', ['as' => 'music.upload','uses' => 'MusicsController@upload']);
+	get('play/{music}', 'MusicsController@play')->name('music.play');
+	post('mete/music', ['as' => 'music.store', 'uses' => 'MusicsController@store']);
 
 	// Categories routes
 	get('categories', 'CategoriesController@index')->name('category.index');
 	get('categories/{slug}', 'CategoriesController@show')->name('category.show');
+
+	// Artists routes
+	get('artists', 'ArtistsController@index')->name('artists');
+	get('artists/{hash}', 'ArtistsController@show')->name('artists.show');
+	get('artists/{hash}/musics', 'ArtistsController@musics')->name('artists.musics');
+	get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
+	put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
+	del('artists/{artist}', ['as' => 'music.delete','uses' => 'ArtistsController@destroy']);
 
 	// Pages
 	// get('/', ['as'=>'home','uses'=>'PagesController@index']);

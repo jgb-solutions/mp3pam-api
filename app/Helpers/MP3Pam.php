@@ -412,16 +412,20 @@ class MP3Pam
 
 	public static function cache($key, $fn, $time = null)
 	{
-		// return Cache::get($key, function() use ($key, $fn, $time){
-			$value = $fn();
+		if (env('CACHE', false)) {
+			return Cache::get($key, function() use ($key, $fn, $time) {
+				$value = $fn();
 
-			// if ($time) {
-			// 	Cache::put($key, $value, $time);
-			// } else {
-			// 	Cache::forever($key, $value);
-			// }
+				if ($time) {
+					Cache::put($key, $value, $time);
+				} else {
+					Cache::forever($key, $value);
+				}
 
-			return $value;
-		// });
+				return $value;
+			});
+		} else {
+			return $fn();
+		}
 	}
 }
