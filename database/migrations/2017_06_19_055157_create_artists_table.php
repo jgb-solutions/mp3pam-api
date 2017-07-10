@@ -19,7 +19,7 @@ class CreateArtistsTable extends Migration
 			$table->string('stageName')->unique();
 			$table->string('hash', 60)->unique();
 			$table->string('avatar')->default('');
-			$table->text('bio')->default('');
+			$table->text('bio');
 			$table->boolean('verified')->default(false);
 			$table->timestamps();
 		});
