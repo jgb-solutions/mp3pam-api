@@ -161,7 +161,7 @@ class Music extends Model
 
 	public function getDownloadUrlAttribute()
 	{
-		return MP3Pam::route('music.get', ['music' => $this->hash]);
+		return MP3Pam::route('musics.get', ['music' => $this->hash]);
 	}
 
 
