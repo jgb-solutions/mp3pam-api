@@ -35,7 +35,7 @@ class ArtistsController extends Controller
 		// 	'musics'	=> Music::latest()->published()->paginate(10),
 		// ];
 		return MP3Pam::cache('artists_index', function() {
-			return Artist::latest()->paginate(10);
+			return Artist::latest()->paginate(10, ['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
 		});
 
 	}

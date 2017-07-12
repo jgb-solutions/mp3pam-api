@@ -7,9 +7,18 @@
 
 group(['prefix' => 'v1'], function()
 {
-	//  get all the users
-	get('/user/{user}', 'UsersController@show');
-	get('/users', 'UsersController@index');
+	group(['middleware' => ['jwt.auth']], function() {
+		// protected API routes go here
+	});
+
+	// Auth routes.
+	post('register', 'Auth\AuthController@register')->name('auth.register');
+    	post('login', 'Auth\AuthController@login')->name('auth.login');
+
+	//  Users' routes
+	get('users', 'UsersController@index')->name('musics.index');
+	get('users/{user}', 'UsersController@show')->name('musics.show');
+	get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
 
 	// Musics routes
 	get('musics', 'MusicsController@index')->name('musics');

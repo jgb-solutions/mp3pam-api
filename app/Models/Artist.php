@@ -12,6 +12,7 @@ class Artist extends Model
 
 	protected $hidden = [
 		'id',
+		'hash',
 		'updated_at',
 		'created_at',
 	];

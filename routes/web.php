@@ -1,12 +1,10 @@
 <?php
 
-get('/', function () {
-	return view('pages.home');
-});
+// get('/', 'PagesController@index');
 
-// Musics routes
-get('t/{music}', ['as' => 'music.get','uses' => 'MusicsController@download']);
+// // Musics routes
+// get('t/{music}', 'API\MusicsController@download')->name('musics.get');
 
-get('cache', function() {
-	return Cache::get('_musics_index_2');
-});
+// get('cache', function() {
+// 	return Cache::get('_musics_index_2');
+// });

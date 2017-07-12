@@ -17,7 +17,7 @@ class User extends Authenticatable
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'email', 'password',
+		'name', 'username', 'email', 'password', 'avatar', 'telephone'
 	];
 
 	/**
@@ -33,7 +33,12 @@ class User extends Authenticatable
 		'password', 'remember_token',
 	];
 
-	protected $appends = ['avatar_url'];
+	protected $appends = ['avatar_url', 'musics_url'];
+
+	public function musics()
+	{
+		return $this->hasMany(Music::class);
+	}
 
 	public function getAvatarUrlAttribute()
 	{
@@ -41,5 +46,10 @@ class User extends Authenticatable
 		if ($this->avatar) $avatarPath = Storage::url($this->avatar);
 
 		return MP3Pam::asset($avatarPath);
+	}
+
+	public function getMusicsUrlAttribute()
+	{
+		return MP3Pam::route('users.musics', ['id' => $this->id]);
 	}
 }

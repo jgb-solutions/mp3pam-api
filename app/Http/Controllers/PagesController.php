@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Cache;
 use App\Models\Music;
-use App\Models\Video;
 
 class PagesController extends Controller
 {
@@ -17,14 +16,9 @@ class PagesController extends Controller
 										->latest()
 										->take(8)
 										->get(),
-				'featuredVideos' => Video::featured()->latest()->take(8)->get(),
 				'lastMonthTopMusics'  => Music::lastMonth()
 											->popular()
 											->byPlay()
-											->take(8)
-											->get(),
-				'lastMonthTopVideos'  => Video::lastMonth()
-											->popular()
 											->take(8)
 											->get(),
 			];
@@ -33,6 +27,8 @@ class PagesController extends Controller
 		});
 
 		return view('home', $data);
+
+		return view('pages.home');
 	}
 
 	public function notFound()
@@ -45,9 +41,6 @@ class PagesController extends Controller
 		$data = [
 			'musics' => Music::published()
 							->rand()
-							->take(12)
-							->get(),
-			'videos' => Video::rand()
 							->take(12)
 							->get()
 		];
@@ -63,14 +56,5 @@ class PagesController extends Controller
 						->paginate(20);
 
 		return view('pages.discover.music', compact('musics'));
-	}
-
-	public function discoverVideo()
-	{
-		$videos = Video::remember(120)
-						->rand()
-						->paginate(20);
-
-		return view('pages.discover.video', compact('videos'));
 	}
 }

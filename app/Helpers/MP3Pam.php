@@ -187,25 +187,25 @@ class MP3Pam
 
 	public static function size($size, $round = 2)
 	{
-    	$sizes = [' B', ' KB', ' MB'];
+	    	$sizes = [' B', ' KB', ' MB'];
 
-    	$total = count($sizes) - 1 ;
+	    	$total = count($sizes) - 1 ;
 
-    	for ($i = 0; $size > 1024 && $i < $total; $i++) {
-       	$size /= 1024;
-    	}
+	    	for ($i = 0; $size > 1024 && $i < $total; $i++) {
+	       		$size /= 1024;
+    		}
 
-    	return round($size, $round) . $sizes[$i];
+		return round($size, $round) . $sizes[$i];
 	}
 
 	public static function tag($music, $image_name = null, $type)
 	{
 		$mp3_handler = new getID3;
-   	$mp3_handler->setOption(['encoding'=> 'UTF-8']);
+	   	$mp3_handler->setOption(['encoding'=> 'UTF-8']);
 
-    	$mp3_writter = new getid3_writetags;
+	    	$mp3_writter = new getid3_writetags;
 
-    	$mp3_writter->filename          = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
+	    	$mp3_writter->filename          = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
 	  	$mp3_writter->tagformats        = ['id3v2.3'];
 	  	$mp3_writter->overwrite_tags    = true;
 	  	$mp3_writter->tag_encoding      = 'UTF-8';
@@ -258,113 +258,6 @@ class MP3Pam
 	    	exit;
 	}
 
-	public static function stream($music)
-	{
-		$music->play += 1;
-		$music->save();
-
-		return redirect($music->name);
-
-		// $mp3name = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
-
-		// header("Content-Type: audio/mpeg");
-		 //    	header("Content-Length: " . filesize($mp3name) );
-		 //    	header('Content-Disposition: filename=' . $music->name . '.music' );
-		 //    	header('X-Pad: avoid browser bug');
-		 //    	header('Cache-Control: no-cache');
-		 //    	readfile($mp3name);
-		 //    	exit;
-	}
-
-	public static function sendMail($view, $data, $type)
-	{
-		Mail::send($view, $data, function($m) use ($data, $type) {
-			extract($data);
-
-			switch ($type) {
-				case 'user':
-					$email = $user->email;
-					$name = $user->name;
-				break;
-
-				case 'music':
-					$email = $music->user->email;
-					$name = $music->name;
-				break;
-
-				case 'video':
-					$email = $video->user->email;
-					$name = $video->name;
-				break;
-
-				case 'buy':
-					$email = $music->user->email;
-					$name = $music->name;
-				break;
-
-				case 'guest4':
-					$email = $video->userEmail;
-					$name = 'Envite';
-				break;
-			}
-
-			$m->to($email, $name)
-				->subject($data['subject'])
-				->replyTo(config('site.email'));
-		});
-	}
-
-	public static function seo($object, $type, $author)
-	{
-		if ($type === 'user') {
-			// $image = url("/config('site.image_upload_path')/{$object->image}");
-			$image = Self::asset($object->image, 'images');
-
-			if ($object->username) {
-				$url = url("/@{$object->username}");
-			} else {
-				$url = url("/u/$object->id");
-			}
-		}
-
-		if ($type === 'music' || $type === 'video') {
-			$url = url(route($type .'.show', [
-				'id'=>$object->id,
-				'slug'=>$object->slug
-			]));
-
-			if ($type === 'music') {
-				$image = Self::asset($object->image, 'images');
-			} else {
-				$image = $object->image;
-			}
-		}
-
-		if ($type === 'cat') {
-			$url = url(route('cat.show', [
-				'slug'=>$object->slug
-			]));
-
-			$image = '';
-		}
-
-		$html = "
-		<link rel='canonical' href='$url' />
-		<meta name='description' content='{$object->description}'/>
-
-		<!-- Open Graph -->
-		<meta property='og:title' content='$author {$object->title}' />
-		<meta property='og:description' content='{$object->description}' />
-		<meta property='og:url' content='$url' />
-		<meta property='og:image' content='$image' />
-		<!-- / Open Graph -->
-
-		<!-- Twitter description -->
-		<meta name='twitter:text:description' content='$object->description'>";
-
-		return $html;
-	}
-
 
 	public static function firstName($name)
 	{
@@ -413,8 +306,8 @@ class MP3Pam
 	public static function cache($key, $fn, $time = null)
 	{
 		if (env('CACHE', false)) {
-			// generate new key variable depening on the page
-			// the user is viewing. And set and default key in case
+			// generate new key variable depending on the page
+			// the user is viewing. And set a default key in case
 			// they are not viewing a paginated page
 			$page = request()->has('page') ? request('page') : 1;
 			$newKey = $key . $page;

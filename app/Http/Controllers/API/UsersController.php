@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use Str;
-use Auth;
-use Hash;
-use TKPM;
-use Cache;
-use Image;
-use Storage;
-use Socialite;
-use App\Models\Vote;
 use App\Models\User;
 use App\Models\Music;
-use App\Models\Video;
 use App\Models\Category;
-use App\Models\MusicSold;
+use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
@@ -36,10 +26,34 @@ class UsersController extends Controller
 
 	public function index()
 	{
-		return [
-			'users' => User::latest()->paginate(10),
-			'title'	=> 'Navige Tout Itilizatè Yo'
-		];
+		return MP3Pam::cache('users_index_', function() {
+			return User::latest()->paginate(10);
+		});
+	}
+
+	public function show($id)
+	{
+		$key = '__user__' . $id;
+
+		return MP3Pam::cache($key, function() use ($id) {
+			return User::with([
+				'musics' => function($query) {
+					$query->select(['user_id', 'title', 'size', 'play', 'hash', 'play', 'download'])
+						->latest()->take(10);
+				}
+			])->findOrFail($id);;
+		});
+	}
+
+	public function musics($id)
+	{
+		$key = '_user_musics';
+
+		return MP3Pam::cache($key, function() use ($key, $id) {
+			$user = User::findOrFail($id);
+
+			return $user->musics()->latest()->paginate(10, ['id', 'title', 'size', 'play', 'hash', 'play', 'download']);
+		});
 	}
 
 	public function getLogin()
