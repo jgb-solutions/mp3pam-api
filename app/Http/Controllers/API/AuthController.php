@@ -25,31 +25,21 @@ class AuthController extends Controller
 
 	public function login(Request $request)
 	{
+		// grab credentials from the request
+		$credentials = $request->only('email', 'password');
+
 		try {
-			$token = JWTAuth::attempt($request->only('email', 'password'), [
-			'exp' => Carbon::now()->addWeek()->timestamp,
-			]);
+		   	// attempt to verify the credentials and create a token for the user
+		   	if (! $token = JWTAuth::attempt($credentials)) {
+		       		return response()->json(['error' => 'invalid_credentials'], 401);
+		   	}
 		} catch (JWTException $e) {
-			return response()->json([
-				'error' => 'Could not authenticate',
-			], 500);
+		   	// something went wrong whilst attempting to encode the token
+		   	return response()->json(['error' => 'could_not_create_token'], 500);
 		}
 
-		if (!$token) {
-			return response()->json([
-			'error' => 'Could not authenticate',
-			], 401);
-		} else {
-			$data = [];
-			$meta = [];
-
-			$data['name'] = $request->user()->name;
-			$meta['token'] = $token;
-
-			return response()->json([
-				'data' => $data,
-				'meta' => $meta
-			]);
-		}
+		// all good so return the token
+		$user = JWTAuth::toUser($token);
+		return response()->json(compact('token', 'user'));
 	}
 }

@@ -178,7 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // MP3Pam Service Providers
-        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
