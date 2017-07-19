@@ -57,145 +57,143 @@ class MusicsController extends Controller
 
 	public function store(StoreMusicRequest $request)
 	{
-		$name 	= $request->get('name');
-		$artist 	= $request->get('artist');
+		$user = MP3Pam::getUserFromToken();
 
-		$storedmusic = Music::whereName($name)
-								->whereArtist($artist)
-								->first();
+		$music = $user->musics()->create([
+			'title'          		=> $request->title,
+			'slug'          		=> str_slug($request->title),
+			'image' 		=> MP3Pam::image($request->file('logo'), 500, null),
+			'name' 		=> MP3Pam::store($request->file('music')),
+			'category_id'   	=> $request->category,
+			'artist_id' 		=> $request->artist,
+			'category_id' 	=> $request->get('category'),
+			'size' 			=> MP3Pam::size($request->file('mp3')->getClientsize()),
+		]);
 
-		if ($storedmusic) {
-			if ($request->ajax()) {
-	        		$response = [];
+		Cache::forget('pages.home');
 
-	        		$response['success']  = true;
-	        		if ($storedmusic->price == 'paid') {
-	        			$response['url'] = route('music.edit', ['id' => $storedmusic->id]);
-	        		} else {
-	        		 	$response = [
-	        				'success' => true,
-	        				'emailedAndTweeted' => true,
-	        				'id' => $storedmusic->id,
-        		 			'url' => $storedmusic->url,
-	        		 		'emailAndTweetUrl' => $storedmusic->emailAndTweetUrl
-	        			];
-	        		}
+		// $name = $request->get('name');
+		// $artist = $request->get('artist');
 
-	        		return $response;
-	        	}
+		// $storedmusic = Music::whereName($name)
+		// 						->whereArtist($artist)
+		// 						->first();
 
-			return redirect(route('music.show', [
-      		 		'id' =>$storedmusic->id,
-      		 		'slug' =>$storedmusic->slug
-	        	]));
-		}
+		// if ($storedmusic) {
+		// 	if ($request->ajax()) {
+	 //        		$response = [];
 
+	 //        		$response['success']  = true;
+	 //        		if ($storedmusic->price == 'paid') {
+	 //        			$response['url'] = route('music.edit', ['id' => $storedmusic->id]);
+	 //        		} else {
+	 //        		 	$response = [
+	 //        				'success' => true,
+	 //        				'emailedAndTweeted' => true,
+	 //        				'id' => $storedmusic->id,
+  //       		 			'url' => $storedmusic->url,
+	 //        		 		'emailAndTweetUrl' => $storedmusic->emailAndTweetUrl
+	 //        			];
+	 //        		}
 
-		/****** music Uploading *******/
-		$price 		= $request->get('price');
-		$slug		= Str::slug($name);
-		$music 		= $request->file('music');
-		$music_size = MP3Pam::size($music->getClientsize());
-		$music_ext 	= $music->getClientOriginalExtension();
-		$music_name =  Str::random(8) . time() . '.' . $music_ext;
+	 //        		return $response;
+	 //        	}
 
-		$content = file_get_contents($request->file('music')->getRealPath());
-
-		$music_success = Storage::disk('musics')->put($music_name, $content);
-
-		/************ Image Uploading *****************/
-		$img 		= $request->file('image');
-		$img_type	= $img->getMimeType();
-		$img_ext 	= $img->getClientOriginalExtension();
-		$img_name 	= Str::random(8) . time() . '.' . $img_ext;
-
-		$content = file_get_contents($request->file('image')->getRealPath());
-
-		$img_success = Storage::disk('images')->put($img_name, $content);
-
-		if ($img_success) {
-			MP3Pam::image($img_name, 245, 250, 'thumbs');
-			MP3Pam::image($img_name, 100, null, 'thumbs/tiny');
-			MP3Pam::image($img_name, 640, 360, 'show');
-		}
-
-		$admin_id = User::whereAdmin(1)->first()->id;
-		$user_id  = (Auth::check()) ? Auth::user()->id : $admin_id;
-
-		if ($music_success && $img_success) {
-			$music = new Music;
-			$music->name = ucwords($name);
-			$music->artist = ucwords($artist);
-			$music->mp3name = $music_name;
-			$music->image = $img_name;
-			$music->user_id = $user_id;
-			$music->category_id = $request->get('category');
-			$music->size = $music_size;
-
-			if ($price == 'free') {
-				$music->publish = 1;
-			}
-
-			$music->price = $price;
-
-			if (! $price) {
-				$music->publish = 1;
-				$music->price = 'free';
-			}
-
-			$music->description = $request->get('description');
-			$music->slug = $slug;
-
-			$music->save();
+		// 	return redirect(route('music.show', [
+  //     		 		'id' =>$storedmusic->id,
+  //     		 		'slug' =>$storedmusic->slug
+	 //        	]));
+		// }
 
 
-			/************** GETID3 **************/
-			MP3Pam::tag($music, $img_name, $img_type);
+		// /****** music Uploading *******/
+		// $price 		= $request->get('price');
+		// $slug		= Str::slug($name);
+		// $music 		= $request->file('music');
+		// $music_size = MP3Pam::size($music->getClientsize());
+		// $music_ext 	= $music->getClientOriginalExtension();
+		// $music_name =  Str::random(8) . time() . '.' . $music_ext;
 
-			/******* Flush the cache ********/
-			Cache::flush();
+		// $content = file_get_contents($request->file('music')->getRealPath());
 
-        	if ($request->ajax()) {
-        		$response = [];
+		// $music_success = Storage::disk('musics')->put($music_name, $content);
 
-        		if ($music->paid) {
-        			$response['url'] = route('music.edit', ['id' => $music->id]);
-        		} else {
-	        		$response = [
-	        			'success' => true,
-	        			'id' => $music->id,
-        		 		'url' => $music->url,
-        		 		'emailAndTweetUrl' => $music->emailAndTweetUrl
-	        		];
-        		}
+		// /************ Image Uploading *****************/
+		// $img 		= $request->file('image');
+		// $img_type	= $img->getMimeType();
+		// $img_ext 	= $img->getClientOriginalExtension();
+		// $img_name 	= Str::random(8) . time() . '.' . $img_ext;
 
-        		return $response;
-        	}
+		// $content = file_get_contents($request->file('image')->getRealPath());
 
-        	Cache::forget('latest.musics');
+		// $img_success = Storage::disk('images')->put($img_name, $content);
 
-			if ($music->paid) {
-					return redirect(route('music.edit', ['id' => $music->id]));
-				} else {
-				 	return redirect (route('music.show', [
-				 		'id' =>$music->id,
-				 		'slug' =>$music->slug
-				 	]));
-			}
-		} else	{
-			if ($request->ajax()) {
-		        		$response = [];
+		// if ($img_success) {
+		// 	MP3Pam::image($img_name, 245, 250, 'thumbs');
+		// 	MP3Pam::image($img_name, 100, null, 'thumbs/tiny');
+		// 	MP3Pam::image($img_name, 640, 360, 'show');
+		// }
 
-		        		$response['success'] = false;
-		        		$response['message'] = 'Nou regrèt men nou pa reyisi mete mizik ou a. Eseye ankò.';
+		// $admin_id = User::whereAdmin(1)->first()->id;
+		// $user_id  = (Auth::check()) ? Auth::user()->id : $admin_id;
 
-		       	 	return $response;
-		        }
+		// if ($music_success && $img_success) {
+		// 	$music = new Music;
+		// 	$music->name = ucwords($name);
+		// 	$music->artist = ucwords($artist);
+		// 	$music->mp3name = $music_name;
+		// 	$music->image = $img_name;
+		// 	$music->user_id = $user_id;
+		// 	$music->category_id = $request->get('category');
+		// 	$music->size = $music_size;
 
-			return back()
-				->withMessage('Nou regrèt men nou pa reyisi mete mizik ou a. Eseye ankò.')
-				->withStatus('failed');
-		}
+		// 	if ($price == 'free') {
+		// 		$music->publish = 1;
+		// 	}
+
+		// 	$music->price = $price;
+
+		// 	if (! $price) {
+		// 		$music->publish = 1;
+		// 		$music->price = 'free';
+		// 	}
+
+		// 	$music->description = $request->get('description');
+		// 	$music->slug = $slug;
+
+		// 	$music->save();
+
+
+		// 	/************** GETID3 **************/
+		// 	MP3Pam::tag($music, $img_name, $img_type);
+
+		// 	/******* Flush the cache ********/
+		// 	Cache::flush();
+
+  //       	Cache::forget('latest.musics');
+
+		// 	if ($music->paid) {
+		// 			return redirect(route('music.edit', ['id' => $music->id]));
+		// 		} else {
+		// 		 	return redirect (route('music.show', [
+		// 		 		'id' =>$music->id,
+		// 		 		'slug' =>$music->slug
+		// 		 	]));
+		// 	}
+		// } else	{
+		// 	if ($request->ajax()) {
+		//         		$response = [];
+
+		//         		$response['success'] = false;
+		//         		$response['message'] = 'Nou regrèt men nou pa reyisi mete mizik ou a. Eseye ankò.';
+
+		//        	 	return $response;
+		//         }
+
+		// 	return back()
+		// 		->withMessage('Nou regrèt men nou pa reyisi mete mizik ou a. Eseye ankò.')
+		// 		->withStatus('failed');
+		// }
 
 	}
 

@@ -19,13 +19,14 @@ class Music extends Model
 
 	protected $fillable = [
 		'title',
+		'slug',
 		'name',
 		'image',
 		'user_id',
-		'description',
+		'artist_id',
 		'category_id',
+		'description',
 		'size',
-		'slug'
 	];
 
 	protected $hidden = [
@@ -105,7 +106,7 @@ class Music extends Model
 	{
 		$query
 			->orderBy('download', 'desc')
-			->orderBy('views', 'desc');
+			->orderBy('play', 'desc');
 	}
 
 	public function scopeFeatured($query)

@@ -7,6 +7,8 @@
 
 group(['prefix' => 'v1'], function()
 {
+	get('/', 'HomeController@index');
+
 	group(['middleware' => ['jwt.auth']], function() {
 		// protected API routes go here
 	});
@@ -22,13 +24,12 @@ group(['prefix' => 'v1'], function()
 
 	// Musics routes
 	get('musics', 'MusicsController@index')->name('musics');
+	post('musics', 'MusicsController@store')->name('musics.store');
 	get('musics/{hash}', 'MusicsController@show')->name('music.show');
 	get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicsController@edit']);
 	put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicsController@update']);
 	del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicsController@destroy']);
-	get('mete/music', ['as' => 'music.upload','uses' => 'MusicsController@upload']);
 	get('play/{music}', 'MusicsController@play')->name('music.play');
-	post('mete/music', ['as' => 'music.store', 'uses' => 'MusicsController@store']);
 
 	// Categories routes
 	get('categories', 'CategoriesController@index')->name('category.index');

@@ -2,32 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Cache;
+use App\Helpers\MP3Pam;
 use App\Models\Music;
 
 class PagesController extends Controller
 {
 	public function index()
 	{
-		$data = Cache::rememberForever('page.home', function() {
-			$data = [
-				'featuredMusics' => Music::featured()
-										->published()
-										->latest()
-										->take(8)
-										->get(),
-				'lastMonthTopMusics'  => Music::lastMonth()
-											->popular()
-											->byPlay()
-											->take(8)
-											->get(),
-			];
-
-			return $data;
-		});
-
-		return view('home', $data);
-
 		return view('pages.home');
 	}
 
