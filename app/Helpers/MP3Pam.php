@@ -4,8 +4,6 @@ namespace App\Helpers;
 
 use App;
 use Auth;
-use Mail;
-use Swap;
 use Image;
 use Cache;
 use getID3;
@@ -85,7 +83,7 @@ class MP3Pam
 
 	public static function makeUploadFolder()
 	{
-		return 'user_' . auth()->id() . '/' . date('Y/m/d');
+		return 'user_' . static::getUserFromToken()->id . '/' . date('Y/m/d');
 	}
 
 	public static function makeUploadFileName($file)
@@ -125,72 +123,11 @@ class MP3Pam
 		];
 	}
 
-	public static function vote($obj, $obj_id, $vote_up, $vote_down)
-	{
-		$key = "vote$obj$obj_id";
-
-		$html = Cache::remember($key, 120, function() use ($obj, $obj_id, $vote_up, $vote_down, $key) {
-			$btn1 		= 'default';
-			$disabled1 	= '';
-			$btn2 		= 'default';
-			$disabled2 	= '';
-
-			$user_id = Auth::user()->id;
-
-			$vote = Vote::whereUserId($user_id)
-						->whereObjId($obj_id)
-						->whereObj($obj)
-						->first();
-			if ($vote) {
-				if ($vote->vote == 1) {
-					$btn1 = 'success';
-					$disabled2 = "disabled='disabled'";
-				} elseif ($vote->vote == -1) {
-					$btn2 = 'danger';
-					$disabled1 = "disabled='disabled'";
-				}
-			}
-
-			$html = "<button
-					class='btn btn-$btn1'
-					id='voteUp'  $disabled1>
-					<i class='fa fa-thumbs-o-up fa-lg'></i>
-					<small>
-						<span class='vote-num' id='vote-up-num'>";
-			$html .=  $vote_up ?: '';
-			$html .= "</span>
-					</small>
-				</button>";
-			// 	<button
-			// 		class='btn btn-$btn2'
-			// 		id='voteDown'  $disabled2>
-			// 		<i class='fa fa-thumbs-o-down fa-lg'></i>
-			// 		<small>
-			// 			<span class='vote-num' id='vote-down-num'>";
-			// $html .=  $vote_down ?: '';
-			// $html .= "</span>
-			// 		</small>
-			// 	</button>";
-
-			return $html;
-		});
-
-		return $html;
-	}
-
-	// public static function image($in, $width = null, $height = null, $out)
-	// {
-	// 	Image::make(storage_path('app/public/tkpmizik-data/images/' . $in))
-	// 		->resize($width, $height, function($constraint) {
-	// 			$constraint->aspectratio();
-	// 		})->save(storage_path("app/public/tkpmizik-data/images/$out/" . $in));
-	// }
-
 	public static function size($size, $round = 2)
 	{
 	    	$sizes = [' B', ' KB', ' MB'];
 
-	    	$total = count($sizes) - 1 ;
+	    	$total = count($sizes) - 1;
 
 	    	for ($i = 0; $size > 1024 && $i < $total; $i++) {
 	       		$size /= 1024;
@@ -206,27 +143,27 @@ class MP3Pam
 
 	    	$mp3_writter = new getid3_writetags;
 
-	    	$mp3_writter->filename          = storage_path('app/public/tkpmizik-data/musics/' . $music->mp3name);
-	  	$mp3_writter->tagformats        = ['id3v2.3'];
-	  	$mp3_writter->overwrite_tags    = true;
-	  	$mp3_writter->tag_encoding      = 'UTF-8';
-	  	$mp3_writter->remove_other_tags = true;
+	    	$mp3_writter->filename          		= storage_path('app/public/' . $music->name);
+	  	$mp3_writter->tagformats        		= ['id3v2.3'];
+	  	$mp3_writter->overwrite_tags    		= true;
+	  	$mp3_writter->tag_encoding      		= 'UTF-8';
+	  	$mp3_writter->remove_other_tags 	= true;
 
-	  	$mp3_data['title'][]   = $music->name;
-	  	$mp3_data['artist'][]  = config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url'); //$mp3_artist;
-	  	$mp3_data['album'][]   = config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url');
+	  	$mp3_data['title'][]   				= $music->title;
+	  	$mp3_data['artist'][]  				= config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url'); //$mp3_artist;
+	  	$mp3_data['album'][]   			= config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url');
 	  	// $mp3_data['year'][]    = $mp3_year;
 	  	// $mp3_data['genre'][]   = $mp3_genre;
-	  	$mp3_data['comment'][] = config('site.name') . ' ' . config('site.separator') . config('site.url');
+	  	$mp3_data['comment'][] 			= config('site.name') . ' ' . config('site.separator') . config('site.url');
 
 	  	if ($music->price == 'paid') {
-	    		$mp3_data['attached_picture'][0]['data'] = Storage::disk('images')->get('thumbs/' . $image_name);
-	    		$mp3_data['attached_picture'][0]['picturetypeid'] = $type;
-	  		$mp3_data['attached_picture'][0]['mime'] = $type;
+	    		$mp3_data['attached_picture'][0]['data'] 		= Storage::disk('images')->get('thumbs/' . $image_name);
+	    		$mp3_data['attached_picture'][0]['picturetypeid'] 	= $type;
+	  		$mp3_data['attached_picture'][0]['mime'] 		= $type;
 	  	} else {
 	    		$mp3_data['attached_picture'][0]['data']		 	= file_get_contents(config('site.christmasLogo'));
 	    		$mp3_data['attached_picture'][0]['picturetypeid'] 	= "image/jpg";
-	    		$mp3_data['attached_picture'][0]['mime'] 			= "image/jpg";
+	    		$mp3_data['attached_picture'][0]['mime'] 		= "image/jpg";
 	  	}
 
 	  	$mp3_data['attached_picture'][0]['description'] = config('site.name') .

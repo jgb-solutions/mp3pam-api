@@ -19,9 +19,10 @@ class Music extends Model
 
 	protected $fillable = [
 		'title',
-		'slug',
+		'hash',
 		'name',
 		'image',
+		'detail',
 		'user_id',
 		'artist_id',
 		'category_id',

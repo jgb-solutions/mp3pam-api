@@ -18,6 +18,7 @@ class StoreMusicRequest extends FormRequest
 			'music'     	=> 'required|max:64000000',
 			'image' 	=> 'required|image',
 			'title' 		=> 'required',
+			'detail' 	=> 'required',
 			'category' 	=> 'required',
 			'artist'         => 'required',
 		];
