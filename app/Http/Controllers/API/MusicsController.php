@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Music;
+use App\Jobs\TagMusic;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -47,7 +48,7 @@ class MusicsController extends Controller
 	{
 		$user = MP3Pam::getUserFromToken();
 
-		return $music = $user->musics()->create([
+		$music = $user->musics()->create([
 			'title'          		=> $request->title,
 			'hash'          	=> MP3Pam::getHash(Music::class),
 			'image' 		=> MP3Pam::image($request->file('image'), 500, null),
@@ -60,10 +61,10 @@ class MusicsController extends Controller
 		]);
 
 		// 	/************** GETID3 **************/
-		// 	this gotta be a job
-		// 	dispatch job
-		// 	MP3Pam::tag($music, $img_name, $img_type);
+		// 	dispatch job because it's going to take some time.
+		dispatch(new TagMusic($music));
 
+		return $music;
 	}
 
 	public function show($hash, $slug = null)

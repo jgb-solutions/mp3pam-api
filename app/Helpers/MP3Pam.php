@@ -136,40 +136,32 @@ class MP3Pam
 		return round($size, $round) . $sizes[$i];
 	}
 
-	public static function tag($music, $image_name = null, $type)
+	public static function tag($music)
 	{
 		$mp3_handler = new getID3;
 	   	$mp3_handler->setOption(['encoding'=> 'UTF-8']);
 
 	    	$mp3_writter = new getid3_writetags;
 
-	    	$mp3_writter->filename          		= storage_path('app/public/' . $music->name);
-	  	$mp3_writter->tagformats        		= ['id3v2.3'];
-	  	$mp3_writter->overwrite_tags    		= true;
-	  	$mp3_writter->tag_encoding      		= 'UTF-8';
-	  	$mp3_writter->remove_other_tags 	= true;
+	    	$mp3_writter->filename          			= storage_path('app/public/' . $music->name);
+	  	$mp3_writter->tagformats        			= ['id3v2.3'];
+	  	$mp3_writter->overwrite_tags    			= true;
+	  	$mp3_writter->tag_encoding      			= 'UTF-8';
+	  	$mp3_writter->remove_other_tags 		= true;
 
-	  	$mp3_data['title'][]   				= $music->title;
-	  	$mp3_data['artist'][]  				= config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url'); //$mp3_artist;
-	  	$mp3_data['album'][]   			= config('site.name') . ' ' . config('site.separator') . ' ' . config('site.url');
-	  	// $mp3_data['year'][]    = $mp3_year;
-	  	// $mp3_data['genre'][]   = $mp3_genre;
-	  	$mp3_data['comment'][] 			= config('site.name') . ' ' . config('site.separator') . config('site.url');
+	  	$data['title'][]   						= config('site.url') . ' - ' . $music->fullTitle;
+	  	$data['artist'][]  						= config('site.name') . ' - ' . config('site.url');
+	  	$data['album'][]   					= config('site.name') . ' - ' . config('site.url');
+	  	// $data['year'][]    = $mp3_year;
+	  	// $data['genre'][]   = $mp3_genre;
+	  	$data['comment'][] 					= config('site.name') . ' - ' . config('site.url');
+    		$data['attached_picture'][0]['data']		 	= file_get_contents(public_path(config('site.defaultThumbnail')));
+    		$data['attached_picture'][0]['picturetypeid'] 	= "image/jpg";
+    		$data['attached_picture'][0]['mime'] 		= "image/jpg";
 
-	  	if ($music->price == 'paid') {
-	    		$mp3_data['attached_picture'][0]['data'] 		= Storage::disk('images')->get('thumbs/' . $image_name);
-	    		$mp3_data['attached_picture'][0]['picturetypeid'] 	= $type;
-	  		$mp3_data['attached_picture'][0]['mime'] 		= $type;
-	  	} else {
-	    		$mp3_data['attached_picture'][0]['data']		 	= file_get_contents(config('site.christmasLogo'));
-	    		$mp3_data['attached_picture'][0]['picturetypeid'] 	= "image/jpg";
-	    		$mp3_data['attached_picture'][0]['mime'] 		= "image/jpg";
-	  	}
+	  	$data['attached_picture'][0]['description'] = config('site.name');
 
-	  	$mp3_data['attached_picture'][0]['description'] = config('site.name') .
-	  		' ' . config('site.separator') . ' ' .  config('site.description');
-
-	  	$mp3_writter->tag_data = $mp3_data;
+	  	$mp3_writter->tag_data = $data;
 
 	  	return $mp3_writter->WriteTags();
 	}
