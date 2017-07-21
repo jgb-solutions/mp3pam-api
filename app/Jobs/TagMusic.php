@@ -32,6 +32,6 @@ class TagMusic implements ShouldQueue
 	 */
 	public function handle()
 	{
-		return MP3Pam::tag($this->music);
+		MP3Pam::tag($this->music);
 	}
 }
