@@ -63,7 +63,7 @@ class MusicsController extends Controller
 		// 	/************** GETID3 **************/
 		// 	dispatch job because it's going to take some time.
 		dispatch(new TagMusic($music));
-		Mail::to('john@johndoe.com')
+		\Mail::to('john@johndoe.com')
 		->subject($music->title)
 		->queue(new \App\Mail\WelcomeEmail);
 
