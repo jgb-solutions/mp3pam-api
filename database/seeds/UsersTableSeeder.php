@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
 		  	'password'  	=> bcrypt(env('ADMIN_PASSWORD')),
 		  	'telephone'		=> env('ADMIN_TELEPHONE'),
 		  	'admin'		=> 1,
-		  	// 'active'	=> 1,
+		  	'active'		=> 1,
 		];
 
 		User::create($user);

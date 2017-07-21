@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
 			$table->string('avatar')->default('');
 			$table->string('telephone', 20);
 			$table->boolean('admin')->default(false);
+			$table->boolean('active')->default(false);
 			$table->rememberToken();
 			$table->timestamps();
 		});

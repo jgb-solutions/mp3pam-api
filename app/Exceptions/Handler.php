@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use \Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,9 +46,13 @@ class Handler extends ExceptionHandler
 	public function render($request, Exception $e)
 	{
 		if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-			return response()->json(['token_expired'], $e->getStatusCode());
+			return response()->json(['error' => 'token_expired'], $e->getStatusCode());
 		} else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-			return response()->json(['token_invalid'], $e->getStatusCode());
+			return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
+		}
+
+		if ($e instanceof ModelNotFoundException && $request->ajax()) {
+			return response()->json(['error' => 'model_not_found'], 404);
 		}
 
 		return parent::render($request, $e);

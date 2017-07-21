@@ -27,6 +27,7 @@ class MusicsController extends Controller
 		// ]);
 
 		// $this->middleware('musicOwner')->only(['edit', 'update']);
+		$this->user = MP3Pam::getUserFromToken();
 	}
 
 	public function index()
@@ -46,9 +47,7 @@ class MusicsController extends Controller
 
 	public function store(StoreMusicRequest $request)
 	{
-		$user = MP3Pam::getUserFromToken();
-
-		$music = $user->musics()->create([
+		$music = $this->user->musics()->create([
 			'title'          		=> $request->title,
 			'hash'          	=> MP3Pam::getHash(Music::class),
 			'image' 		=> MP3Pam::image($request->file('image'), 500, null),

@@ -7,41 +7,57 @@
 
 group(['prefix' => 'v1'], function()
 {
-	get('/', 'HomeController@index');
-
-	group(['middleware' => ['jwt.auth']], function() {
-		// protected API routes go here
-	});
 
 	// Auth routes.
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
 
-	//  Users' routes
-	get('users', 'UsersController@index')->name('musics.index');
-	get('users/{user}', 'UsersController@show')->name('musics.show');
-	get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
+	group(['middleware' => ['jwt.auth']], function() {
+		// protected API routes go here
+		get('/', 'HomeController@index');
 
-	// Musics routes
-	get('musics', 'MusicsController@index')->name('musics');
-	post('musics', 'MusicsController@store')->name('musics.store');
-	get('musics/{hash}', 'MusicsController@show')->name('music.show');
-	get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicsController@edit']);
-	put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicsController@update']);
-	del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicsController@destroy']);
-	get('play/{music}', 'MusicsController@play')->name('music.play');
+		//  Users' routes
+		get('users', 'UsersController@index')->name('musics.index');
+		get('users/{user}', 'UsersController@show')->name('musics.show');
+		get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
 
-	// Categories routes
-	get('categories', 'CategoriesController@index')->name('category.index');
-	get('categories/{slug}', 'CategoriesController@show')->name('category.show');
+		// Musics routes
+		get('musics', 'MusicsController@index')->name('musics');
+		post('musics', 'MusicsController@store')->name('musics.store');
+		get('musics/{hash}', 'MusicsController@show')->name('music.show');
+		get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicsController@edit']);
+		put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicsController@update']);
+		del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicsController@destroy']);
+		get('play/{music}', 'MusicsController@play')->name('music.play');
 
-	// Artists routes
-	get('artists', 'ArtistsController@index')->name('artists');
-	get('artists/{hash}', 'ArtistsController@show')->name('artists.show');
-	get('artists/{hash}/musics', 'ArtistsController@musics')->name('artists.musics');
-	get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
-	put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
-	del('artists/{artist}', ['as' => 'music.delete','uses' => 'ArtistsController@destroy']);
+		// Categories routes
+		get('categories', 'CategoriesController@index')->name('category.index');
+		get('categories/{slug}', 'CategoriesController@show')->name('category.show');
+
+		// Artists routes
+		get('artists', 'ArtistsController@index')->name('artists');
+		get('artists/{hash}', 'ArtistsController@show')->name('artists.show');
+		get('artists/{hash}/musics', 'ArtistsController@musics')->name('artists.musics');
+		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
+		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
+		del('artists/{artist}', ['as' => 'music.delete','uses' => 'ArtistsController@destroy']);
+
+		// // Admin routes
+		// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+		// 	get('kategori', ['as' => 'cat','uses' => 'CategoryController@getCreate']);
+		// 	post('kategori', [	'as' => 'cat','uses' => 'CategoryController@postCreate']);
+		// 	delete('kategori/efase/{id}', [	'as' => 'cat.delete','uses' => 'CategoryController@destroy']);
+		// 	get('kategori/{category}/modifye', [	'as' => 'cat.edit','uses' => 'CategoryController@edit'])
+		// ;
+		// 	put('kategori/{category}/modifye', [	'as' => 'cat.update','uses' => 'CategoryController@update']);
+		// 	get('/', [	'as' => 'index','uses' => 'AdminController@index']);
+		// 	get('mizik', [	'as' => 'music','uses' => 'AdminController@musics']);
+		// 	get('videyo', [	'as' => 'video','uses' => 'AdminController@videos']);
+		// 	get('lis', [	'as' => 'playlists','uses' => 'AdminController@playlists']);
+		// 	get('itilizate', ['as' => 'users','uses' => 'AdminController@users']);
+		// });
+	});
+
 
 	// Pages
 	// get('/', ['as'=>'home','uses'=>'PagesController@index']);
@@ -104,27 +120,4 @@ group(['prefix' => 'v1'], function()
 	// get('@{username}/videyo', ['as' => 'user.public.videos','uses' => 'UsersController@getUserVideos']);
 	// get('@{id}/lis', ['as' => 'user.public.playlists','uses' => 'UsersController@playlists']);
 	// get('@{username}/lis', ['as' => 'user.public.playlists','uses' => 'UsersController@playlists']);
-
-
-
-
-	// // Admin routes
-	// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
-	// 	get('kategori', ['as' => 'cat','uses' => 'CategoryController@getCreate']);
-	// 	post('kategori', [	'as' => 'cat','uses' => 'CategoryController@postCreate']);
-	// 	delete('kategori/efase/{id}', [	'as' => 'cat.delete','uses' => 'CategoryController@destroy']);
-	// 	get('kategori/{category}/modifye', [	'as' => 'cat.edit','uses' => 'CategoryController@edit'])
-	// ;
-	// 	put('kategori/{category}/modifye', [	'as' => 'cat.update','uses' => 'CategoryController@update']);
-	// 	get('/', [	'as' => 'index','uses' => 'AdminController@index']);
-	// 	get('mizik', [	'as' => 'music','uses' => 'AdminController@musics']);
-	// 	get('videyo', [	'as' => 'video','uses' => 'AdminController@videos']);
-	// 	get('lis', [	'as' => 'playlists','uses' => 'AdminController@playlists']);
-	// 	get('itilizate', ['as' => 'users','uses' => 'AdminController@users']);
-	// });
-
-	// // get('test', function() {
-	// // 	$music = App\Models\Music::find(198);
-	// // 	return $music->load('user');
-	// // });
 });
