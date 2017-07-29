@@ -38,7 +38,7 @@ class MusicsController extends Controller
 
 		return MP3Pam::cache('_musics_index_', function() {
 			return Music::latest()->paginate(10, [
-				'title', 'play', 'download', 'hash'
+				'id', 'title', 'play', 'download', 'hash'
 			]);
 		});
 
@@ -60,7 +60,7 @@ class MusicsController extends Controller
 			'size' 			=> MP3Pam::size($request->file('music')->getClientsize()),
 		]);
 
-		// 	/************** GETID3 **************/
+		// 	GETID3
 		// 	dispatch job because it's going to take some time.
 		dispatch(new TagMusic($music));
 		\Mail::to('john@johndoe.com')

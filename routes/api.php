@@ -12,23 +12,23 @@ group(['prefix' => 'v1'], function()
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
 
-	group(['middleware' => ['jwt.auth']], function() {
+	group(['middleware' => []], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');
 
 		//  Users' routes
-		get('users', 'UsersController@index')->name('musics.index');
-		get('users/{user}', 'UsersController@show')->name('musics.show');
+		get('users', 'UsersController@index')->name('users.index');
+		get('users/{user}', 'UsersController@show')->name('users.show');
 		get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
 
 		// Musics routes
 		get('musics', 'MusicsController@index')->name('musics');
 		post('musics', 'MusicsController@store')->name('musics.store');
+		get('play/{music}', 'MusicsController@play')->name('musics.play');
 		get('musics/{hash}', 'MusicsController@show')->name('music.show');
-		get('musics/{music}/edit',['as' => 'music.edit','uses' => 'MusicsController@edit']);
-		put('musics/{music}/edit',['as' => 'music.update','uses' => 'MusicsController@update']);
-		del('efase/musics/{music}', ['as' => 'music.delete','uses' => 'MusicsController@destroy']);
-		get('play/{music}', 'MusicsController@play')->name('music.play');
+		get('musics/{music}/edit', 'MusicsController@edit')->name('musics.edit');
+		put('musics/{music}/edit', 'MusicsController@update')->name('musics.edit');
+		del('efase/musics/{music}', 'MusicsController@destroy')->name('musics.destroy');
 
 		// Categories routes
 		get('categories', 'CategoriesController@index')->name('category.index');
@@ -40,7 +40,7 @@ group(['prefix' => 'v1'], function()
 		get('artists/{hash}/musics', 'ArtistsController@musics')->name('artists.musics');
 		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
 		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
-		del('artists/{artist}', ['as' => 'music.delete','uses' => 'ArtistsController@destroy']);
+		del('artists/{artist}', 'ArtistsController@destroy')->name('musics.destroy');
 
 		// // Admin routes
 		// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {

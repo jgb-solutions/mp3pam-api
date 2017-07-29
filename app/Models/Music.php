@@ -145,7 +145,7 @@ class Music extends Model
 
 	public function getPlayUrlAttribute()
 	{
-		return MP3Pam::route('music.play', ['id' => $this->id]);
+		return MP3Pam::route('musics.play', ['id' => $this->id]);
 	}
 
 	public function getImageUrlAttribute()
