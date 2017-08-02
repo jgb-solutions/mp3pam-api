@@ -37,8 +37,8 @@ class MusicsController extends Controller
 		// ];
 
 		return MP3Pam::cache('_musics_index_', function() {
-			return Music::latest()->paginate(10, [
-				'id', 'title', 'play', 'download', 'hash'
+			return Music::with('category')->latest()->paginate(10, [
+				'id', 'title', 'play', 'download', 'hash', 'category_id'
 			]);
 		});
 

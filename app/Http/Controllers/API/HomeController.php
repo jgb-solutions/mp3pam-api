@@ -10,6 +10,7 @@ class HomeController extends Controller {
 
 	public function index()
 	{
+		return dd(request()->ajax());
 		return $data = MP3Pam::cache('page.home', function() {
 			return [
 				'featuredMusics' => Music::featured()->published()->latest()->take(8)->get(),
