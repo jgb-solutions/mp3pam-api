@@ -34,6 +34,14 @@ class Artist extends Model
 		$query->orderBy('name');
 	}
 
+	public function scopeSearch($query, $term)
+	{
+		// $query->whereIn('id', $ids)
+		$query->where('name', 'like', "%$term%")
+			->orWhere('stageName', 'like', "%$term%")
+			->orWhere('bio', 'like', "%$term%");
+	}
+
 	public function getAvatarUrlAttribute()
 	{
 		$avatarPath = config('site.defaultThumbnail');

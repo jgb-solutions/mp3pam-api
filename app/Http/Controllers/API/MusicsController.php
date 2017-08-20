@@ -44,7 +44,7 @@ class MusicsController extends Controller
 
 	}
 
-	public function store(StoreMusicRequest $request)
+	public function store()
 	{
 		$user = MP3Pam::getUserFromToken();
 

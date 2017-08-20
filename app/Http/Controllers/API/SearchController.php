@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use Cache;
+use App\Models\Artist;
 use App\Models\Music;
-use App\Models\Video;
-use App\Models\Category;
 use Illuminate\Http\Request;
-use TeamTNT\TNTSearch\TNTSearch;
 use App\Http\Controllers\Controller;
 
 class SearchController extends Controller
@@ -58,89 +55,33 @@ class SearchController extends Controller
 
 
 
-	public function searchmusic($term)
+	public function search_musics($term)
 	{
-		// $music_res = $this->search('musics', $term);
-		$music_res = null;
+		return Music::with('category')
+			->latest()
+			->search($term)
+			->take(30)
+			->get(['title', 'image', 'category_id', 'hash']);
+			// ->paginate(20, ['id', 'name', 'play', 'views', 'artist', 'download'] );
+	}
 
-		$musics = Music::search($music_res['ids'], $term)
-			// ->get(['id', 'name', 'play', 'download', 'views', 'image']);
-			->paginate(20, ['id', 'name', 'play', 'views', 'artist', 'download'] );
+	public function search_artists($term)
+	{
+		return Artist::withCount('musics')
+			->latest()
+			->search($term)
+			->take(30)
+			->get(['stageName', 'hash', 'avatar']);
+			// ->paginate(20, ['id', 'name', 'play', 'views', 'artist', 'download'] );
+	}
 
-		$music_results = $this->prepare('music', $musics);
+	public function search(Request $request)
+	{
+		$term = $request->term;
 
-
-		if ($this->request->ajax()) {
-			return $musics;
-		}
-
-
-		$data = [
-			'musics' => $musics,
-			'query' => $term,
-			'title' => $term
+		return [
+			'musics' => $this->search_musics($term),
+			'artists' => $this->search_artists($term)
 		];
-
-		return view('search.music', $data);
-	}
-
-
-
-	public function searchvideo($term)
-	{
-		// $video_res = $this->search('videos', $term);
-		$video_res = null;
-
-		$videos = Video::search($video_res['ids'], $term)
-			->paginate( 20, ['id', 'name', 'download', 'views', 'artist']);
-
-		$videos = $this->prepare('video', $videos);
-
-		if ($this->request->ajax() ) {
-			return $videos;
-		}
-
-		$data = [
-			'videos' => $videos,
-			'query' => $term,
-			'title' => $term
-		];
-
-		return view('search.video', $data);
-	}
-
-	private function search($index, $term, $howmany = 200)
-	{
-		$tnt = new TNTSearch;
-
-		$tnt->loadConfig([
-	        		"storage"  => storage_path(),
-	   ]);
-
-		$tnt->selectIndex("{$index}.index");
-		$tnt->asYouType = true;
-
-	   dd($tnt->search($term, $howmany));
-	}
-
-	private function prepare($type, $collection)
-	{
-		switch ($type) {
-			case 'music':
-				$icon = 'music';
-			break;
-
-			case 'video':
-				$icon = 'video-camera';
-			break;
-		}
-
-		$collection->each(function($obj) use ($icon, $type) {
-			$obj->icon = $icon;
-			$obj->type = $type;
-			$obj->url = url(route("$type.show", ['id'=>$obj->id, 'slug'=>$obj->slug]));
-		});
-
-		return $collection;
 	}
 }

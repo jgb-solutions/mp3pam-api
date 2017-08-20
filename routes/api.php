@@ -5,14 +5,12 @@
 //     return 'yeah';
 // });
 
-group(['prefix' => 'v1'], function()
-{
-
+group(['prefix' => 'v1'], function() {
 	// Auth routes.
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
 
-	group(['middleware' => []], function() {
+	group(['middleware' => ['jwt.auth']], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');
 
@@ -41,6 +39,8 @@ group(['prefix' => 'v1'], function()
 		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
 		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
 		del('artists/{artist}', 'ArtistsController@destroy')->name('musics.destroy');
+
+		get('search', 'SearchController@search');
 
 		// // Admin routes
 		// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {

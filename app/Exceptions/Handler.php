@@ -46,13 +46,19 @@ class Handler extends ExceptionHandler
 	public function render($request, Exception $e)
 	{
 		if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-			return response()->json(['error' => 'token_expired'], $e->getStatusCode());
-		} else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-			return response()->json(['error' => 'token_invalid'], $e->getStatusCode());
+			return response()->json(['message' => 'Tokenn ou an ekspire.'], $e->getStatusCode());
+		}
+
+		if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+			return response()->json(['message' => 'Tokenn ou an envalid.'], $e->getStatusCode());
+		}
+
+		if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenMismatchException) {
+			return response()->json(['message' => 'TokenMismatchException'], $e->getStatusCode());
 		}
 
 		if ($e instanceof ModelNotFoundException && $request->ajax()) {
-			return response()->json(['error' => 'model_not_found'], 404);
+			return response()->json(['message' => 'Nou pa jwenn sa w mande a.'], 404);
 		}
 
 		return parent::render($request, $e);

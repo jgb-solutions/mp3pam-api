@@ -67,15 +67,12 @@ class Music extends Model
 		$query->where('category_id', $category->id);
 	}
 
-	public function scopeSearch($query, $ids, $term)
+	public function scopeSearch($query, $term)
 	{
 		// $query->whereIn('id', $ids)
-		$query
-			->where('name', 'like', "%$term%")
-			->orWhere('artist', 'like', "%$term%")
-			->orderBy('download', 'desc')
-			->orderBy('views', 'desc')
-			->take(20);
+		$query->where('title', 'like', "%$term%")
+			->orWhere('detail', 'like', "%$term%")
+			->orWhere('lyrics', 'like', "%$term%");
 	}
 
 	public function scopeRand($query)

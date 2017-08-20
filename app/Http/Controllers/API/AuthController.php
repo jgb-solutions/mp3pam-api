@@ -31,11 +31,11 @@ class AuthController extends Controller
 		try {
 		   	// attempt to verify the credentials and create a token for the user
 		   	if (! $token = JWTAuth::attempt($credentials)) {
-		       		return response()->json(['error' => 'invalid_credentials'], 401);
+		       		return response()->json(['message' => 'Imel oubyen Modpas la pa bon.'], 401);
 		   	}
 		} catch (JWTException $e) {
 		   	// something went wrong whilst attempting to encode the token
-		   	return response()->json(['error' => 'could_not_create_token'], 500);
+		   	return response()->json(['message' => 'Nou pa rive kreye kòd tokenn nan.'], 500);
 		}
 
 		// all good so return the token
