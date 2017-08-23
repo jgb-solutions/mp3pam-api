@@ -10,6 +10,11 @@ group(['prefix' => 'v1'], function() {
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
 
+    	// Recover Password
+    	post('recover', 'Auth\ResetPasswordController@recover')->name('password.recover');
+    	post('verify', 'Auth\ResetPasswordController@verify')->name('password.verify');
+    	post('reset-password', 'Auth\ResetPasswordController@resetPassword')->name('password.reset');
+
 	group(['middleware' => ['jwt.auth']], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');

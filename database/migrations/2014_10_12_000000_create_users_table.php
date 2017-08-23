@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
 			$table->string('telephone', 20);
 			$table->boolean('admin')->default(false);
 			$table->boolean('active')->default(false);
+			$table->string('password_reset_code')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
 		});

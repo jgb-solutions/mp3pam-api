@@ -39,7 +39,6 @@ class Music extends Model
 		'publish',
 		'name',
 		'image',
-		'hash',
 	];
 
 	public function user()
