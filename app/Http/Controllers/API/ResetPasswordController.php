@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Auth;
 
+use App\Helpers\MP3Pam;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -51,5 +52,19 @@ class ResetPasswordController extends Controller
 		return response()->json([
 			'message' => 'Nou pa ka verifye kòd ou a. Tanpri verifye kòd nou voye sou imel ou a epi eseye ankò.'
 		],  401);
+	}
+
+	public function resetPassword(Request $request)
+	{
+		$this->validate($request, [
+			'email' => 'required|email',
+			'password' => 'required|confirmed',
+		]);
+
+		$user = User::where('email', $request->email)->firstOrFail();
+
+		$user->update(['passworld' => bcrypt($request->password)]);
+
+		return response()->json(['success' => true]);
 	}
 }
