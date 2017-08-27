@@ -56,15 +56,15 @@ class MusicsController extends Controller
 			'detail' 		=> $request->detail,
 			'category_id'   	=> $request->category,
 			'artist_id' 		=> $request->artist,
-			'category_id' 	=> $request->get('category'),
+			'category_id' 	=> $request->category,
 			'size' 			=> MP3Pam::size($request->file('music')->getClientsize()),
 		]);
 
 		// 	GETID3
 		// 	dispatch job because it's going to take some time.
 		dispatch(new TagMusic($music));
-		\Mail::to('john@johndoe.com')
-		->queue(new \App\Mail\WelcomeEmail($music));
+
+		\Mail::to('john@johndoe.com')->queue(new \App\Mail\WelcomeEmail($music));
 
 		return $music;
 	}

@@ -14,6 +14,7 @@ class UsersTableSeeder extends Seeder
 		  	'username'  	=> env('ADMIN_USERNAME'),
 		  	'email'     		=> env('ADMIN_EMAIL'),
 		  	'password'  	=> bcrypt(env('ADMIN_PASSWORD')),
+		  	'avatar' 		=> env('AVATAR')
 		  	'telephone'		=> env('ADMIN_TELEPHONE'),
 		  	'admin'		=> 1,
 		  	'active'		=> 1,

@@ -10,6 +10,11 @@ use App\Notifications\RecoverPassword;
 
 class ResetPasswordController extends Controller
 {
+	// public function __construct()
+	// {
+	// 	$this->middleware('jwt.refresh')->only('resetPassword');
+	// }
+
 	public function recover(Request $request)
 	{
 		$this->validate($request, ['email' => 'required|email']);
@@ -63,7 +68,7 @@ class ResetPasswordController extends Controller
 
 		$user = User::where('email', $request->email)->firstOrFail();
 
-		$user->update(['passworld' => bcrypt($request->password)]);
+		$user->update(['password' => bcrypt($request->password)]);
 
 		return response()->json(['success' => true]);
 	}
