@@ -40,7 +40,7 @@ class Category extends Model
 	public static function allCategories()
 	{
 		return MP3Pam::cache('allCategories', function() {
-			return static::orderBy('name')->get();
+			return static::withCount('musics')->orderBy('name')->get();
 		});
 	}
 }

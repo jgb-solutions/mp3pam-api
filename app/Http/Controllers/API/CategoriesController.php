@@ -71,7 +71,7 @@ class CategoriesController extends Controller
 		$key = "category.$slug";
 
 		return MP3Pam::cache($key, function() use ($slug) {
-		   $category= Category::whereSlug($slug)->firstOrFail();
+		   $category= Category::withCount('musics')->whereSlug($slug)->firstOrFail();
 
 			$musics = Music::byCategory($category)->paginate(10, [
 				'id', 'hash', 'title', 'featured', 'size', 'play', 'download', 'created_at'
