@@ -42,8 +42,11 @@ class User extends Authenticatable
 
 	public function getAvatarUrlAttribute()
 	{
-		$avatarPath = config('site.defaultThumbnail');
-		if ($this->avatar) $avatarPath = Storage::url($this->avatar);
+		$avatarPath = config('site.defaultAvatar');
+
+		if (!empty($this->avatar)) {
+			$avatarPath = Storage::url($this->avatar);
+		}
 
 		return MP3Pam::asset($avatarPath);
 	}

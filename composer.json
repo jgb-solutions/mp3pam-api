@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "barryvdh/laravel-cors": "^0.9.2",
-        "intervention/image": "^2.4",
+        "genealabs/laravel-model-caching": "^0.2.34",
         "james-heinrich/getid3": "^1.9",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",

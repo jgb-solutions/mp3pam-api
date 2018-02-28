@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
 			$table->string('username', 60)->unique();
 			$table->string('email', 60)->unique();
 			$table->string('password', 60);
-			$table->string('avatar')->default('');
+			$table->string('avatar')->nullable();
 			$table->string('telephone', 20);
 			$table->boolean('admin')->default(false);
 			$table->boolean('active')->default(false);
