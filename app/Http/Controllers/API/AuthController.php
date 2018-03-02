@@ -65,13 +65,13 @@ class AuthController extends Controller
 		//     'avatar' => $providerUser->getAvatar(),
 		// ]);
 
-		// $token = JWTAuth::fromUser($user);
+		$token = JWTAuth::fromUser($user);
 
-		// return response()->json([
-		//     'token' => $token
-		// ]);
-		// dd($providerUser);
-		// return 'token nan baz';
+		return response()->json([
+		    'token' => $token
+		]);
+		dd($providerUser);
+		return 'token nan baz';
 		return response()->json([
 			'token' => 'askdfasdjfalasdkfasdlfjlasd',
 			'user' => 'alskdfjaskdfjakdsfk'
