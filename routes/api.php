@@ -9,6 +9,8 @@ group(['prefix' => 'v1'], function() {
 	// Auth routes.
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
+    	get('/auth/facebook', 'Auth\AuthController@redirectToFacebook')->name('auth.facebook');
+		get('/auth/facebook/handle', 'Auth\AuthController@handleFacebookConnect')->name('auth.facebook.handle');
 
     	// Recover Password
     	post('recover', 'Auth\ResetPasswordController@recover')->name('password.recover');
