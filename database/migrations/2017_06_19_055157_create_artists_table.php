@@ -18,10 +18,13 @@ class CreateArtistsTable extends Migration
 			$table->string('name');
 			$table->string('stageName')->unique();
 			$table->string('hash', 60)->unique();
-			$table->string('avatar')->default('');
-			$table->text('bio');
+			$table->string('avatar')->nullable();
+			$table->integer('user_id')->unsigned()->unique();
+			$table->text('bio')->nullable();
 			$table->boolean('verified')->default(false);
 			$table->timestamps();
+
+			$table->foreign('user_id')->references('id')->on('users');
 		});
 	}
 

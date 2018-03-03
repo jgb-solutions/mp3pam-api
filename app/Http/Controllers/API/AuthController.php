@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Requests\RegisterFormRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -41,7 +42,12 @@ class AuthController extends Controller
 
 		// all good so return the token
 		$user = JWTAuth::toUser($token);
-		return response()->json(compact('token', 'user'));
+
+		// return response
+		return response()->json([
+			'user' => new UserResource($user),
+			'token' => $token
+		]);
 	}
 
 	public function redirectToFacebook()
@@ -56,25 +62,32 @@ class AuthController extends Controller
      */
 	public function handleFacebookConnect()
 	{
-		$providerUser = Socialite::driver('facebook')->stateless()->user();
-		// for example we might do something like... Check if a user exists with the email and if so, log them in.
-		// $user = User::firstOrCreate([
-		//     'facebook_id' => $providerUser->getId(),
-		//     'email' => $providerUser->getEmail(),
-		//     'name' => $providerUser->getName(),
-		//     'avatar' => $providerUser->getAvatar(),
-		// ]);
+		try {
+			$fb_user = Socialite::driver('facebook')->stateless()->user();
 
-		$token = JWTAuth::fromUser($user);
+			// for example we might do something like... Check if a user exists with the email and if so, log them in.
+			// $user = User::where()
+			$user = User::orWhere('email', $fb_user->email)->firstOrCreate([
+			   'facebook_id' 	=> $fb_user->id,
+			], [
+				'name' 				=> $fb_user->name,
+				'avatar' 			=> $fb_user->avatar,
+				'facebook_link' 	=> $fb_user->profileUrl
+			]);
 
-		return response()->json([
-		    'token' => $token
-		]);
-		dd($providerUser);
-		return 'token nan baz';
-		return response()->json([
-			'token' => 'askdfasdjfalasdkfasdlfjlasd',
-			'user' => 'alskdfjaskdfjakdsfk'
-		]);
+			if ($user->firstLogin) {
+				$user->email = $fb_user->email;
+				$user->save();
+			}
+
+			$token = JWTAuth::fromUser($user);
+
+			return response()->json([
+			    'token' => $token,
+			    'user' 	=> new UserResource($user)
+			]);
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
+			return response()->json(['message' => 'Nou pa rive konekte w ak Facebook, tanpri eseye ankò'], 500);
+		}
 	}
 }

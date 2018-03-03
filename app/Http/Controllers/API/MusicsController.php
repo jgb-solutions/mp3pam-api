@@ -76,7 +76,7 @@ class MusicsController extends Controller
 		return MP3Pam::cache($key, function() use ($hash, $key) {
 			$music = Music::with([
 				'user' => function($query) {
-					$query->select(['id', 'name', 'username', 'email', 'avatar', 'telephone']);
+					$query->select(['id', 'name', 'email', 'avatar', 'telephone']);
 				},
 				'artist' => function($query) {
 					$query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);

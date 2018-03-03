@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use App\Models\Artist;
+use App\Helpers\MP3Pam;
 use Illuminate\Database\Seeder;
 
 class ArtistsTableSeeder extends Seeder
@@ -9,15 +11,13 @@ class ArtistsTableSeeder extends Seeder
 	{
 		DB::table('artists')->delete();
 
-		$artists = [
-			[
-			  	'name' => 'Daniel Darinus',
-				'stageName' => 'Fantom Tapajè',
-				'hash' => App\Helpers\MP3Pam::getHash(Artist::class),
-				'bio' => '',
-			],
+		$artist = [
+		  	'name' => 'Daniel Darinus',
+			'stageName' => 'Fantom Tapajè',
+			'hash' => MP3Pam::getHash(Artist::class),
+			'user_id' => User::first()->id
 		];
 
-		foreach ($artists as $artist) { Artist::create($artist); }
+		Artist::create($artist);
 	}
 }

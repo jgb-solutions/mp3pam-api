@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
-	protected $fillable = ['name', 'slug'];
+	protected $fillable = ['name', 'stageName', 'hash', 'avatar', 'bio', 'user_id'];
 
 	protected $hidden = [
 		'id',
