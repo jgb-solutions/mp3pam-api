@@ -134,7 +134,10 @@ class Music extends Model
 	public function getMp3UrlAttribute()
 	{
 		$mp3Path = config('site.defaultMP3URL');
-		if ($this->name) $mp3Path = Storage::url($this->name);
+
+		if ($this->name){
+			$mp3Path = Storage::url($this->name);
+		}
 
 		return MP3Pam::asset($mp3Path);
 	}

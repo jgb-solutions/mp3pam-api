@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
 			$table->boolean('admin')->default(false);
 			$table->boolean('active')->default(false);
 			$table->string('password_reset_code')->nullable();
-			$table->boolean('firstLogin')->default(false);
+			$table->boolean('first_login')->default(true);
 			$table->rememberToken();
 			$table->timestamps();
 		});

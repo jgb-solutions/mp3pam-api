@@ -26,11 +26,11 @@ $factory->define(Music::class, function (Faker\Generator $faker)
 
 	return [
 		'title'			=> $name,
-		'hash' 		=> MP3Pam::getHash(Music::class),
+		'hash' 			=> MP3Pam::getHash(Music::class),
 		'detail' 		=> $faker->realText(200),
 		'lyrics' 		=> $faker->realText(1000),
-		'size' 			=> rand(10000,99999),
-		'name' 		=> '',
+		'file_size'		=> rand(10000,99999),
+		'file_name' 			=> '',
 		'image' 		=> '',
 		'user_id' 		=> $admin->id,
 		'artist_id'		=> Artist::first()->id,

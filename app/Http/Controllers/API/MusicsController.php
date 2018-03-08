@@ -7,6 +7,7 @@ use App\Jobs\TagMusic;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MusicCollection;
 use App\Http\Requests\StoreMusicRequest;
 use App\Http\Requests\UpdateMusicRequest;
 
@@ -36,11 +37,9 @@ class MusicsController extends Controller
 		// 	'musics'	=> Music::latest()->published()->paginate(10),
 		// ];
 
-		return MP3Pam::cache('_musics_index_', function() {
-			return Music::with('category')->latest()->paginate(10, [
-				'id', 'title', 'play', 'download', 'hash', 'category_id'
-			]);
-		});
+		// return MP3Pam::cache('_musics_index_', function() {
+			return new MusicCollection(Music::with('category')->latest()->paginate(10));
+		// });
 
 	}
 
@@ -76,7 +75,7 @@ class MusicsController extends Controller
 		return MP3Pam::cache($key, function() use ($hash, $key) {
 			$music = Music::with([
 				'user' => function($query) {
-					$query->select(['id', 'name', 'email', 'avatar', 'telephone']);
+					$query->select(['id', 'file_name', 'email', 'avatar', 'telephone']);
 				},
 				'artist' => function($query) {
 					$query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);

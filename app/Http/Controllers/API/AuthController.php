@@ -67,24 +67,58 @@ class AuthController extends Controller
 
 			// for example we might do something like... Check if a user exists with the email and if so, log them in.
 			// $user = User::where()
-			$user = User::orWhere('email', $fb_user->email)->firstOrCreate([
-			   'facebook_id' 	=> $fb_user->id,
-			], [
-				'name' 				=> $fb_user->name,
-				'avatar' 			=> $fb_user->avatar,
-				'facebook_link' 	=> $fb_user->profileUrl
-			]);
+			// $user = User::orWhere('email', $fb_user->email)->firstOrCreate([
+			//    'facebook_id' 	=> $fb_user->id,
+			// ], [
+			// 	'name' 				=> $fb_user->name,
+			// 	'avatar' 			=> $fb_user->avatar,
+			// 	'facebook_link' 	=> $fb_user->profileUrl
+			// ]);
+
+			$user = User::where('facebook_id', $fb_user->id)->orWhere('email', $fb_user->email)->first();
+
+			if ($user) {
+				if (empty($user->facebook_id)) {
+					$user->facebook_id = $fb_user->id;
+				}
+
+				if (empty($user->name)) {
+					$user->name = $fb_user->name;
+				}
+
+				if (empty($user->avatar)) {
+					$user->avatar = $fb_user->avatar;
+				}
+
+				if (empty($user->facebook_link)) {
+					$user->facebook_link = $fb_user->profileUrl;
+				}
+
+				$user->save();
+			} else {
+				$user = User::create([
+					'facebook_id' 		=> $fb_user->id,
+					'name' 				=> $fb_user->name,
+					'avatar' 			=> $fb_user->avatar,
+					'facebook_link' 	=> $fb_user->profileUrl
+				]);
+			}
+
+			$first_login = false;
 
 			if ($user->firstLogin) {
-				$user->email = $fb_user->email;
+				$user->first_login = true;
+				$first_login = true;
+
 				$user->save();
 			}
 
 			$token = JWTAuth::fromUser($user);
 
 			return response()->json([
-			    'token' => $token,
-			    'user' 	=> new UserResource($user)
+			    'token'			=> $token,
+			    'user' 			=> new UserResource($user),
+			    'firstLogin' 	=> (boolean) $first_login
 			]);
 		} catch (\GuzzleHttp\Exception\ClientException $e) {
 			return response()->json(['message' => 'Nou pa rive konekte w ak Facebook, tanpri eseye ankò'], 500);

@@ -14,6 +14,16 @@ class MusicResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'title'         => $this->title,
+            'detail'        => $this->detail,
+            'lyrics'        => $this->lyrics,
+            'url'           => $this->url,
+            'play_count'    => $this->play_count,
+            'download_count'=> $this->download_count,
+            'download_url'  => $this->download_url,
+            'image_url'     => $this->url,
+            'category'      => $this->category
+        ];
     }
 }

@@ -21,7 +21,6 @@ class UserResource extends Resource
             'active'    => (boolean) $this->active,
             'admin'     => (boolean) $this->admin,
             'facebook'  => $this->facebook_link,
-            'firstLogin'=> (boolean) $this->firstLogin,
             'musics'    => $this->musics_url,
             'telephone' => $this->telephone,
             'type'      => $this->type
