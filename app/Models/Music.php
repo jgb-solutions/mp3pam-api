@@ -135,8 +135,8 @@ class Music extends Model
 	{
 		$mp3Path = config('site.defaultMP3URL');
 
-		if ($this->name){
-			$mp3Path = Storage::url($this->name);
+		if ($this->file_name){
+			$mp3Path = Storage::url($this->file_name);
 		}
 
 		return MP3Pam::asset($mp3Path);

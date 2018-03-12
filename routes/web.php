@@ -49,3 +49,29 @@ get('fg', function() {
 	// $waveform = $audio->waveform();
 	// $waveform->save(storage_path('app/public/waveform.png' ));
 });
+
+get('b2-put', function()
+{
+	\Storage::disk('b2')->put('jgb.txt', 'web developer');
+});
+
+get('b2-get', function()
+{
+	return \Storage::disk('b2')->url('musics/yeah');
+});
+
+post('b2-store', function()
+{
+	// $path = request()->file('music')->store(
+ //    'musics/'.time(), 'b2'
+	// );
+	$path = request()->file('music')->storeAs(
+    	'musics', str_random(12) . '.mp3', 'b2'
+	);
+	return $path;
+});
+
+get('b2-del', function()
+{
+	\Storage::disk('b2')->delete('jgb.txt');
+});

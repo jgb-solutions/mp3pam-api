@@ -63,6 +63,13 @@ return [
             'bucket' => env('AWS_BUCKET'),
         ],
 
+        'b2' => [
+            'driver'    => 'b2',
+            'account'   => env('B2_ACCOUNT'),
+            'key'       => env('B2_KEY'),
+            'bucket'    => env('B2_BUCKET'),
+            'host'      => 'f001.backblazeb2.com'
+        ],
     ],
 
 ];

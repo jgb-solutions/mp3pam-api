@@ -182,7 +182,6 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Pbmedia\LaravelFFMpeg\FFMpegServiceProvider::class,
-
     ],
 
     /*

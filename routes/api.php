@@ -17,7 +17,7 @@ group(['prefix' => 'v1'], function() {
     	post('verify', 'Auth\ResetPasswordController@verify')->name('password.verify');
     	post('reset-password', 'Auth\ResetPasswordController@resetPassword')->name('password.reset');
 
-	group(['middleware' => ['jwt.auth']], function() {
+	group(['middleware' => []], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');
 

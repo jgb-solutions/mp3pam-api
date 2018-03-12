@@ -14,6 +14,8 @@ class ArtistResource extends Resource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id', 'name', 'stageName', 'hash', 'avatar', 'verified'
+        ]
     }
 }

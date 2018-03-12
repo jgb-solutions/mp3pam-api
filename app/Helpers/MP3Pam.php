@@ -168,7 +168,7 @@ class MP3Pam
 
 	public static function download($music)
 	{
-		$music->download += 1;
+		$music->download_count += 1;
 		$music->save();
 
 		if ($music->name) {
@@ -178,14 +178,14 @@ class MP3Pam
 		}
 
 		header('Content-Description: File Transfer');
-	    	header('Content-Type: application/octet-stream');
-	    	header('Content-Disposition: attachment; filename=' . $music->fullTitle . '.mp3' );
-	    	header('Expires: 0');
-	    	header('Cache-Control: must-revalidate');
-	    	header('Pragma: public');
-	    	header('Content-Length: ' . filesize($mp3name) );
-	    	readfile($mp3name) ;
-	    	exit;
+    	header('Content-Type: application/octet-stream');
+    	header('Content-Disposition: attachment; filename=' . $music->fullTitle . '.mp3' );
+    	header('Expires: 0');
+    	header('Cache-Control: must-revalidate');
+    	header('Pragma: public');
+    	header('Content-Length: ' . filesize($mp3name) );
+    	readfile($mp3name) ;
+    	exit;
 	}
 
 

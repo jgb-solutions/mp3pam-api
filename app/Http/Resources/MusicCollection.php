@@ -23,10 +23,12 @@ class MusicCollection extends ResourceCollection
                     'lyrics'        => $music->lyrics,
                     'url'           => $music->url,
                     'play_count'    => $music->play_count,
+                    'play_url'      => $music->play_url,
                     'download_count'=> $music->download_count,
                     'download_url'  => $music->download_url,
                     'image_url'     => $music->image_url,
-                    'category'      => $music->category
+                    'category'      => $music->category,
+                    'artist'        => $music->artist
                 ];
             })
         ];

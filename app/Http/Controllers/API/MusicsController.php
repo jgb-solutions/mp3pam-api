@@ -38,7 +38,7 @@ class MusicsController extends Controller
 		// ];
 
 		// return MP3Pam::cache('_musics_index_', function() {
-			return new MusicCollection(Music::with('category')->latest()->paginate(10));
+			return new MusicCollection(Music::with('category', 'artist')->latest()->paginate(10));
 		// });
 
 	}
@@ -260,7 +260,7 @@ class MusicsController extends Controller
 
 	public function play(Music $music)
 	{
-		$music->play += 1;
+		$music->play_count += 1;
 		$music->save();
 
 		return redirect($music->mp3_url);
