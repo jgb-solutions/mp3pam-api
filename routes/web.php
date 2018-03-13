@@ -75,3 +75,19 @@ get('b2-del', function()
 {
 	\Storage::disk('b2')->delete('jgb.txt');
 });
+
+get('b2-stream', function()
+{
+	// return \Storage::disk('b2')->response("avatars/1520745144/us8i5AUeXS6zOwBei9W7bT617rDQJLlulECpOaHY.jpeg");
+	$file = "avatars/1520745144/us8i5AUeXS6zOwBei9W7bT617rDQJLlulECpOaHY.jpeg";
+	$fs = Storage::disk('b2')->getDriver();
+	$stream = $fs->readStream($file);
+
+	return Response::stream(function() use($stream) {
+	    fpassthru($stream);
+	}, 200, [
+	    "Content-Type" => $fs->getMimetype($file),
+	    "Content-Length" => $fs->getSize($file),
+	    "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
+	]);
+});

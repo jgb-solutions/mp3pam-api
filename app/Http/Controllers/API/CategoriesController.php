@@ -74,7 +74,7 @@ class CategoriesController extends Controller
 		   $category= Category::withCount('musics')->whereSlug($slug)->firstOrFail();
 
 			$musics = Music::byCategory($category)->paginate(10, [
-				'id', 'hash', 'title', 'featured', 'size', 'play', 'download', 'created_at'
+				'id', 'hash', 'title', 'featured', 'file_size', 'created_at'
 			]);
 			// $musics = $cat->musics()->published()->latest()->take(20)->get();
 
