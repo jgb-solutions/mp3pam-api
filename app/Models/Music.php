@@ -102,8 +102,8 @@ class Music extends Model
 	public function scopePopular($query)
 	{
 		$query
-			->orderBy('download', 'desc')
-			->orderBy('play', 'desc');
+			->orderBy('download_count', 'desc')
+			->orderBy('play_count', 'desc');
 	}
 
 	public function scopeFeatured($query)

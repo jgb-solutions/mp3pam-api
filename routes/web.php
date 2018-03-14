@@ -57,7 +57,7 @@ get('b2-put', function()
 
 get('b2-get', function()
 {
-	return \Storage::disk('b2')->url('musics/yeah');
+	return \Storage::disk('b2')->url('musics/npEknR6TuowI.mp3');
 });
 
 post('b2-store', function()
