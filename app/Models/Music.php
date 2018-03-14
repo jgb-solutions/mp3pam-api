@@ -118,7 +118,7 @@ class Music extends Model
 
 	public function scopeByPlay($query)
 	{
-		$query->orderBy('play', 'desc');
+		$query->orderBy('play_count', 'desc');
 	}
 
 	public function getFullTitleAttribute()
