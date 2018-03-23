@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Storage;
 use App\Helpers\MP3Pam;
-use Illuminate\Database\Eloquent\Model;
 
-class Artist extends Model
+class Artist extends BaseModel
 {
 	protected $fillable = ['name', 'stageName', 'hash', 'avatar', 'bio', 'user_id'];
 

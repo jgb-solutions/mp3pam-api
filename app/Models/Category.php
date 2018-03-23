@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Helpers\MP3Pam;
-use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Category extends BaseModel
 {
 	protected $table = 'categories';
 

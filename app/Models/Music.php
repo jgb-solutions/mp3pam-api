@@ -5,9 +5,8 @@ namespace App\Models;
 use Storage;
 use Carbon\Carbon;
 use App\Helpers\MP3Pam;
-use Illuminate\Database\Eloquent\Model;
 
-class Music extends Model
+class Music extends BaseModel
 {
 	protected $appends = [
 		'url',

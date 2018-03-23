@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class MusicList extends Model
+class MusicList extends BaseModel
 {
 	protected $fillable = ['playlist_id', 'music_id'];
 

@@ -48,7 +48,7 @@ class MusicsController extends Controller
 		$user = MP3Pam::getUserFromToken();
 
 		$music = $user->musics()->create([
-			'title'          		=> $request->title,
+			'title'     => $request->title,
 			'hash'          	=> MP3Pam::getHash(Music::class),
 			'image' 		=> MP3Pam::image($request->file('image'), 500, null),
 			'name' 		=> MP3Pam::store($request->file('music')),

@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use TKPM;
 use Illuminate\Support\Collection;
 
-class Playlist extends Model
+class Playlist extends BaseModel
 {
 	protected $appends = ['url'];
 	protected $fillable = ['name', 'slug', 'user_id', 'music_list_id'];

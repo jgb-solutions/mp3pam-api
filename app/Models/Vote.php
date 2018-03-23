@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-
-class Vote extends Model
+class Vote extends BaseModel
 {
 	public $timestamps = false;
 
