@@ -15,15 +15,28 @@ class MusicResource extends Resource
     public function toArray($request)
     {
         return [
-            'title'         => $this->title,
-            'detail'        => $this->detail,
-            'lyrics'        => $this->lyrics,
-            'url'           => $this->url,
-            'play_count'    => $this->play_count,
-            'download_count'=> $this->download_count,
-            'download_url'  => $this->download_url,
-            'image_url'     => $this->url,
-            'category'      => $this->category
+            'title'         	=> $this->title,
+            'detail'        	=> $this->detail,
+            'lyrics'        	=> $this->lyrics,
+            'url'           	=> $this->url,
+            'hash'				=> $this->hash,
+            'play_count'    	=> $this->play_count,
+            'play_url'    		=> $this->play_url,
+            'download_count'	=> $this->download_count,
+            'download_url'  	=> $this->download_url,
+            'image'				=> $this->image_url,
+            'category'      	=> new CategoryResource($this->category),
+            'artist' 			=> new ArtistResource($this->artist)
         ];
+
+        // 'user' => function($query) {
+        //             $query->select(['id', 'name', 'email', 'avatar', 'telephone']);
+        // },
+        // 'artist' => function($query) {
+        //     $query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
+        // },
+        //
+        // $related = Music::related($music)->get(['id', 'name', 'image', 'play', 'download', 'hash']);
+
     }
 }

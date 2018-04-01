@@ -16,7 +16,7 @@ class CreateArtistsTable extends Migration
 		Schema::create('artists', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
-			$table->string('stageName')->unique();
+			$table->string('stage_name')->unique();
 			$table->string('hash', 60)->unique();
 			$table->string('avatar')->nullable();
 			$table->integer('user_id')->unsigned()->unique();

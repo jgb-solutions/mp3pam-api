@@ -57,18 +57,32 @@ get('b2-put', function()
 
 get('b2-get', function()
 {
-	return \Storage::disk('b2')->url('musics/npEknR6TuowI.mp3');
+	return \Storage::disk('b2')->url('musics/0Es1ghj4ftd9.mp3');
 });
 
 post('b2-store', function()
 {
-	// $path = request()->file('music')->store(
- //    'musics/'.time(), 'b2'
-	// );
-	$path = request()->file('music')->storeAs(
-    	'musics', str_random(12) . '.mp3', 'b2'
+	$path = request()->file('music')->store(
+    'musics/'.time(), 'b2'
 	);
+	$path = request()->file('music')->storeAs(
+    	'musics', str_random(12) . '.mp3', 'b2', [
+    		'X-Bz-Info-b2-content-disposition'	 => 'attachment'
+    	]
+	);
+
 	return $path;
+});
+
+get('b2-at', function()
+{
+	$path = \Storage::disk('b2')->getDriver()->put('music/index4.txt', 'test', [
+		// 'visibility' => 'public',
+		'Expires' => 'Expires, Fri, 30 Oct 1998 14:19:41 GMT',
+		'ContentDisposition' => 'attachment'
+	]);
+
+	dd($path);
 });
 
 get('b2-del', function()

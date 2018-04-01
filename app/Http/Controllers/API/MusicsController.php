@@ -7,6 +7,7 @@ use App\Jobs\TagMusic;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MusicResource;
 use App\Http\Resources\MusicCollection;
 use App\Http\Requests\StoreMusicRequest;
 use App\Http\Requests\UpdateMusicRequest;
@@ -68,33 +69,17 @@ class MusicsController extends Controller
 		return $music;
 	}
 
-	public function show($hash, $slug = null)
+	public function show($hash)
 	{
-		$key = '_music_' . $hash;
+		$music = Music::with(['user', 'artist', 'category'])->byHash($hash)->firstOrFail();
 
-		return MP3Pam::cache($key, function() use ($hash, $key) {
-			$music = Music::with([
-				'user' => function($query) {
-					$query->select(['id', 'file_name', 'email', 'avatar', 'telephone']);
-				},
-				'artist' => function($query) {
-					$query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
-				},
-				'category'
-			])->byHash($hash)->firstOrFail();
+		$related = Music::related($music)->get();
+		// return $related;
 
-			$related = Music::related($music)->get(['id', 'name', 'image', 'play', 'download', 'hash']);
-			// return $related;
-
-			$data = [
-				'music' 	=> $music,
-				'related' => $related,
-			];
-
-			return $data;
-		});
-
-		return $data;
+		return [
+			'music' 	=> new MusicResource($music),
+			'related' => new MusicCollection($related)
+		];
 	}
 
 	public function edit(Music $music)

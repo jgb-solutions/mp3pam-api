@@ -15,7 +15,11 @@ class ArtistResource extends Resource
     public function toArray($request)
     {
         return [
-            'id', 'name', 'stageName', 'hash', 'avatar', 'verified'
-        ]
+            'name'          => $this->name,
+            'stageName'     => $this->stage_name,
+            'hash'          => $this->hash,
+            'avatar'        => $this->avatar_url,
+            'verified'      => (boolean) $this->verified
+        ];
     }
 }

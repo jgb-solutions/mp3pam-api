@@ -17,19 +17,7 @@ class MusicCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->transform(function($music) {
-                return [
-                    'title'         => $music->title,
-                    'detail'        => $music->detail,
-                    'lyrics'        => $music->lyrics,
-                    'url'           => $music->url,
-                    'play_count'    => $music->play_count,
-                    'play_url'      => $music->play_url,
-                    'download_count'=> $music->download_count,
-                    'download_url'  => $music->download_url,
-                    'image_url'     => $music->image_url,
-                    'category'      => $music->category,
-                    'artist'        => $music->artist
-                ];
+                return new MusicResource($music);
             })
         ];
     }
