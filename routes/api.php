@@ -27,13 +27,13 @@ group(['prefix' => 'v1'], function() {
 		get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
 
 		// Musics routes
-		get('musics', 'MusicsController@index')->name('musics');
-		post('musics', 'MusicsController@store')->name('musics.store');
-		get('play/{music}', 'MusicsController@play')->name('musics.play');
-		get('musics/{hash}', 'MusicsController@show')->name('music.show');
-		get('musics/{music}/edit', 'MusicsController@edit')->name('musics.edit');
-		put('musics/{music}/edit', 'MusicsController@update')->name('musics.edit');
-		del('efase/musics/{music}', 'MusicsController@destroy')->name('musics.destroy');
+		get('musics', 'MusicsController@index')->name('api.musics');
+		post('musics', 'MusicsController@store')->name('api.musics.store');
+		get('play/{music}', 'MusicsController@play')->name('api.musics.play');
+		get('musics/{hash}', 'MusicsController@show')->name('api.musics.show');
+		get('musics/{music}/edit', 'MusicsController@edit')->name('api.musics.edit');
+		put('musics/{music}/edit', 'MusicsController@update')->name('api.musics.edit');
+		del('efase/musics/{music}', 'MusicsController@destroy')->name('api.musics.destroy');
 
 		// Categories routes
 		get('categories', 'CategoriesController@index')->name('category.index');

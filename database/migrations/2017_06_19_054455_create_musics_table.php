@@ -17,7 +17,7 @@ class CreateMusicsTable extends Migration
 		{
 			$table->increments('id');
 			$table->string('title')->index();
-			$table->integer('hash')->unsigned();
+			$table->integer('hash')->unsigned()->unique();
 			$table->string('file_name');
 			$table->string('image');
 			$table->boolean('featured')->default(false);

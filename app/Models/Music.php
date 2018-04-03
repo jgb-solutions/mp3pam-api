@@ -127,7 +127,12 @@ class Music extends BaseModel
 
 	public function getUrlAttribute()
 	{
-		return MP3Pam::route('music.show', ['hash' => $this->hash]);
+		return MP3Pam::route('api.musics.show', ['hash' => $this->hash]);
+	}
+
+	public function getPublicUrlAttribute()
+	{
+		return MP3Pam::route('musics.show', ['hash' => $this->hash]);
 	}
 
 	public function getMp3UrlAttribute()
@@ -143,7 +148,7 @@ class Music extends BaseModel
 
 	public function getPlayUrlAttribute()
 	{
-		return MP3Pam::route('musics.play', ['id' => $this->id]);
+		return MP3Pam::route('api.musics.play', ['id' => $this->id]);
 	}
 
 	public function getImageUrlAttribute()
@@ -156,7 +161,7 @@ class Music extends BaseModel
 
 	public function scopeUrl()
 	{
-		return MP3Pam::route('music.show', ['id' => $this->id, 'slug' => $this->slug]);
+		return MP3Pam::route('api.musics.show', ['id' => $this->id, 'slug' => $this->slug]);
 	}
 
 	public function getDownloadUrlAttribute()

@@ -19,6 +19,7 @@ class MusicResource extends Resource
             'detail'        	=> $this->detail,
             'lyrics'        	=> $this->lyrics,
             'url'           	=> $this->url,
+            'publicUrl'       => $this->public_url,
             'hash'				=> $this->hash,
             'play_count'    	=> $this->play_count,
             'play_url'    		=> $this->play_url,
