@@ -46,13 +46,13 @@ class User extends Authenticatable
 			return $this->avatar;
 		}
 
-		// $avatarPath = config('site.defaultAvatar');
+		$avatarPath = config('site.defaultAvatar');
 
-		// if (!empty($this->avatar)) {
-		// 	$avatarPath = Storage::url($this->avatar);
-		// }
+		if (!empty($this->avatar)) {
+			$avatarPath = Storage::url($this->avatar);
+		}
 
-		// return MP3Pam::asset($avatarPath);
+		return MP3Pam::asset($avatarPath);
 	}
 
 	public function getMusicsUrlAttribute()

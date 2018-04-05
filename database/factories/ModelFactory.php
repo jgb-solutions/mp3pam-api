@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\User;
-use App\Models\Artist;
 use App\Models\Music;
-use App\Models\Category;
+use App\Models\Artist;
 use App\Helpers\MP3Pam;
+use App\Models\Category;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 // $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
@@ -30,10 +30,20 @@ $factory->define(Music::class, function (Faker\Generator $faker)
 		'detail' 		=> $faker->realText(200),
 		'lyrics' 		=> $faker->realText(1000),
 		'file_size'		=> rand(10000,99999),
-		'file_name' 			=> '',
-		'image' 		=> '',
+		'file_name' 	=> '',
+		'image' 			=> '',
 		'user_id' 		=> $admin->id,
 		'artist_id'		=> Artist::first()->id,
 		'category_id' 	=> Category::first()->id,
+	];
+});
+
+$factory->define(Artist::class, function (Faker\Generator $faker)
+{
+	return [
+	  	'name' 			=> $faker->name,
+		'stage_name' 	=> $faker->name,
+		'hash' 			=> MP3Pam::getHash(Artist::class),
+		'user_id' 		=> User::first()
 	];
 });

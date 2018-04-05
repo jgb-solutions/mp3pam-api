@@ -11,6 +11,7 @@
         "fideloper/proxy": "~4.0",
         "genealabs/laravel-model-caching": "^0.2.34",
         "james-heinrich/getid3": "^1.9",
+        "laravel-notification-channels/onesignal": "^1.2",
         "laravel/framework": "^5.6",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",

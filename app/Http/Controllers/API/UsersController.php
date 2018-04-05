@@ -97,9 +97,9 @@ class UsersController extends Controller
 	public function store(StoreUserRequest $request)
 	{
 		$user = User::create([
-			'name' 		=> $request->get('name'),
+			'name' 			=> $request->get('name'),
 			'password' 		=> bcrypt($request->get('password')),
-			'email' 		=> $request->get('email'),
+			'email' 			=> $request->get('email'),
 			'telephone' 	=> $request->get('telephone')
 		]);
 
