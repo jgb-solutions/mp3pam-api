@@ -4,10 +4,20 @@ namespace App\Models;
 
 use Storage;
 use App\Helpers\MP3Pam;
+use Laravel\Scout\Searchable;
 
 class Artist extends BaseModel
 {
-	protected $fillable = ['name', 'stageName', 'hash', 'avatar', 'bio', 'user_id'];
+	use Searchable;
+
+	protected $fillable = [
+		'bio',
+		'name',
+		'hash',
+		'avatar',
+		'user_id',
+		'stageName',
+	];
 
 	protected $hidden = [
 		'id',
@@ -63,4 +73,18 @@ class Artist extends BaseModel
 	{
 		return MP3Pam::route('artists.musics', ['hash' => $this->hash]);
 	}
+
+	// Algolia
+	// public function toSearchableArray()
+	// {
+	//   $array = $this->toArray();
+
+	//   // Customize array...
+
+	//   return $array;
+	// }
+	// public function shouldBeSearchable()
+	// {
+	// 	return $this->isPublished();
+	// }
 }

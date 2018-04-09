@@ -19,7 +19,7 @@ class MusicResource extends Resource
             'detail'        	=> $this->detail,
             'lyrics'        	=> $this->lyrics,
             'url'           	=> $this->url,
-            'publicUrl'       => $this->public_url,
+            'publicUrl'         => $this->public_url,
             'hash'				=> $this->hash,
             'play_count'    	=> $this->play_count,
             'play_url'    		=> $this->play_url,
@@ -33,11 +33,6 @@ class MusicResource extends Resource
         // 'user' => function($query) {
         //             $query->select(['id', 'name', 'email', 'avatar', 'telephone']);
         // },
-        // 'artist' => function($query) {
-        //     $query->select(['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
-        // },
-        //
-        // $related = Music::related($music)->get(['id', 'name', 'image', 'play', 'download', 'hash']);
 
     }
 }

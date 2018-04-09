@@ -5,9 +5,12 @@ namespace App\Models;
 use Storage;
 use Carbon\Carbon;
 use App\Helpers\MP3Pam;
+use Laravel\Scout\Searchable;
 
 class Music extends BaseModel
 {
+	use Searchable;
+
 	protected $appends = [
 		'url',
 		'play_url',
@@ -115,6 +118,11 @@ class Music extends BaseModel
 		$query->wherePublish(1);
 	}
 
+	public function isPublished()
+	{
+		return $this->publish === 1;
+	}
+
 	public function scopeByPlay($query)
 	{
 		$query->orderBy('play_count', 'desc');
@@ -199,5 +207,30 @@ class Music extends BaseModel
 	// 	static::created([__CLASS__, 'insertToIndex']);
 	// 	static::updated([__CLASS__, 'updateIndex']);
 	// 	static::deleted([__CLASS__, 'deleteFromIndex']);
+	// }
+
+
+	// Algolia
+	public function toSearchableArray()
+	{
+		return [
+         'hash'				=> $this->hash,
+			'title'         	=> $this->title,
+         'detail'        	=> $this->detail,
+         'lyrics'        	=> $this->lyrics,
+         // 'play_url'    		=> $this->play_url,
+         'image'				=> $this->image_url,
+         'publicUrl'       => $this->public_url,
+         // 'play_count'    	=> $this->play_count,
+         'download_url'  	=> $this->download_url,
+         // 'download_count'	=> $this->download_count,
+         'category'      	=> $this->category->name,
+         'artist' 			=> $this->artist->stageName
+		];
+	}
+
+	// public function shouldBeSearchable()
+	// {
+	// 	return $this->isPublished();
 	// }
 }
