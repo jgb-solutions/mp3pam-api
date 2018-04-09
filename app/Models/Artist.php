@@ -75,16 +75,15 @@ class Artist extends BaseModel
 	}
 
 	// Algolia
-	// public function toSearchableArray()
-	// {
-	//   $array = $this->toArray();
-
-	//   // Customize array...
-
-	//   return $array;
-	// }
-	// public function shouldBeSearchable()
-	// {
-	// 	return $this->isPublished();
-	// }
+	public function toSearchableArray()
+	{
+		return [
+			'name'		=> $this->name,
+         'stageName'	=> $this->stage_name,
+         'hash'		=> $this->hash,
+         'avatar'		=> $this->avatar_url,
+         'musics'		=> $this->musics_url,
+         'bio'			=> $this->bio
+		];
+	}
 }
