@@ -221,11 +221,12 @@ class Music extends BaseModel
          // 'play_url'    		=> $this->play_url,
          'image'				=> $this->image_url,
          'publicUrl'       => $this->public_url,
+         'url'       		=> $this->url,
          // 'play_count'    	=> $this->play_count,
          'download_url'  	=> $this->download_url,
          // 'download_count'	=> $this->download_count,
          'category'      	=> $this->category->name,
-         'artist' 			=> $this->artist->stageName
+         'artist' 			=> $this->artist->stage_name
 		];
 	}
 

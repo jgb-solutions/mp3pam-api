@@ -22,6 +22,6 @@ class ArtistsTableSeeder extends Seeder
 		// Artist::create($artist);
 		Artist::truncate();
 
-		factory(Artist::class, 10)->create();
+		factory(Artist::class, 25)->create();
 	}
 }

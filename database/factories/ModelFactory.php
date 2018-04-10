@@ -33,7 +33,7 @@ $factory->define(Music::class, function (Faker\Generator $faker)
 		'file_name' 	=> '',
 		'image' 			=> '',
 		'user_id' 		=> $admin->id,
-		'artist_id'		=> Artist::first()->id,
+		'artist_id'		=> Artist::inRandomOrder()->first()->id,
 		'category_id' 	=> Category::first()->id,
 	];
 });

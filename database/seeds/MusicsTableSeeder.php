@@ -10,6 +10,6 @@ class MusicsTableSeeder extends Seeder
 	{
 		Music::truncate();
 
-		factory(Music::class, 20)->create();
+		factory(Music::class, 50)->create();
 	}
 }
