@@ -50,7 +50,7 @@ class MP3Pam
 			'show'  	=> config('site.image_upload_path') .'/show/',
 			'tiny' 		=> config('site.image_upload_path') .'/thumbs/tiny/',
 			'profile' 	=> config('site.image_upload_path') .'/thumbs/profile/',
-			'null'		=> ''
+			'null'		=> '/'
 		];
 
 		$relativeUrl = $imgSize[$size] . $asset;
