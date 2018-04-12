@@ -59,7 +59,7 @@ class MP3Pam
 			return asset($relativeUrl);
 		}
 
-		$cdnUrl = 'https://cache.haitiprojet.com';
+		$cdnUrl = config('app.url');
 
 		return url($cdnUrl . $relativeUrl);
 	}
