@@ -38,7 +38,7 @@ return [
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT'),
         'client_secret' => env('FACEBOOK_SECRET'),
-        'redirect' => "http://192.168.43.102:8000/api/v1/auth/facebook/handle"
+        'redirect' => env('FACEBOOK_REDIRECT') . "/api/v1/auth/facebook/handle"
     ]
 
 ];
