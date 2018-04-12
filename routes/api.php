@@ -5,7 +5,7 @@
 //     return 'yeah';
 // });
 
-group(['prefix' => 'v1'], function() {
+group(['prefix' => 'v1', 'middleware' => ['cors']], function() {
 	// Auth routes.
 	post('register', 'Auth\AuthController@register')->name('auth.register');
     	post('login', 'Auth\AuthController@login')->name('auth.login');
