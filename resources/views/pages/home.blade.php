@@ -1,745 +1,520 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <!-- SITE TITTLE -->
+    <title>{{config('app.name')}}</title>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lifetrakr</title>
-    <!-- PLUGINS CSS STYLE -->
-    <!-- Bootstrap -->
-    <link href="/assets/landing/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Themefisher Font -->
-    <link href="/assets/landing/plugins/themefisher-font/style.css" rel="stylesheet">
-    <!-- Slick Carousel -->
-    <link href="/assets/landing/plugins/slick/slick.css" rel="stylesheet">
-    <!-- Slick Carousel Theme -->
-    <link href="/assets/landing/plugins/slick/slick-theme.css" rel="stylesheet">
-    <!-- CUSTOM CSS -->
-    <link href="/assets/landing/css/style.css" rel="stylesheet">
-    <!-- FAVICON -->
-    <link href="/assets/landing/images/favicon.png" rel="shortcut icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{{config('app.name')}}">
+    <meta name="keywords" content="HTML5, bootstrap, mobile, app, landing, ios, android, responsive">
+
+    <!-- Font -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/mobapp/css/bootstrap.min.css">
+    <!-- Themify Icons -->
+    <link rel="stylesheet" href="/mobapp/css/themify-icons.css">
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="/mobapp/css/owl.carousel.min.css">
+    <!-- Main css -->
+    <link href="/mobapp/css/style.css" rel="stylesheet">
 </head>
 
-<body class="body-wrapper">
-    <nav class="navbar main-nav fixed-top navbar-expand-lg">
-        <div class="container">
-            <!-- <a class="navbar-brand" href="homepage.html"><img src="/assets/landing/images/logo.png" alt="logo"></a> -->
-            <a class="navbar-brand" href="/">{{config('app.name')}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="tf-ion-android-menu"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link scrollTo" href="#home">Akèy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link scrollTo" href="#about">Apwopo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link scrollTo" href="#feature">Opsyon</a>
-                    </li>
-                    <!--         <li class="nav-item">
-          <a class="nav-link scrollTo" href="#pricing">Pricing</a>
-        </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link scrollTo" href="#team">Ekip</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link scrollTo" href="#contact">Kontak</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!--=====================================
-=            Homepage Banner            =
-======================================-->
-    <section class="banner bg-1" id="home">
+<body data-spy="scroll" data-target="#navbar" data-offset="30">
+
+    <!-- Nav Menu -->
+
+    <div class="nav-menu fixed-top">
         <div class="container">
             <div class="row">
-                <div class="col-md-8 align-self-center">
-                    <!-- Contents -->
-                    <div class="content-block">
-                        <h1>Amazing App Best for business</h1>
-                        <h5>Let you track everything in your life with a simple way</h5>
-                        <!-- App Badge -->
-                        <div class="app-badge">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a href="#"><img class="img-fluid" src="/assets/landing/images/app-badge/google-play.png" alt="google-play"></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#"><img class="img-fluid" src="/assets/landing/images/app-badge/app-store.png" alt="app-store"></a>
-                                </li>
+                <div class="col-md-12">
+                    <nav class="navbar navbar-dark navbar-expand-lg">
+                        <a class="navbar-brand" href="/">
+                            {{-- <img src="/mobapp/images/logo.png" class="img-fluid" alt="logo"> --}}
+                            {{config('app.name')}}
+                        </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+                        <div class="collapse navbar-collapse" id="navbar">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item"> <a class="nav-link active" href="#home">HOME <span class="sr-only">(current)</span></a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#features">FEATURES</a> </li>
+                                {{-- <li class="nav-item"> <a class="nav-link" href="#gallery">GALLERY</a> </li> --}}
+                                {{-- <li class="nav-item"> <a class="nav-link" href="#pricing">PRICING</a> </li> --}}
+                                <li class="nav-item"> <a class="nav-link" href="#contact">CONTACT</a> </li>
+                                <li class="nav-item"><a href="{{route('admin.home')}}" class="btn btn-outline-light my-3 my-sm-0 ml-lg-3">Admin</a></li>
                             </ul>
                         </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <header class="bg-gradient" id="home">
+        <div class="container mt-5">
+            <h1>{{config('app.name')}}. <small>Make Your Order. Fast.</small></h1>
+            <p class="tagline" style="color:white;">Your one-stop solution to mobile shopping.</p>
+        </div>
+        <div class="img-holder mt-3"><img src="/mobapp/images/iphonex-2.png" alt="phone" class="img-fluid"></div>
+    </header>
+{{--
+    <div class="client-logos my-5">
+        <div class="container text-center">
+            <img src="/mobapp/images/client-logos.png" alt="client logos" class="img-fluid">
+        </div>
+    </div> --}}
+
+    <div class="section light-bg" id="features">
+        <div class="container">
+
+            <div class="section-title">
+                <small>HIGHLIGHTS</small>
+                <h3>Features you love</h3>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 col-lg-4">
+                    <div class="card features">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-face-smile gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Simple</h4>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="card features">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-settings gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Customize</h4>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="card features">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-lock gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Secure</h4>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- // end .section -->
+    <div class="section">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-6">
+                    <div class="box-icon"><span class="ti-mobile gradient-fill ti-3x"></span></div>
+                    <h2>Discover our App</h2>
+                    <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati vel exercitationem eveniet vero maxime ratione </p>
+                    <a href="#" class="btn btn-primary" style="background-image: linear-gradient( 135deg, #55321C 0%, #d0bcaf 100%);color:white;">Read more</a>
+                </div>
+            </div>
+            <div class="perspective-phone">
+                <img src="/mobapp/images/perspective-2.png" alt="perspective phone" class="img-fluid">
+            </div>
+        </div>
+
+    </div>
+    <!-- // end .section -->
+
+
+   {{--  <div class="section light-bg">
+        <div class="container">
+            <div class="section-title">
+                <small>FEATURES</small>
+                <h3>Do more with our app</h3>
+            </div>
+
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#communication">Communication</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#schedule">Scheduling</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#messages">Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#livechat">Live Chat</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="communication">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <img src="/mobapp/images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                        <div>
+
+                            <h2>Communicate with ease</h2>
+                            <p class="lead">Uniquely underwhelm premium outsourcing with proactive leadership skills. </p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. Ut placerat dui eu nulla
+                                congue tincidunt ac a nibh. Mauris accumsan pulvinar lorem placerat volutpat. Praesent quis facilisis elit. Sed condimentum neque quis ex porttitor,
+                            </p>
+                            <p> malesuada faucibus augue aliquet. Sed elit est, eleifend sed dapibus a, semper a eros. Vestibulum blandit vulputate pharetra. Phasellus lobortis leo a nisl euismod, eu faucibus justo sollicitudin. Mauris consectetur, tortor
+                                sed tempor malesuada, sem nunc porta augue, in dictum arcu tortor id turpis. Proin aliquet vulputate aliquam.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="schedule">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <div>
+                            <h2>Scheduling when you want</h2>
+                            <p class="lead">Uniquely underwhelm premium outsourcing with proactive leadership skills. </p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. Ut placerat dui eu nulla
+                                congue tincidunt ac a nibh. Mauris accumsan pulvinar lorem placerat volutpat. Praesent quis facilisis elit. Sed condimentum neque quis ex porttitor,
+                            </p>
+                            <p> malesuada faucibus augue aliquet. Sed elit est, eleifend sed dapibus a, semper a eros. Vestibulum blandit vulputate pharetra. Phasellus lobortis leo a nisl euismod, eu faucibus justo sollicitudin. Mauris consectetur, tortor
+                                sed tempor malesuada, sem nunc porta augue, in dictum arcu tortor id turpis. Proin aliquet vulputate aliquam.
+                            </p>
+                        </div>
+                        <img src="/mobapp/images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="messages">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <img src="/mobapp/images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                        <div>
+                            <h2>Realtime Messaging service</h2>
+                            <p class="lead">Uniquely underwhelm premium outsourcing with proactive leadership skills. </p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. Ut placerat dui eu nulla
+                                congue tincidunt ac a nibh. Mauris accumsan pulvinar lorem placerat volutpat. Praesent quis facilisis elit. Sed condimentum neque quis ex porttitor,
+                            </p>
+                            <p> malesuada faucibus augue aliquet. Sed elit est, eleifend sed dapibus a, semper a eros. Vestibulum blandit vulputate pharetra. Phasellus lobortis leo a nisl euismod, eu faucibus justo sollicitudin. Mauris consectetur, tortor
+                                sed tempor malesuada, sem nunc porta augue, in dictum arcu tortor id turpis. Proin aliquet vulputate aliquam.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="livechat">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <div>
+                            <h2>Live chat when you needed</h2>
+                            <p class="lead">Uniquely underwhelm premium outsourcing with proactive leadership skills. </p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. Ut placerat dui eu nulla
+                                congue tincidunt ac a nibh. Mauris accumsan pulvinar lorem placerat volutpat. Praesent quis facilisis elit. Sed condimentum neque quis ex porttitor,
+                            </p>
+                            <p> malesuada faucibus augue aliquet. Sed elit est, eleifend sed dapibus a, semper a eros. Vestibulum blandit vulputate pharetra. Phasellus lobortis leo a nisl euismod, eu faucibus justo sollicitudin. Mauris consectetur, tortor
+                                sed tempor malesuada, sem nunc porta augue, in dictum arcu tortor id turpis. Proin aliquet vulputate aliquam.
+                            </p>
+                        </div>
+                        <img src="/mobapp/images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div> --}}
+    <!-- // end .section -->
+{{--
+    <div class="section">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="/mobapp/images/dualphone.png" alt="dual phone" class="img-fluid">
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <div>
+                        <div class="box-icon"><span class="ti-rocket gradient-fill ti-3x"></span></div>
+                        <h2>Launch your App</h2>
+                        <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati vel exercitationem eveniet vero maxime ratione </p>
+                        <a href="#" class="btn btn-primary">Read more</a></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+ {{--    <div class="section light-bg">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 d-flex align-items-center">
+                    <ul class="list-unstyled ui-steps">
+                        <li class="media">
+                            <div class="circle-icon mr-4">1</div>
+                            <div class="media-body">
+                                <h5>Create an Account</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium obcaecati vel exercitationem </p>
+                            </div>
+                        </li>
+                        <li class="media my-4">
+                            <div class="circle-icon mr-4">2</div>
+                            <div class="media-body">
+                                <h5>Share with friends</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium obcaecati vel exercitationem eveniet</p>
+                            </div>
+                        </li>
+                        <li class="media">
+                            <div class="circle-icon mr-4">3</div>
+                            <div class="media-body">
+                                <h5>Enjoy your life</h5>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium obcaecati vel exercitationem </p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col-md-4">
-                    <!-- App Image -->
-                    <div class="image-block">
-                        <img class="img-fluid" src="/assets/landing/images/phones/iphone-banner.png" alt="iphone-banner">
-                    </div>
+                    <img src="/mobapp/images/iphonex.png" alt="iphone" class="img-fluid">
                 </div>
+
             </div>
+
         </div>
-    </section>
-    <!--====  End of Homepage Banner  ====-->
-    <!--===========================
-=            About            =
-============================-->
-    <section class="about section bg-2" id="about">
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+    {{-- <div class="section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-5 mr-auto">
-                    <!-- Image Content -->
-                    <div class="image-block">
-                        <img src="/assets/landing/images/phones/iphone-feature.png" alt="iphone-feature" class="img-fluid">
-                    </div>
+            <div class="section-title">
+                <small>TESTIMONIALS</small>
+                <h3>What our Customers Says</h3>
+            </div>
+
+            <div class="testimonials owl-carousel">
+                <div class="testimonials-single">
+                    <img src="/mobapp/images/client.png" alt="client" class="client-img">
+                    <blockquote class="blockquote">Uniquely streamline highly efficient scenarios and 24/7 initiatives. Conveniently embrace multifunctional ideas through proactive customer service. Distinctively conceptualize 2.0 intellectual capital via user-centric partnerships.</blockquote>
+                    <h5 class="mt-4 mb-2">Crystal Gordon</h5>
+                    <p class="text-primary">United States</p>
                 </div>
-                <div class="col-lg-6 col-md-10 m-md-auto align-self-center ml-auto">
-                    <div class="about-block">
-                        <!-- About 01 -->
-                        <div class="about-item">
-                            <div class="icon">
-                                <i class="tf-ion-ios-paper-outline"></i>
-                            </div>
-                            <div class="content">
-                                <h5>Creative Design</h5>
-                                <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete accounta</p>
-                            </div>
-                        </div>
-                        <!-- About 02 -->
-                        <div class="about-item active">
-                            <div class="icon">
-                                <i class="tf-globe"></i>
-                            </div>
-                            <div class="content">
-                                <h5>Easy to Use</h5>
-                                <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete accounta</p>
-                            </div>
-                        </div>
-                        <!-- About 03 -->
-                        <div class="about-item">
-                            <div class="icon">
-                                <i class="tf-circle-compass"></i>
-                            </div>
-                            <div class="content">
-                                <h5>Best User Experience</h5>
-                                <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete accounta</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="testimonials-single">
+                    <img src="/mobapp/images/client.png" alt="client" class="client-img">
+                    <blockquote class="blockquote">Uniquely streamline highly efficient scenarios and 24/7 initiatives. Conveniently embrace multifunctional ideas through proactive customer service. Distinctively conceptualize 2.0 intellectual capital via user-centric partnerships.</blockquote>
+                    <h5 class="mt-4 mb-2">Crystal Gordon</h5>
+                    <p class="text-primary">United States</p>
+                </div>
+                <div class="testimonials-single">
+                    <img src="/mobapp/images/client.png" alt="client" class="client-img">
+                    <blockquote class="blockquote">Uniquely streamline highly efficient scenarios and 24/7 initiatives. Conveniently embrace multifunctional ideas through proactive customer service. Distinctively conceptualize 2.0 intellectual capital via user-centric partnerships.</blockquote>
+                    <h5 class="mt-4 mb-2">Crystal Gordon</h5>
+                    <p class="text-primary">United States</p>
                 </div>
             </div>
+
         </div>
-    </section>
-    <!--====  End of About  ====-->
-    <!--==============================
-=            Features            =
-===============================-->
-    <section class="section feature" id="feature">
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+   {{--  <div class="section light-bg" id="gallery">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2>App Features</h2>
-                        <p>Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
-                    </div>
-                </div>
+            <div class="section-title">
+                <small>GALLERY</small>
+                <h3>App Screenshots</h3>
             </div>
-            <div class="row bg-elipse">
-                <div class="col-lg-4 align-self-center text-center text-lg-right">
-                    <!-- Feature Item -->
-                    <div class="feature-item">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-circle-compass"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>Beautiful Interface Design</h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                    <!-- Feature Item -->
-                    <div class="feature-item">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-tools-2"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>Unlimited Features</h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <!-- Feature Item -->
-                    <div class="feature-item mb-0">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-chat"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>Full free chat</h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                    <div class="app-screen">
-                        <img class="img-fluid" src="/assets/landing/images/phones/i-phone-screen.png" alt="app-screen">
-                    </div>
-                    <!-- Feature Item -->
-                    <div class="feature-item">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-hourglass"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>24/7 support by real people</h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-center text-lg-left align-self-center">
-                    <!-- Feature Item -->
-                    <div class="feature-item">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-mobile"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>Retina ready greaphics</h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                    <!-- Feature Item -->
-                    <div class="feature-item">
-                        <!-- Icon -->
-                        <div class="icon">
-                            <i class="tf-layers"></i>
-                        </div>
-                        <!-- Content -->
-                        <div class="content">
-                            <h5>IOS & android version </h5>
-                            <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising</p>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="img-gallery owl-carousel owl-theme">
+                <img src="/mobapp/images/screen1.jpg" alt="image">
+                <img src="/mobapp/images/screen2.jpg" alt="image">
+                <img src="/mobapp/images/screen3.jpg" alt="image">
+                <img src="/mobapp/images/screen1.jpg" alt="image">
             </div>
+
         </div>
-    </section>
-    <!--====  End of Features  ====-->
-    <!--=================================
-=            Promo Video            =
-==================================-->
-    <section class="section promo-video bg-3 overlay">
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+
+
+
+{{--     <div class="section" id="pricing">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Promo Video -->
-                    <div class="video">
-                        <img class="img-fluid" src="/assets/landing/images/backgrounds/promo-video-bg.jpg" alt="video-thumbnail">
-                        <div class="video-button video-box">
-                            <!-- Video Play Button -->
-                            <a href="javascript:void(0)">
-                            <span class="icon" data-video="https://www.youtube.com/embed/g3-VxLQO7do?autoplay=1">
-                                <i class="tf-ion-ios-play-outline"></i>
-                            </span>
-                        </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="section-title">
+                <small>PRICING</small>
+                <h3>Upgrade to Pro</h3>
             </div>
-        </div>
-    </section>
-    <!--====  End of Promo Video  ====-->
-    <!--===================================
-=            Pricing Table            =
-====================================-->
-   {{--  <section class="pricing section bg-shape" id="pricing">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2>Choose Your Subscription Plan</h2>
-                        <p>Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
+
+            <div class="card-deck">
+                <div class="card pricing">
+                    <div class="card-head">
+                        <small class="text-primary">PERSONAL</small>
+                        <span class="price">$14<sub>/m</sub></span>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <!-- Pricing Table -->
-                    <div class="pricing-table text-center">
-                        <!-- Title -->
-                        <div class="title">
-                            <h5>Free</h5>
-                        </div>
-                        <!-- Price Tag -->
-                        <div class="price">
-                            <p>$0<span>/month</span></p>
-                        </div>
-                        <!-- Features -->
-                        <ul class="feature-list">
-                            <li>Android App</li>
-                            <li>One time payment</li>
-                            <li>Build & Publish</li>
-                            <li>Life time support</li>
-                        </ul>
-                        <!-- Take Action -->
-                        <div class="action-button">
-                            <a href="" class="btn btn-main-rounded">Start Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <!-- Pricing Table -->
-                    <div class="pricing-table featured text-center">
-                        <!-- Title -->
-                        <div class="title">
-                            <h5>Basic</h5>
-                        </div>
-                        <!-- Price Tag -->
-                        <div class="price">
-                            <p>$19<span>/month</span></p>
-                        </div>
-                        <!-- Features -->
-                        <ul class="feature-list">
-                            <li>Android App</li>
-                            <li>One time payment</li>
-                            <li>Build & Publish</li>
-                            <li>Life time support</li>
-                        </ul>
-                        <!-- Take Action -->
-                        <div class="action-button">
-                            <a href="" class="btn btn-main-rounded">Start Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 m-md-auto">
-                    <!-- Pricing Table -->
-                    <div class="pricing-table text-center">
-                        <!-- Title -->
-                        <div class="title">
-                            <h5>Advance</h5>
-                        </div>
-                        <!-- Price Tag -->
-                        <div class="price">
-                            <p>$99<span>/month</span></p>
-                        </div>
-                        <!-- Features -->
-                        <ul class="feature-list">
-                            <li>Android App</li>
-                            <li>One time payment</li>
-                            <li>Build & Publish</li>
-                            <li>Life time support</li>
-                        </ul>
-                        <!-- Take Action -->
-                        <div class="action-button">
-                            <a href="" class="btn btn-main-rounded">Start Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!--====  End of Pricing Table  ====-->
-    <!--=============================================
-=            Call to Action Download            =
-==============================================-->
-    <section class="cta-download bg-3 overlay">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="image-block"><img class="img-fluid" src="/assets/landing/images/phones/iphone-chat.png" alt=""></div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="content-block">
-                        <!-- Title -->
-                        <h2>Free Download Now</h2>
-                        <!-- Desctcription -->
-                        <p>Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
-                        <!-- App Badge -->
-                        <div class="app-badge">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a href="#"><img class="img-fluid" src="/assets/landing/images/app-badge/google-play.png" alt="google-play"></a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="#"><img class="img-fluid" src="/assets/landing/images/app-badge/app-store.png" alt="app-store"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--====  End of Call to Action Download  ====-->
-    <!--=============================
-=            Counter            =
-==============================-->
-    <section class="section counter bg-gray">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="counter-item">
-                        <!-- Counter Number -->
-                        <h3>29k</h3>
-                        <!-- Counter Name -->
-                        <p>Download</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="counter-item">
-                        <!-- Counter Number -->
-                        <h3>200k</h3>
-                        <!-- Counter Name -->
-                        <p>Active Account</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="counter-item">
-                        <!-- Counter Number -->
-                        <h3>60k</h3>
-                        <!-- Counter Name -->
-                        <p>Happy User</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="counter-item">
-                        <!-- Counter Number -->
-                        <h3>300k<sup>+</sup></h3>
-                        <!-- Counter Name -->
-                        <p>Download</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--====  End of Counter  ====-->
-    <!--==========================
-=            Team            =
-===========================-->
-    <section class="section team bg-shape-two" id="team">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2>Our Creative Team</h2>
-                        <p>Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <!-- Team Member -->
-                    <div class="team-member text-center">
-                        <div class="image">
-                            <img class="img-fluid" src="/assets/landing/images/team/member-one.jpg" alt="team-member">
-                        </div>
-                        <div class="name">
-                            <h5>Johnny Depp</h5>
-                        </div>
-                        <div class="position">
-                            <p>Production Designer</p>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="progress" data-percent="85%">
-                                <div class="progress-bar"></div>
-                            </div>
-                            <span>85%</span>
-                        </div>
-                        <ul class="social-icons list-inline">
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-facebook"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-linkedin"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-instagram-outline"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <!-- Team Member -->
-                    <div class="team-member text-center">
-                        <div class="image">
-                            <img class="img-fluid" src="/assets/landing/images/team/member-two.jpg" alt="team-member">
-                        </div>
-                        <div class="name">
-                            <h5>cristin milioti</h5>
-                        </div>
-                        <div class="position">
-                            <p>UX Researcher</p>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="progress" data-percent="95%">
-                                <div class="progress-bar"></div>
-                            </div>
-                            <span>95%</span>
-                        </div>
-                        <ul class="social-icons list-inline">
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-facebook"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-linkedin"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-instagram-outline"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <!-- Team Member -->
-                    <div class="team-member text-center">
-                        <div class="image">
-                            <img class="img-fluid" src="/assets/landing/images/team/member-three.jpg" alt="team-member">
-                        </div>
-                        <div class="name">
-                            <h5>john doe</h5>
-                        </div>
-                        <div class="position">
-                            <p>Head of Ideas</p>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="progress" data-percent="80%">
-                                <div class="progress-bar"></div>
-                            </div>
-                            <span>80%</span>
-                        </div>
-                        <ul class="social-icons list-inline">
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-facebook"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-linkedin"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-instagram-outline"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <!-- Team Member -->
-                    <div class="team-member text-center">
-                        <div class="image">
-                            <img class="img-fluid" src="/assets/landing/images/team/member-four.jpg" alt="team-member">
-                        </div>
-                        <div class="name">
-                            <h5>mario gotze</h5>
-                        </div>
-                        <div class="position">
-                            <p>UX/UI designer</p>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="progress" data-percent="75%">
-                                <div class="progress-bar"></div>
-                            </div>
-                            <span>75%</span>
-                        </div>
-                        <ul class="social-icons list-inline">
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-facebook"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-linkedin"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href=""><i class="tf-ion-social-instagram-outline"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--====  End of Team  ====-->
-    <!--=================================
-=            Testimonial            =
-==================================-->
-    {{-- <section class="section testimonial bg-primary-shape" id="testimonial">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-title">
-                        <h2 class="text-white">Our Happy Customers</h2>
-                        <p class="text-white">Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 m-auto">
-                    <!-- Testimonial Carosel -->
-                    <div class="testimonial-slider">
-                        <!-- testimonial item -->
-                        <div class="testimonial-item">
-                            <div class="content">
-                                <div class="name">
-                                    <h5>Kris lazy Cistin Miloti</h5>
-                                </div>
-                                <div class="pos-in-com">
-                                    <p>CEO at <span>Themefisher</span></p>
-                                </div>
-                                <div class="speech">
-                                    <p>Explain to you how all this mistaken idea of denouncing tis pleasure and praising pain was born and I will give you a complete praising the account is account the. </p>
-                                </div>
-                                <ul class="rating list-inline">
-                                    <li class="list-inline-item">
-                                        <i class="tf-ion-android-star"></i>
-                                        <i class="tf-ion-android-star"></i>
-                                        <i class="tf-ion-android-star"></i>
-                                        <i class="tf-ion-android-star"></i>
-                                        <i class="tf-ion-android-star"></i>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="image">
-                                <img class="img-fluid" src="/assets/landing/images/testimonial/review-person-one.png" alt="testimonial-person">
-                            </div>
-                        </div>
-                        <!-- testimonial item -->
-                        <div class="testimonial-item">
-                            <div class="content">
-                                <div class="name">
-                                    <h5>Kris lazy Cistin Miloti</h5>
-                                </div>
-                                <div class="pos-in-com">
-                                    <p>CEO at<span>Themefisher</span></p>
-                                </div>
-                                <div class="speech">
-                                    <p>Explain to you how all this mistaken idea of denouncing tis pleasure and praising pain was born and I will give you a complete praising the account is account the. </p>
-                                </div>
-                                <div class="rating">
-                                    <ul class="rating list-inline">
-                                        <li class="list-inline-item">
-                                            <i class="tf-ion-android-star"></i>
-                                            <i class="tf-ion-android-star"></i>
-                                            <i class="tf-ion-android-star"></i>
-                                            <i class="tf-ion-android-star"></i>
-                                            <i class="tf-ion-android-star"></i>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="image">
-                                <img class="img-fluid" src="/assets/landing/images/testimonial/review-person-one.png" alt="testimonial-person">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!--====  End of Testimonial  ====-->
-    <section class="section cta-subscribe" id="contact">
-        <div class="container">
-            <div class="row bg-elipse-red">
-                <div class="col-lg-4">
-                    <div class="image"><img src="/assets/landing/images/phones/iphone-banner.png" alt="iphone-app"></div>
-                </div>
-                <div class="col-lg-8 align-self-center">
-                    <div class="content">
-                        <div class="title">
-                            <h2>Subscribe Our Newsletter</h2>
-                        </div>
-                        <div class="description">
-                            <p>Demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee idea of denouncing pleasure and praising</p>
-                        </div>
-                        <form action="#">
-                            <div class="input-group">
-                                <input type="text" class="form-control main" placeholder="Enter your email address">
-                                <span class="input-group-addon tf-ion-android-send" id="btnGroupAddon"></span>
-                            </div>
-                        </form>
-                        <div class="subscription-tag text-right">
-                            <p>Subscribe To Our Newsletter & Stay Updated</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--============================
-=            Footer            =
-=============================-->
-    <footer class="footer-main">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mr-auto">
-                    <div class="footer-logo">
-                        <!-- <img src="/assets/landing/images/logo.png" alt="footer-logo"> -->
-                        {{ config('app.name') }}
-                    </div>
-                    <div class="copyright">
-                        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. Tout Dwa Rezève.</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 text-lg-right">
-                    <!-- Social Icons -->
-                    <ul class="social-icons list-inline">
-                        <li class="list-inline-item">
-                            <a href=""><i class="tf-ion-social-facebook"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href=""><i class="tf-ion-social-twitter"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href=""><i class="tf-ion-social-linkedin"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href=""><i class="tf-ion-social-instagram-outline"></i></a>
-                        </li>
+                    <ul class="list-group list-group-flush">
+                        <div class="list-group-item">10 Projects</div>
+                        <div class="list-group-item">5 GB Storage</div>
+                        <div class="list-group-item">Basic Support</div>
+                        <div class="list-group-item"><del>Collaboration</del></div>
+                        <div class="list-group-item"><del>Reports and analytics</del></div>
                     </ul>
-                    <!-- Footer Links -->
-                    <ul class="footer-links list-inline">
-                        <li class="list-inline-item">
-                            <a href="#">ABOUT</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#">TEAM</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#">CONTACT</a>
-                        </li>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                    </div>
+                </div>
+                <div class="card pricing popular">
+                    <div class="card-head">
+                        <small class="text-primary">FOR TEAMS</small>
+                        <span class="price">$29<sub>/m</sub></span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <div class="list-group-item">Unlimited Projects</div>
+                        <div class="list-group-item">100 GB Storage</div>
+                        <div class="list-group-item">Priority Support</div>
+                        <div class="list-group-item">Collaboration</div>
+                        <div class="list-group-item">Reports and analytics</div>
                     </ul>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                    </div>
+                </div>
+                <div class="card pricing">
+                    <div class="card-head">
+                        <small class="text-primary">ENTERPRISE</small>
+                        <span class="price">$249<sub>/m</sub></span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <div class="list-group-item">Unlimited Projects</div>
+                        <div class="list-group-item">Unlimited Storage</div>
+                        <div class="list-group-item">Collaboration</div>
+                        <div class="list-group-item">Reports and analytics</div>
+                        <div class="list-group-item">Web hooks</div>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                    </div>
+                </div>
+            </div>
+            <!-- // end .pricing -->
+
+
+        </div>
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+ {{--    <div class="section pt-0">
+        <div class="container">
+            <div class="section-title">
+                <small>FAQ</small>
+                <h3>Frequently Asked Questions</h3>
+            </div>
+
+            <div class="row pt-4">
+                <div class="col-md-6">
+                    <h4 class="mb-3">Can I try before I buy?</h4>
+                    <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+                    <h4 class="mb-3">What payment methods do you accept?</h4>
+                    <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+
+                </div>
+                <div class="col-md-6">
+                    <h4 class="mb-3">Can I change my plan later?</h4>
+                    <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+                    <h4 class="mb-3">Do you have a contract?</h4>
+                    <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+
                 </div>
             </div>
         </div>
+
+    </div> --}}
+    <!-- // end .section -->
+
+
+
+    <div class="section bg-gradient">
+        <div class="container">
+            <div class="call-to-action">
+
+                <div class="box-icon"><span class="ti-mobile gradient-fill ti-3x"></span></div>
+                <h2>Download Anywhere</h2>
+                {{-- <p class="tagline">Available for all major mobile and desktop platforms. Rapidiously visualize optimal ROI rather than enterprise-wide methods of empowerment. </p> --}}
+                <div class="my-4">
+
+                    <a href="#" class="btn btn-light"><img src="/mobapp/images/appleicon.png" alt="icon"> App Store</a>
+                    <a href="#" class="btn btn-light"><img src="/mobapp/images/playicon.png" alt="icon"> Google play</a>
+                </div>
+                {{-- <p class="text-primary"><small><i>*Works on iOS 10.0.5+, Android Kitkat and above. </i></small></p> --}}
+            </div>
+        </div>
+
+    </div>
+    <!-- // end .section -->
+
+    <div class="light-bg py-5" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 text-center text-lg-left">
+                    <p class="mb-2"> <span class="ti-location-pin mr-2"></span> 123, route de l'aéroport, Port-au-Prince</p>
+                    <div class=" d-block d-sm-inline-block">
+                        <p class="mb-2">
+                            <span class="ti-email mr-2"></span> <a class="mr-4" href="mailto:reboapp@rebo.com" style="color:black;">reboapp@rebo.com</a>
+                        </p>
+                    </div>
+                    <div class="d-block d-sm-inline-block">
+                        <p class="mb-0">
+                            <span class="ti-headphone-alt mr-2"></span> <a href="tel:51836362800" style="color:black">(509) 3647 8199</a>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="social-icons">
+                        <a href="#" style="color:black"><span class="ti-facebook"></span></a>
+                        <a href="#" style="color:black"><span class="ti-twitter-alt"></span></a>
+                        <a href="#" style="color:black"><span class="ti-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- // end .section -->
+    <footer class="my-5 text-center">
+        <!-- Copyright removal is not prohibited! -->
+        <p class="mb-2"><small>COPYRIGHT © {{date('y')}}. ALL RIGHTS RESERVED. {{config('app.name')}}</a></small></p>
+
+        <small>
+            <a href="#" class="m-2" style="color:black">PRESS</a>
+            <a href="#" class="m-2" style="color:black">TERMS</a>
+            <a href="#" class="m-2" style="color:black">PRIVACY</a>
+        </small>
     </footer>
-    <!-- JAVASCRIPTS -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI14J_PNWVd-m0gnUBkjmhoQyNyd7nllA" async defer></script>
-    <script src="/assets/landing/plugins/jquery/jquery.js"></script>
-    <script src="/assets/landing/plugins/popper/popper.min.js"></script>
-    <script src="/assets/landing/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/assets/landing/plugins/waypoints/jquery.waypoints.min.js"></script>
-    <script src="/assets/landing/plugins/slick/slick.min.js"></script>
-    <script src="/assets/landing/plugins/smoothscroll/SmoothScroll.min.js"></script>
-    <script src="/assets/landing/js/custom.js"></script>
+
+    <!-- jQuery and Bootstrap -->
+    <script src="/mobapp/js/jquery-3.2.1.min.js"></script>
+    <script src="/mobapp/js/bootstrap.bundle.min.js"></script>
+    <!-- Plugins JS -->
+    <script src="/mobapp/js/owl.carousel.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/mobapp/js/script.js"></script>
+
 </body>
 
 </html>

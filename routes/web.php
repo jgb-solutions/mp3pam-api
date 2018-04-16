@@ -7,6 +7,26 @@ get('t/{music}', 'API\MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
 get('t/{music}', 'API\MusicsController@download')->name('musics.get');
 
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+	Route::get('/', 'AdminController@index')->name('admin.home');
+	Route::get('/profile', 'AdminController@profile')->name('admin.profile');
+
+	Route::group(['prefix' => 'orders'], function() {
+		Route::get('/', 'AdminController@orders_index')->name('admin.orders.index');
+		Route::get('/add', 'AdminController@add')->name('admin.orders.add');
+		Route::get('/show/{order}', 'AdminController@showOrder')->name('admin.orders.show');
+	});
+
+	Route::get('/products', 'AdminController@products')->name('admin.products');
+	Route::get('/gifts', 'AdminController@gifts')->name('admin.gifts');
+	Route::get('/categories', 'AdminController@categories_index')->name('admin.categories.index');
+	Route::get('/categories/{category}', 'AdminController@showCategory')->name('admin.categories.show');
+	Route::get('/services', 'AdminController@services')->name('admin.services');
+	Route::get('/branches', 'AdminController@branches')->name('admin.branches');
+});
+
+Auth::routes();
+
 get('get', function() {
 	return Cache::get('data');
 });
