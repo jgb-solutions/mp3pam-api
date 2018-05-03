@@ -6,26 +6,30 @@ get('/', 'PagesController@index');
 get('t/{music}', 'API\MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
 get('t/{music}', 'API\MusicsController@download')->name('musics.get');
+get('play/{music}', 'MusicsController@play')->name('musics.play');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
-	Route::get('/', 'AdminController@index')->name('admin.home');
-	Route::get('/profile', 'AdminController@profile')->name('admin.profile');
+group(['prefix' => 'admin'], function() {
+	// Authentication Routes...
+  get('login', 'Auth\LoginController@showLoginForm')->name('admin.getLogin');
+  post('login', 'Auth\LoginController@login')->name('admin.postLogin');
+  get('logout', 'Auth\LoginController@logout')->name('admin.logout');
 
-	Route::group(['prefix' => 'orders'], function() {
-		Route::get('/', 'AdminController@orders_index')->name('admin.orders.index');
-		Route::get('/add', 'AdminController@add')->name('admin.orders.add');
-		Route::get('/show/{order}', 'AdminController@showOrder')->name('admin.orders.show');
+  // Registration Routes...
+  get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+  post('register', 'Auth\RegisterController@register');
+
+  // Password Reset Routes...
+  get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+  post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+  get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+  post('password/reset', 'Auth\ResetPasswordController@reset');
+
+	group(['middleware' => 'auth'], function() {
+		get('/', 'AdminController@index')->name('admin.home');
+		get('/profile', 'AdminController@profile')->name('admin.profile');
 	});
-
-	Route::get('/products', 'AdminController@products')->name('admin.products');
-	Route::get('/gifts', 'AdminController@gifts')->name('admin.gifts');
-	Route::get('/categories', 'AdminController@categories_index')->name('admin.categories.index');
-	Route::get('/categories/{category}', 'AdminController@showCategory')->name('admin.categories.show');
-	Route::get('/services', 'AdminController@services')->name('admin.services');
-	Route::get('/branches', 'AdminController@branches')->name('admin.branches');
 });
 
-Auth::routes();
 
 get('get', function() {
 	return Cache::get('data');

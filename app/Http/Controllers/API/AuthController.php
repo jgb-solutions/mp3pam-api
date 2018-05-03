@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\Auth;
 
-use JWTAuth;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,9 +16,9 @@ class AuthController extends Controller
 	public function register(RegisterFormRequest $request)
 	{
 		return User::create([
-			'name' 		=> $request->name,
-			'username' 	=> str_slug($request->name),
-			'email' 		=> $request->email,
+			'name' 			=> $request->name,
+			'username' 		=> str_slug($request->name),
+			'email' 			=> $request->email,
 			'password' 		=> bcrypt($request->password),
 			'telephone' 	=> $request->telephone
 		]);
@@ -32,7 +31,7 @@ class AuthController extends Controller
 
 		try {
 		   	// attempt to verify the credentials and create a token for the user
-		   	if (! $token = JWTAuth::attempt($credentials)) {
+		   	if (! $token = auth()->guard('api')->attempt($credentials)) {
 		       		return response()->json(['message' => 'Imel oubyen Modpas la pa bon.'], 401);
 		   	}
 		} catch (JWTException $e) {
@@ -41,7 +40,7 @@ class AuthController extends Controller
 		}
 
 		// all good so return the token
-		$user = JWTAuth::toUser($token);
+		$user = auth()->guard('api')->user();
 
 		// return response
 		return response()->json([
@@ -49,6 +48,35 @@ class AuthController extends Controller
 			'token' => $token
 		]);
 	}
+
+	public function me()
+    {
+        return response()->json([
+        		'user ' => New UserResource(auth()->guard('api')->user()),
+        	]);
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        auth()->guard('api')->logout(true);
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->guard('api')->refresh());
+    }
 
 	public function redirectToFacebook()
     {
@@ -113,7 +141,7 @@ class AuthController extends Controller
 				$user->save();
 			}
 
-			$token = JWTAuth::fromUser($user);
+			$token = auth()->login($user);
 
 			return response()->json([
 			    'token'			=> $token,
@@ -124,4 +152,13 @@ class AuthController extends Controller
 			return response()->json(['message' => 'Nou pa rive konekte w ak Facebook, tanpri eseye ankò'], 500);
 		}
 	}
+
+	protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            // 'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
+    }
 }

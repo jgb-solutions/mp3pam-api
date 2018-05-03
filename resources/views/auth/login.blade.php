@@ -3,8 +3,9 @@
 @section('content')
     {{--  --}}
     <div class="card">
+        {{$errors}}
         <div class="body">
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('admin.postLogin') }}">
             @csrf
                 <div class="msg">Sign in to start your session</div>
                 <div class="input-group">
@@ -12,12 +13,12 @@
                         <i class="material-icons">person</i>
                     </span>
                     <div class="form-line">
-                        <input type="text" class="form-control" name="username" placeholder="{{ __('Username') }}" required autofocus>
+                        <input type="text" class="form-control" name="email" placeholder="{{ __('Email') }}" required autofocus>
                     </div>
                 </div>
-                @if ($errors->has('username'))
+                @if ($errors->has('email'))
                     <span class="invalid-feedback">
-                        <strong>{{ $errors->first('username') }}</strong>
+                        <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
 

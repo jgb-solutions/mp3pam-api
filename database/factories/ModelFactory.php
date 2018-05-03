@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Music;
 use App\Models\Artist;
 use App\Helpers\MP3Pam;
@@ -21,7 +22,7 @@ use App\Models\Category;
 
 $factory->define(Music::class, function (Faker\Generator $faker)
 {
-	$admin = User::whereAdmin(1)->first();
+	$admin = Admin::first();
 	$name = $faker->name;
 
 	return [

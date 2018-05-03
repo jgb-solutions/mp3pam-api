@@ -23,7 +23,6 @@ class CreateUsersTable extends Migration
 			$table->string('facebook_link')->nullable();
 			$table->string('telephone', 20)->nullable();
 			$table->enum('type', ['artist', 'user'])->default('user');
-			$table->boolean('admin')->default(false);
 			$table->boolean('active')->default(false);
 			$table->string('password_reset_code')->nullable();
 			$table->boolean('first_login')->default(true);

@@ -156,7 +156,7 @@ class Music extends BaseModel
 
 	public function getPlayUrlAttribute()
 	{
-		return MP3Pam::route('api.musics.play', ['id' => $this->id]);
+		return MP3Pam::route('musics.play', ['id' => $this->id]);
 	}
 
 	public function getImageUrlAttribute()

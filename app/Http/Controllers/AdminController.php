@@ -7,7 +7,6 @@ use Cache;
 use Validator;
 use App\Models\User;
 use App\Models\Music;
-use App\Models\Video;
 use App\Models\Category;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
@@ -17,32 +16,13 @@ class AdminController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('admin');
+		// $this->middleware('admin');
 	}
 
 	public function index()
 	{
-		$data = [
-			'admin' 	=> Auth::user(),
-
-			'musics' => music::latest()->take(10)->get(),
-			'musics_count' => music::count(),
-
-			'videos' => video::latest()->take(10)->get(),
-			'videos_count' => video::count(),
-
-			'playlists' => Playlist::latest()->take(10)->get(),
-			'playlists_count' => Playlist::count(),
-
-			'users' => User::latest()->take(10)->get(),
-			'users_count' => User::count(),
-
-			'categories' => Category::orderBy('name')->take(10)->get(),
-			'cats_count'	=> Category::count(),
-			'title' => 'Administrasyon',
-		];
-
-		return view('admin.index', $data);
+		return 'welcome to admin';
+		return view('admin.index');
 	}
 
 	public function musics()
