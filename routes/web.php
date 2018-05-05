@@ -131,3 +131,18 @@ get('b2-stream', function()
 	    "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
 	]);
 });
+
+get('user-music', function()
+{
+	$user = \App\Models\User::first();
+	$music = \App\Models\Music::first();
+
+	return $user->likedMusics()->toggle($music);
+});
+
+get('user-has-liked-music', function()
+{
+	$music = \App\Models\Music::first();
+	$user = \App\Models\User::first();
+	dd($user->hasLiked($music));
+});

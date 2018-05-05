@@ -29,10 +29,5 @@ class MusicResource extends Resource
             'category'      	=> new CategoryResource($this->category),
             'artist' 			=> new ArtistResource($this->artist)
         ];
-
-        // 'user' => function($query) {
-        //             $query->select(['id', 'name', 'email', 'avatar', 'telephone']);
-        // },
-
     }
 }

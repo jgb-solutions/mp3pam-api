@@ -33,7 +33,7 @@ class Music extends BaseModel
 	];
 
 	protected $hidden = [
-		'id',
+		// 'id',
 		'updated_at',
 		'user_id',
 		'artist_id',
@@ -43,9 +43,14 @@ class Music extends BaseModel
 		'image',
 	];
 
-	public function user()
+	public function getRouteKeyName()
 	{
-		return $this->belongsTo(User::class);
+		return 'hash';
+	}
+
+	public function peopleWhoFavoured()
+	{
+		return $this->belongsToMany(User::class, 'liked_musics')->withTimestamps();
 	}
 
 	public function artist()

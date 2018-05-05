@@ -56,6 +56,13 @@ class UsersController extends Controller
 		});
 	}
 
+	public function toggleLike(Music $music)
+	{
+		$toggle = auth()->user()->likedMusics()->toggle($music);
+
+		return (bool) count($toggle['attached']) ? 'true' : 'false';
+	}
+
 	public function getLogin()
 	{
 		if (Auth::guest()) {

@@ -33,15 +33,7 @@ class MusicsController extends Controller
 
 	public function index()
 	{
-		// $data = [
-		// 	// 'musics'	=> Music::remember(120)->latest()->published()->paginate(12),
-		// 	'musics'	=> Music::latest()->published()->paginate(10),
-		// ];
-
-		// return MP3Pam::cache('_musics_index_', function() {
-			return new MusicCollection(Music::with('category', 'artist')->latest()->paginate(10));
-		// });
-
+		return new MusicCollection(Music::with('category', 'artist')->latest()->paginate(10));
 	}
 
 	public function store()
@@ -71,14 +63,15 @@ class MusicsController extends Controller
 
 	public function show($hash)
 	{
-		$music = Music::with(['user', 'artist', 'category'])->byHash($hash)->firstOrFail();
+		$music = Music::with(['artist', 'category'])->byHash($hash)->firstOrFail();
 
 		$related = Music::related($music)->get();
 		// return $related;
 
 		return [
 			'music' 	=> new MusicResource($music),
-			'related' => new MusicCollection($related)
+			'related' => new MusicCollection($related),
+			'hasLiked' => (bool) auth()->user()->hasLiked($music)
 		];
 	}
 

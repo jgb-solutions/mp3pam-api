@@ -36,9 +36,14 @@ class User extends Authenticatable implements JWTSubject
 
 	protected $appends = ['avatar_url', 'musics_url'];
 
-	public function musics()
+	public function likedMusics()
 	{
-		return $this->hasMany(Music::class);
+		return $this->belongsToMany(Music::class, 'liked_musics')->withTimestamps();
+	}
+
+	public function hasLiked($music)
+	{
+		return $this->likedMusics()->wherePivot('music_id', $music->id)->exists();
 	}
 
 	public function getAvatarUrlAttribute()

@@ -13,17 +13,12 @@ use App\Models\Category;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MusicCollection;
+use App\Http\Resources\CategoryResource;
 use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoriesController extends Controller
 {
-	public function __construct()
-	{
-		// $this->middleware('admin')->except([
-		// 	'show',
-		// 	'musics',
-		// ]);
-	}
 
 	public function index()
 	{
@@ -68,25 +63,31 @@ class CategoriesController extends Controller
 
 	public function show($slug)
 	{
-		$key = "category.$slug";
+	   $category= Category::withCount('musics')->whereSlug($slug)->firstOrFail();
 
-		return MP3Pam::cache($key, function() use ($slug) {
-		   $category= Category::withCount('musics')->whereSlug($slug)->firstOrFail();
+		// $musics = Music::byCategory($category)->with('artist')->paginate(10);
+		$musics = $category->musics()->with('artist', 'category')->latest()->paginate(10);
+		// $musics = $cat->musics()->published()->latest()->take(20)->get();
+		$musics_to_array = $musics->toArray();
 
-			$musics = Music::byCategory($category)->paginate(10, [
-				'id', 'hash', 'title', 'featured', 'file_size', 'created_at'
-			]);
-			// $musics = $cat->musics()->published()->latest()->take(20)->get();
-
-
-			// $merged = $musics->merge($videos);
-
-			return [
-				'musics' => $musics,
-				'category' => $category,
-				// 'musiccount' => $musics->count(),
-			];
-		});
+		return [
+			'musics' => (new MusicCollection($musics))->toJSON(),
+			// [
+			// 	'data' => (new MusicCollection($musics))->toJSON(),
+			// 	'current_page' => $musics_to_array['current_page'],
+			// 	'first_page_url' => $musics_to_array['first_page_url'],
+			// 	'from' => $musics_to_array['from'],
+			// 	'last_page' => $musics_to_array['last_page'],
+			// 	'last_page_url' => $musics_to_array['last_page_url'],
+			// 	'next_page_url' => $musics_to_array['next_page_url'],
+			// 	'path' => $musics_to_array['path'],
+			// 	'per_page' => $musics_to_array['per_page'],
+			// 	'prev_page_url' => $musics_to_array['prev_page_url'],
+			// 	'to' =>   $musics_to_array['to'],
+			// 	'total' => $musics_to_array['total']
+			// ],
+			'category' => new CategoryResource($category),
+		];
 	}
 
 	public function musics($slug)

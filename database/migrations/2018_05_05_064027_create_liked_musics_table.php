@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFavoritesTable extends Migration
+class CreateLikedMusicsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,11 @@ class CreateFavoritesTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('liked_musics', function (Blueprint $table) {
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('music_id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class CreateFavoritesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('liked_musics');
     }
 }
