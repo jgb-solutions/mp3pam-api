@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MusicCollection;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
@@ -61,6 +62,13 @@ class UsersController extends Controller
 		$toggle = auth()->user()->likedMusics()->toggle($music);
 
 		return (bool) count($toggle['attached']) ? 'true' : 'false';
+	}
+
+	public function musicsLiked()
+	{
+		$liked_musics = auth()->user()->likedMusics()->latest()->paginate(10);
+
+		return new MusicCollection($liked_musics);
 	}
 
 	public function getLogin()

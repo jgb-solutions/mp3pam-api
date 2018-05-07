@@ -23,12 +23,12 @@ group(['prefix' => 'v1'], function() {
 	   post('refresh', 'AuthController@refresh')->name('auth.refresh');
 
 		//  Users' routes
-		get('users', 'UsersController@index')->name('users.index');
-		get('users/{user}', 'UsersController@show')->name('users.show');
-		get('users/{id}/musics', 'UsersController@musics')->name('users.musics');
-		get('users/liked/musics', 'UsersController@musicsLiked')->name('users.musics.liked');
-		post('users/toggle-like/{music}', 'UsersController@toggleLike')->name('users.musics.toggle-like');
-		get('users/has-liked/{music}', 'UsersController@hasLiked')->name('users.musics.has-liked');
+		get('/users', 'UsersController@index')->name('users.index');
+		get('/users/{user}', 'UsersController@show')->name('users.show');
+		get('/users/liked/musics', 'UsersController@musicsLiked')->name('users.musics.liked');
+		get('/users/{id}/musics', 'UsersController@musics')->name('users.musics');
+		post('/users/toggle-like/{music}', 'UsersController@toggleLike')->name('users.musics.toggle-like');
+		get('/users/has-liked/{music}', 'UsersController@hasLiked')->name('users.musics.has-liked');
 
 		// Musics routes
 		get('musics', 'MusicsController@index')->name('api.musics');
