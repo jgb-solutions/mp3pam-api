@@ -3,9 +3,8 @@
 get('/', 'PagesController@index');
 
 // Musics routes
-get('t/{music}', 'API\MusicsController@download')->name('musics.get');
+get('t/{music}', 'MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
-get('t/{music}', 'API\MusicsController@download')->name('musics.get');
 get('play/{music}', 'MusicsController@play')->name('musics.play');
 
 group(['prefix' => 'admin'], function() {

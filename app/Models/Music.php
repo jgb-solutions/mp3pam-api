@@ -161,7 +161,7 @@ class Music extends BaseModel
 
 	public function getPlayUrlAttribute()
 	{
-		return MP3Pam::route('musics.play', ['id' => $this->id]);
+		return MP3Pam::route('musics.play', ['hash' => $this->hash]);
 	}
 
 	public function getImageUrlAttribute()
@@ -169,7 +169,9 @@ class Music extends BaseModel
 		$imagePath = config('site.defaultThumbnail');
 		if ($this->image) $imagePath = Storage::url($this->image);
 
-		return MP3Pam::asset($imagePath);
+		// return MP3Pam::asset($imagePath);
+
+		return 'http://via.placeholder.com/500x500';
 	}
 
 	public function scopeUrl()
