@@ -1,9 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-export default class App extends Component {
-    render() {
-        return (
-            <h1>MP3 Pam!</h1>
-        );
-    }
+// Main screens
+import HomeScreen from './screens/Home';
+import AboutScreen from './screens/About';
+import Main from './components/layouts/Main';
+
+const App = () => {
+  return (
+    <Router>
+      <Main>
+        <Route path="/" exact component={HomeScreen} />
+        <Route path="/about" component={AboutScreen} />
+      </Main>
+    </Router>
+  );
 };
+
+export default App;
