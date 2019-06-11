@@ -1,24 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { CssBaseline, Grid, Container } from '@material-ui/core';
+import Player from '../Player';
+import Left from '../Left';
+import Right from '../Right';
+import Content from '../Content';
 
 const Main = props => {
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Button>
-              <Link to="/">Home</Link>
-            </Button>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
-      {props.children}
-    </div>
+    <>
+      <CssBaseline />
+      <Container
+        maxWidth="lg"
+        style={{
+          marginBottom: 50
+        }}
+      >
+        <Grid container spacing={1}>
+          <Grid item sm={3}>
+            <Left />
+          </Grid>
+          <Grid item sm={6}>
+            <Content />
+          </Grid>
+          <Grid item sm={3}>
+            <Right />
+          </Grid>
+        </Grid>
+      </Container>
+      <Player />
+    </>
   );
 };
 
