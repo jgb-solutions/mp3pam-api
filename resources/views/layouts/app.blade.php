@@ -19,8 +19,14 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+    </style>
 </head>
-<body style="background-color:black;color:white">
-    <div id="app" style="display: flex;flex-direction: column;min-height: 100vh;"></div>
+<body>
+    @yield('app')
 </body>
 </html>

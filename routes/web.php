@@ -1,7 +1,4 @@
 <?php
-
-get('/', 'PagesController@index');
-
 // Musics routes
 get('t/{music}', 'MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
@@ -145,3 +142,6 @@ get('user-has-liked-music', function()
 	$user = \App\Models\User::first();
 	dd($user->hasLiked($music));
 });
+
+// Catch all routes
+Route::view('/{any}', 'pages.spa')->where('any', '^(?!api).*$');

@@ -4,7 +4,15 @@ import Player from '../Player';
 import Left from '../Left';
 import Right from '../Right';
 import Content from '../Content';
+import Header from '../../components/Header';
 
+const styles = {
+  padding: {
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10
+  }
+};
 const Main = props => {
   return (
     <>
@@ -15,14 +23,15 @@ const Main = props => {
           marginBottom: 50
         }}
       >
-        <Grid container spacing={1}>
-          <Grid item sm={3}>
+        <Grid container>
+          <Grid item sm={2} style={styles.padding}>
             <Left />
           </Grid>
-          <Grid item sm={6}>
-            <Content />
+          <Grid item sm={8} style={{ backgroundColor: '#181818' }}>
+            <Header />
+            <Content style={styles.padding}>{props.children}</Content>
           </Grid>
-          <Grid item sm={3}>
+          <Grid item sm={2} style={styles.padding}>
             <Right />
           </Grid>
         </Grid>
