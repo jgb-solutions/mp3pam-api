@@ -14,7 +14,7 @@ const SearchScreen = props => {
             const { url, width, height } = image;
 
             return (
-              <Grid key={index} item sm={3}>
+              <Grid key={index} item sm={2} xs={2}>
                 <img src={url} style={{ maxWidth: '100%' }} />
               </Grid>
             );

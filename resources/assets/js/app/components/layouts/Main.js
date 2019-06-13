@@ -27,7 +27,11 @@ const Main = props => {
           <Grid item sm={2} style={styles.padding}>
             <Left />
           </Grid>
-          <Grid item sm={8} style={{ backgroundColor: '#181818' }}>
+          <Grid
+            item
+            sm={8}
+            style={{ backgroundColor: '#181818', position: 'relative' }}
+          >
             <Header />
             <Content style={styles.padding}>{props.children}</Content>
           </Grid>

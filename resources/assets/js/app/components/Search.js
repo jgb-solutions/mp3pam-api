@@ -10,13 +10,14 @@ const useStyles = makeStyles(theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 0.95),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+      backgroundColor: fade(theme.palette.common.white, 0.99)
     },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%'
+    color: fade(theme.palette.common.black, 0.8),
+    // marginRight: theme.spacing(2),
+    marginLeft: 0
+    // width: '100%'
   },
   searchIcon: {
     width: theme.spacing(7),
@@ -55,11 +56,17 @@ const Search = props => {
     search(text);
   };
 
-  const updateSearchUrl = () => {
-    history.push({
-      pathname: 'search',
-      search: searchTerm.length ? `?query=${searchTerm}` : ''
-    });
+  const updateSearchUrl = (isClicked = false) => {
+    if (searchTerm.length || isClicked) {
+      history.push({
+        pathname: '/search',
+        search: searchTerm.length ? `?query=${searchTerm}` : ''
+      });
+    } else {
+      history.push({
+        search: ''
+      });
+    }
   };
 
   return (
@@ -74,7 +81,7 @@ const Search = props => {
           input: classes.inputInput
         }}
         inputProps={{ 'aria-label': 'Search' }}
-        onClick={() => updateSearchUrl()}
+        onClick={() => updateSearchUrl(true)}
         onChange={handleChange}
         value={searchTerm}
       />

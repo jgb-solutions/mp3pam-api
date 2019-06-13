@@ -15,7 +15,8 @@ import Search from './Search';
 
 const useStyles = makeStyles(theme => ({
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
+    position: 'relative'
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -124,7 +125,7 @@ const Header = props => {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="sticky" style={{ backgroundColor: '#000' }}>
+      <AppBar position="static" style={{ backgroundColor: '#000' }}>
         <Toolbar style={{ paddingLeft: 10, paddingRight: 10 }}>
           <Search />
           <div className={classes.grow} />

@@ -18,7 +18,7 @@ export default function App() {
         <Main>
           <Switch>
             <Route path="/" exact component={HomeScreen} />
-            <Route path="/search" component={SearchScreen} />
+            <Route path="/search" exact component={SearchScreen} />
             <Route path="/about" component={AboutScreen} />
             <Route component={FourOFour} />
           </Switch>

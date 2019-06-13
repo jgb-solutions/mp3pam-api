@@ -1,7 +1,7 @@
 import { SEARCH } from '../actions/types';
 
 const INITIAL_STATE = {
-  term: '',
+  term: new URL(document.location).searchParams.get('query') || '',
   results: [
     {
       album: {
