@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   search: {
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 25,
     backgroundColor: fade(theme.palette.common.white, 0.95),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.99)

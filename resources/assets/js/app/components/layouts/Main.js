@@ -7,10 +7,11 @@ import Content from '../Content';
 import Header from '../../components/Header';
 
 const styles = {
-  padding: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingRight: 10
+  col: {
+    paddingLeft: 5,
+    paddingRight: 5,
+    height: window.innerHeight - 86,
+    overflowY: 'scroll'
   }
 };
 const Main = props => {
@@ -24,18 +25,23 @@ const Main = props => {
         }}
       >
         <Grid container>
-          <Grid item sm={2} style={styles.padding}>
+          <Grid item sm={2} xs={12} style={{ ...styles.col, paddingTop: 10 }}>
             <Left />
           </Grid>
           <Grid
             item
             sm={8}
-            style={{ backgroundColor: '#181818', position: 'relative' }}
+            xs={12}
+            style={{
+              ...styles.col,
+              backgroundColor: '#181818',
+              position: 'relative'
+            }}
           >
             <Header />
-            <Content style={styles.padding}>{props.children}</Content>
+            <Content style={styles.col}>{props.children}</Content>
           </Grid>
-          <Grid item sm={2} style={styles.padding}>
+          <Grid item sm={2} xs={12} style={{ ...styles.col, paddingTop: 10 }}>
             <Right />
           </Grid>
         </Grid>

@@ -125,7 +125,7 @@ const Header = props => {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static" style={{ backgroundColor: '#000' }}>
+      <AppBar position="absolute" style={{ backgroundColor: '#000' }}>
         <Toolbar style={{ paddingLeft: 10, paddingRight: 10 }}>
           <Search />
           <div className={classes.grow} />
