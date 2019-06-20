@@ -8,8 +8,8 @@ import Header from '../../components/Header';
 
 const styles = {
   col: {
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     height: window.innerHeight - 86,
     overflowY: 'scroll'
   }

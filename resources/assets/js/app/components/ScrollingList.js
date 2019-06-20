@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.common.white
   },
   item: {
-    width: 140,
+    width: 180,
     marginRight: 21
   },
   link: { color: '#fff', textDecoration: 'none' },
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16
   },
   img: {
-    width: 140
+    width: 180
   },
   title: {
     margin: 0,

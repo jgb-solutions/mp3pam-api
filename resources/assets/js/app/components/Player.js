@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Slider from '../components/Slider';
 import {
   Shuffle,
   PlayCircleOutline,
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     height: 86,
-    backgroundColor: '#1d1d1d',
+    backgroundColor: '#272727',
     color: 'white'
   },
   player: {
@@ -51,6 +52,7 @@ const useStyles = makeStyles(theme => ({
   controls: {
     flex: 2,
     display: 'flex',
+    marginTop: 10,
     flexDirection: 'column',
     justifyContent: 'space-around'
     // border: '1px solid white'
@@ -63,8 +65,19 @@ const useStyles = makeStyles(theme => ({
     alignSelf: 'center'
     // border: '1px solid white'
   },
+  sliderTime: {
+    display: 'flex',
+    width: '90%',
+    alignSelf: 'center',
+    justifyContent: 'space-between'
+  },
   slider: {
-    display: 'flex'
+    flex: 1,
+    marginLeft: 15,
+    marginRight: 15
+  },
+  startEndTime: {
+    fontSize: 10
   },
   icon: {
     fontSize: 22,
@@ -76,6 +89,12 @@ const useStyles = makeStyles(theme => ({
 }));
 const Player = () => {
   const styles = useStyles();
+  const [sliderValue, setSliderValue] = useState(30);
+
+  const handleSliderChange = (event, newValue) => {
+    setSliderValue(newValue);
+    console.log(newValue);
+  };
 
   return (
     <div className={styles.container}>
@@ -86,13 +105,23 @@ const Player = () => {
             <Shuffle className={styles.icon} />
             <SkipPrevious className={styles.icon} />
             <PauseCircleOutline
-              className={{ ...styles.icon }}
+              className={styles.icon}
               style={{ fontSize: 42 }}
             />
             <SkipNext className={styles.icon} />
             <Repeat className={styles.icon} />
           </div>
-          <div className={styles.slider}>slider</div>
+          <div className={styles.sliderTime}>
+            <div className={styles.startEndTime}>00.00</div>
+            <div className={styles.slider}>
+              <Slider
+                value={sliderValue}
+                onChange={handleSliderChange}
+                aria-labelledby="continuous-slider"
+              />
+            </div>
+            <div className={styles.startEndTime}>3:35</div>
+          </div>
         </div>
         <div className={styles.playlistVolume}>
           <PlaylistPlayOutlined className={styles.icon} />
