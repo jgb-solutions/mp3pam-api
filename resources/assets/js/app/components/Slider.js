@@ -1,7 +1,8 @@
+import React from 'react';
 import Slider from '@material-ui/lab/Slider';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const CustomSlider = withStyles({
+const useStyles = makeStyles({
   root: {
     color: '#a4a4a4'
   },
@@ -12,6 +13,12 @@ const CustomSlider = withStyles({
   rail: {
     height: 4
   }
-})(Slider);
+});
+
+const CustomSlider = props => {
+  const styles = useStyles();
+
+  return <Slider classes={styles} {...props} />;
+};
 
 export default CustomSlider;

@@ -12,6 +12,7 @@ const styles = {
     paddingRight: 10,
     height: window.innerHeight - 86,
     overflowY: 'scroll'
+    // border: '1px solid white'
   }
 };
 const Main = props => {

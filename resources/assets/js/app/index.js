@@ -8,6 +8,9 @@ import SearchScreen from './screens/Search';
 import FourOFour from './screens/FourOFour';
 import Main from './components/layouts/Main';
 
+//  Routers
+import Routes from './routes';
+
 // Redux Store
 import store from './store';
 
@@ -17,9 +20,9 @@ export default function App() {
       <Router>
         <Main>
           <Switch>
-            <Route path="/" exact component={HomeScreen} />
-            <Route path="/search" exact component={SearchScreen} />
-            <Route path="/about" component={AboutScreen} />
+            <Route path={Routes.root} exact component={HomeScreen} />
+            <Route path={Routes.search} exact component={SearchScreen} />
+            <Route path={Routes.about} component={AboutScreen} />
             <Route component={FourOFour} />
           </Switch>
         </Main>

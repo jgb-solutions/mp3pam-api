@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from '../components/Slider';
 import {
@@ -14,6 +15,7 @@ import {
   VolumeUpOutlined,
   VolumeMuteOutlined
 } from '@material-ui/icons';
+import Routes from '../routes';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   player: {
     flex: 1,
-    maxWidth: 1200,
+    maxWidth: 1216,
     marginLeft: 'auto',
     marginRight: 'auto',
     display: 'flex',
@@ -37,10 +39,9 @@ const useStyles = makeStyles(theme => ({
   posterTitle: {
     flex: 1,
     display: 'flex',
-    // border: '1px solid white',
     justifyContent: 'center',
-    alignItems: 'flex-start'
-    // border: '1px solid white'
+    alignItems: 'flex-start',
+    border: '1px solid white'
   },
   playlistVolume: {
     flex: 1,
@@ -70,6 +71,7 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     alignSelf: 'center',
     justifyContent: 'space-between'
+    // border: '1px solid white'
   },
   slider: {
     flex: 1,
@@ -77,7 +79,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: 15
   },
   startEndTime: {
-    fontSize: 10
+    fontSize: 10,
+    alignSelf: 'center'
   },
   icon: {
     fontSize: 22,
@@ -85,15 +88,43 @@ const useStyles = makeStyles(theme => ({
   },
   playIcon: {
     fontSize: 48
+  },
+  volumeSliderContainer: {
+    width: 70,
+    marginLeft: 7
+  },
+  volumeIcons: {
+    marginLeft: 15
   }
 }));
-const Player = () => {
+const Player = props => {
   const styles = useStyles();
-  const [sliderValue, setSliderValue] = useState(30);
+  const [seekValue, setseekValue] = useState(30);
+  const [volume, setVolume] = useState(50);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleSliderChange = (event, newValue) => {
-    setSliderValue(newValue);
+  const handleSeekChange = (event, newValue) => {
+    setseekValue(newValue);
     console.log(newValue);
+  };
+
+  const handleVolumeChange = (event, newVolume) => {
+    setVolume(newVolume);
+    console.log(newVolume);
+  };
+
+  const play = () => {
+    setIsPlaying(true);
+  };
+
+  const pause = () => {
+    setIsPlaying(false);
+  };
+
+  const handleQueue = () => {
+    console.log('go to queue');
+    console.log(props);
+    props.history.push(Routes.queue);
   };
 
   return (
@@ -104,10 +135,22 @@ const Player = () => {
           <div className={styles.buttons}>
             <Shuffle className={styles.icon} />
             <SkipPrevious className={styles.icon} />
-            <PauseCircleOutline
-              className={styles.icon}
-              style={{ fontSize: 42 }}
-            />
+            <div className={styles.playPause}>
+              {isPlaying && (
+                <PauseCircleOutline
+                  className={styles.icon}
+                  style={{ fontSize: 42 }}
+                  onClick={pause}
+                />
+              )}
+              {!isPlaying && (
+                <PlayCircleOutline
+                  className={styles.icon}
+                  style={{ fontSize: 42 }}
+                  onClick={play}
+                />
+              )}
+            </div>
             <SkipNext className={styles.icon} />
             <Repeat className={styles.icon} />
           </div>
@@ -115,8 +158,8 @@ const Player = () => {
             <div className={styles.startEndTime}>00.00</div>
             <div className={styles.slider}>
               <Slider
-                value={sliderValue}
-                onChange={handleSliderChange}
+                value={seekValue}
+                onChange={handleSeekChange}
                 aria-labelledby="continuous-slider"
               />
             </div>
@@ -124,14 +167,27 @@ const Player = () => {
           </div>
         </div>
         <div className={styles.playlistVolume}>
-          <PlaylistPlayOutlined className={styles.icon} />
-          <VolumeMuteOutlined className={styles.icon} />
-          <VolumeDownOutlined className={styles.icon} />
-          <VolumeUpOutlined className={styles.icon} />
+          <PlaylistPlayOutlined className={styles.icon} onClick={handleQueue} />
+          <div className={styles.volumeIcons}>
+            {volume === 0 && <VolumeMuteOutlined className={styles.icon} />}
+            {volume > 0 && volume <= 70 && (
+              <VolumeDownOutlined className={styles.icon} />
+            )}
+            {volume > 0 && volume > 70 && (
+              <VolumeUpOutlined className={styles.icon} />
+            )}
+          </div>
+          <div className={styles.volumeSliderContainer}>
+            <Slider
+              value={volume}
+              onChange={handleVolumeChange}
+              aria-labelledby="continuous-slider"
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Player;
+export default withRouter(Player);
