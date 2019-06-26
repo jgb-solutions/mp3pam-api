@@ -1,13 +1,14 @@
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
 import { makeStyles } from '@material-ui/core/styles';
+import colors from '../utils/colors';
 
 const useStyles = makeStyles({
   root: {
-    color: '#a4a4a4'
+    color: colors.grey
   },
   track: {
-    color: '#cd1b54',
+    color: colors.primary,
     height: 4
   },
   rail: {

@@ -16,6 +16,7 @@ import {
   VolumeMuteOutlined
 } from '@material-ui/icons';
 import Routes from '../routes';
+import colors from '../utils/colors';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     height: 86,
-    backgroundColor: '#272727',
+    backgroundColor: colors.darkGrey,
     color: 'white'
   },
   player: {
@@ -84,7 +85,7 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     fontSize: 22,
-    color: '#a4a4a4'
+    color: colors.grey
   },
   playIcon: {
     fontSize: 48
@@ -102,10 +103,11 @@ const Player = props => {
   const [seekValue, setseekValue] = useState(30);
   const [volume, setVolume] = useState(50);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [repeat, setRepeat] = useState(false);
 
-  const handleSeekChange = (event, newValue) => {
-    setseekValue(newValue);
-    console.log(newValue);
+  const handleSeekChange = (event, newSeekValue) => {
+    setseekValue(newSeekValue);
+    console.log(newSeekValue);
   };
 
   const handleVolumeChange = (event, newVolume) => {
@@ -125,6 +127,20 @@ const Player = props => {
     console.log('go to queue');
     console.log(props);
     props.history.push(Routes.queue);
+  };
+
+  const handleRepeatAll = () => {
+    console.log('repeat all');
+    if (repeat === 'all') {
+      setRepeat('one');
+    } else {
+      setRepeat('all');
+    }
+  };
+
+  const handleRepeatOne = () => {
+    console.log('repeat one');
+    setRepeat('one');
   };
 
   return (
@@ -152,7 +168,26 @@ const Player = props => {
               )}
             </div>
             <SkipNext className={styles.icon} />
-            <Repeat className={styles.icon} />
+            <div className={styles.repeat}>
+              {!repeat !== 'one' && (
+                <Repeat
+                  className={styles.icon}
+                  style={{
+                    color: repeat === 'all' ? colors.primary : colors.grey
+                  }}
+                  onClick={handleRepeatAll}
+                />
+              )}
+              {repeat === 'one' && (
+                <RepeatOne
+                  className={styles.icon}
+                  style={{
+                    color: repeat === 'all' ? colors.primary : colors.grey
+                  }}
+                  onClick={handleRepeatOne}
+                />
+              )}
+            </div>
           </div>
           <div className={styles.sliderTime}>
             <div className={styles.startEndTime}>00.00</div>
