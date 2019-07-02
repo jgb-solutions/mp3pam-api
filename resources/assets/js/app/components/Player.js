@@ -11,6 +11,7 @@ import {
   VolumeDownOutlined,
   PlaylistPlayOutlined
 } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -55,9 +56,9 @@ const styles = theme => ({
   controls: {
     flex: 2,
     display: 'flex',
-    marginTop: 10,
-    flexDirection: 'column',
-    justifyContent: 'space-around'
+    // marginTop: 0,
+    flexDirection: 'column'
+    // justifyContent: 'space-around'
     // border: '1px solid white'
   },
   buttons: {
@@ -73,16 +74,16 @@ const styles = theme => ({
     width: '90%',
     alignSelf: 'center',
     justifyContent: 'space-between'
-    // border: '1px solid white'
   },
   slider: {
     flex: 1,
     marginLeft: 15,
-    marginRight: 15
+    marginRight: 15,
+    alignSelf: 'flex-end'
   },
   startEndTime: {
     fontSize: 10,
-    alignSelf: 'center'
+    paddingBottom: 20
   },
   icon: {
     fontSize: 22,
@@ -121,7 +122,7 @@ class Player extends Component {
   }
 
   state = {
-    volume: 50,
+    volume: 80,
     isPlaying: false,
     repeat: 'none',
     position: 0,
@@ -131,32 +132,31 @@ class Player extends Component {
     onRepeat: false,
     isShuffled: false,
     isPlaying: false,
+    currentPlaylist: [],
     currentTrack: {
       title: 'Bad News',
       detail:
         "Cat, 'if you don't explain it is right?' 'In my youth,' Father William replied to his ear. Alice considered a little, and then said 'The fourth.' 'Two days wrong!' sighed the Lory, as soon as she.",
       lyrics:
         "She went in without knocking, and hurried off at once, while all the jurymen are back in a minute or two, they began moving about again, and looking at them with large round eyes, and half believed herself in Wonderland, though she knew that it might tell her something worth hearing. For some minutes it puffed away without speaking, but at the bottom of the court. 'What do you mean \"purpose\"?' said Alice. 'Then you should say what you would seem to come once a week: HE taught us Drawling, Stretching, and Fainting in Coils.' 'What was THAT like?' said Alice. 'Well, I never heard of \"Uglification,\"' Alice ventured to ask. 'Suppose we change the subject,' the March Hare and the Mock Turtle, 'but if they do, why then they're a kind of serpent, that's all I can say.' This was such a puzzled expression that she was now only ten inches high, and her eyes filled with tears again as she could. 'The game's going on between the executioner, the King, 'or I'll have you executed, whether you're a.",
-      url: 'http://192.168.43.102:8000/api/v1/musics/42139505',
+      url: 'http://mp3pam.loc/api/v1/musics/42139505',
       play_count: 0,
-      play_url:
-        'https://files.mp3pam.com/file/mp3pam/(Rington)+OMVR+-+Bad+News+-+RingtonOrg.mp3',
+      play_url: '/assets/audio/OMVR-Bad-News.mp3',
       download_count: 0,
-      download_url: 'http://192.168.43.102:8000/t/42139505',
-      image:
-        'http://mp3pam-server.test/assets/images/OMVR-Bad-News-2016-2480x2480.jpg',
+      download_url: 'http://mp3pam.loc/t/42139505',
+      image: 'http://mp3pam.loc/assets/images/OMVR-Bad-News-2016-2480x2480.jpg',
       category: {
         name: 'Konpa',
         slug: 'konpa',
-        url: 'http://192.168.43.102:8000/api/v1/categories/konpa'
+        url: 'http://mp3pam.loc/api/v1/categories/konpa'
       },
       artist: {
-        avatar: 'http://192.168.43.102:8000/assets/images/logo.jpg',
+        avatar: 'http://mp3pam.loc/assets/images/logo.jpg',
         bio: null,
-        musics: 'http://192.168.43.102:8000/api/v1/artists/77868635/musics',
+        musics: 'http://mp3pam.loc/api/v1/artists/77868635/musics',
         name: 'OMVR',
         stageName: 'OMVR',
-        url: 'http://192.168.43.102:8000/api/v1/artists/77868635',
+        url: 'http://mp3pam.loc/api/v1/artists/77868635',
         verified: false
       }
     },
@@ -164,59 +164,63 @@ class Player extends Component {
   };
 
   setUpAudio = () => {
-    this.audio = new Audio();
-
-    this.audio.onended = e => {
-      console.log('ended');
-      this.isPlaying = false;
-    };
-
-    this.audio.ontimeupdate = e => {
-      const elapsed = this.audio.currentTime;
-      let duration = this.audio.duration;
-      this.setState({
-        position: (elapsed / duration) * 100,
-        elapsed: this.formatTime(elapsed),
-        duration: duration > 0 ? this.formatTime(duration) : ''
-      });
-    };
+    window.audio = this.audio = new Audio();
+    this.audio.volume = this.state.volume / 100;
+    this.audio.loop = this.state.repeat === 'one';
+    this.audio.onended = this.onEnded;
+    this.audio.ontimeupdate = this.onTimeUpdate;
   };
 
-  play = url => {
-    this.prepare(url);
-    this.audio.play().then(
-      () => {
-        console.log('started playing...');
-      },
-      error => {
-        console.log('failed because ' + error);
-        let toast = this.toast.create({
-          message: 'Nou pa rive jwe mizik la. Tanpri eseye ankò.',
-          duration: 3000,
-          closeButtonText: 'OKE'
-        });
+  onTimeUpdate = () => {
+    const elapsed = this.audio.currentTime;
+    let duration = this.audio.duration;
+    this.setState({
+      position: (elapsed / duration) * 100,
+      elapsed: this.formatTime(elapsed),
+      duration: duration > 0 ? this.formatTime(duration) : ''
+    });
+  };
 
-        toast.present();
-      }
-    );
+  onEnded = () => {
+    if (this.state.repeat === 'all') {
+      this.play();
+    } else {
+      this.setState({ isPlaying: false, position: 0 });
+    }
+  };
+
+  play = () => {
+    this.setState({ isPlaying: true }, () => {
+      this.audio.src = this.state.currentTrack.play_url;
+      this.audio.load();
+      this.audio.play().then(
+        () => {
+          console.log('started playing...');
+        },
+        error => {
+          console.log('failed because ' + error);
+          this.setState({ isPlaying: false });
+        }
+      );
+    });
   };
 
   resume = () => {
-    // this.isPaused = false;
     this.audio.play();
-    console.log('resuming...');
+    this.setState({ isPlaying: true });
   };
 
   playOrResume = () => {
     if (this.audio.paused && this.audio.currentTime > 0) {
       this.resume();
     } else {
-      this.play(this.currentTrack.play_url);
+      this.play();
     }
   };
 
   pause() {
     this.audio.pause();
+    this.setState({ isPlaying: false });
     console.log('pausing...');
   }
 
@@ -261,24 +265,6 @@ class Player extends Component {
       this.playCurrentTrack(this.playedTracks[indexToPlay]);
     }
   };
-
-  adjustVolume() {}
-
-  // backward() {
-  //     const elapsed = this.audio.currentTime;
-  //     console.log(elapsed);
-  //     if (elapsed >= 5) {
-  //         this.audio.currentTime = elapsed - 5;
-  //     }
-  // }
-
-  // forward() {
-  //     const elapsed = this.audio.currentTime;
-  //     const duration = this.audio.duration;
-  //     if (duration - elapsed >= 5) {
-  //         this.audio.currentTime = elapsed + 5;
-  //     }
-  // }
 
   randomTrack = () => {
     return this.playedTracks[
@@ -362,34 +348,21 @@ class Player extends Component {
   };
 
   handleSeekChange = (event, newPosition) => {
+    this.audio.currentTime = (newPosition * this.audio.duration) / 100;
     this.setState({ position: newPosition });
-    console.log(newPosition);
   };
 
   handleVolumeChange = (event, newVolume) => {
+    this.audio.volume = newVolume / 100;
     this.setState({ volume: newVolume });
-    console.log(newVolume);
   };
 
   togglePlay = () => {
-    this.setState(
-      prevState => ({
-        isPlaying: !prevState.isPlaying
-      }),
-      () => {
-        this.audio.src =
-          'https://files.mp3pam.com/file/mp3pam/(Rington)+OMVR+-+Bad+News+-+RingtonOrg.mp3';
-        this.audio.load();
-        this.audio.play().then(
-          () => {
-            console.log('started playing...');
-          },
-          error => {
-            console.log('failed because ' + error);
-          }
-        );
-      }
-    );
+    if (this.state.isPlaying) {
+      this.pause();
+    } else {
+      this.playOrResume();
+    }
   };
 
   handleQueue = () => {
@@ -404,8 +377,10 @@ class Player extends Component {
         case 'none':
           return { repeat: 'all' };
         case 'all':
+          this.audio.loop = true;
           return { repeat: 'one' };
         case 'one':
+          this.audio.loop = false;
           return { repeat: 'none' };
       }
     });
@@ -434,8 +409,13 @@ class Player extends Component {
           <div className={classes.controls}>
             <div className={classes.buttons}>
               <Shuffle className={classes.icon} />
-              <SkipPrevious className={classes.icon} />
-              <div className={classes.playPause} onClick={this.togglePlay}>
+              <IconButton disabled={this.state.currentPlaylist.length < 2}>
+                <SkipPrevious className={classes.icon} />
+              </IconButton>
+              <IconButton
+                className={classes.playPause}
+                onClick={this.togglePlay}
+              >
                 {isPlaying && (
                   <PauseCircleOutline
                     className={classes.icon}
@@ -448,8 +428,10 @@ class Player extends Component {
                     style={{ fontSize: 42 }}
                   />
                 )}
-              </div>
-              <SkipNext className={classes.icon} />
+              </IconButton>
+              <IconButton disabled={this.state.currentPlaylist.length < 2}>
+                <SkipNext className={classes.icon} />
+              </IconButton>
               <div className={classes.repeat} onClick={this.toggleRepeat}>
                 {repeat === 'none' && <Repeat className={classes.icon} />}
                 {repeat === 'all' && (
