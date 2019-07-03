@@ -9,11 +9,13 @@ import {
   PauseCircleOutline,
   VolumeMuteOutlined,
   VolumeDownOutlined,
-  PlaylistPlayOutlined
+  PlaylistPlayOutlined,
+  Favorite,
+  FavoriteBorder
 } from '@material-ui/icons';
-import IconButton from '@material-ui/core/IconButton';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 
 import Routes from '../routes';
@@ -42,9 +44,25 @@ const styles = theme => ({
   posterTitle: {
     flex: 1,
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    border: '1px solid white'
+    alignItems: 'center'
+    // border: '1px solid white'
+  },
+  image: {
+    width: 55,
+    height: 55
+  },
+  titleArtist: {
+    paddingLeft: 10
+  },
+  title: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    display: 'block',
+    marginBottom: -10
+  },
+  artist: {
+    fontSize: 9,
+    display: 'block'
   },
   playlistVolume: {
     flex: 1,
@@ -86,7 +104,7 @@ const styles = theme => ({
     paddingBottom: 20
   },
   icon: {
-    fontSize: 22,
+    fontSize: 18,
     color: colors.grey
   },
   playIcon: {
@@ -118,7 +136,6 @@ class Player extends Component {
     super(props);
 
     this.setUpAudio();
-    // this.listenToEvents();
   }
 
   state = {
@@ -145,6 +162,7 @@ class Player extends Component {
       download_count: 0,
       download_url: 'http://mp3pam.loc/t/42139505',
       image: 'http://mp3pam.loc/assets/images/OMVR-Bad-News-2016-2480x2480.jpg',
+      favorite: true,
       category: {
         name: 'Konpa',
         slug: 'konpa',
@@ -189,6 +207,22 @@ class Player extends Component {
     }
   };
 
+  togglePlay = () => {
+    if (this.state.isPlaying) {
+      this.pause();
+    } else {
+      this.playOrResume();
+    }
+  };
+
+  playOrResume = () => {
+    if (this.audio.paused && this.audio.currentTime > 0) {
+      this.resume();
+    } else {
+      this.play();
+    }
+  };
+
   play = () => {
     this.setState({ isPlaying: true }, () => {
       this.audio.src = this.state.currentTrack.play_url;
@@ -210,25 +244,10 @@ class Player extends Component {
     this.setState({ isPlaying: true });
   };
 
-  playOrResume = () => {
-    if (this.audio.paused && this.audio.currentTime > 0) {
-      this.resume();
-    } else {
-      this.play();
-    }
-  };
-
   pause() {
     this.audio.pause();
     this.setState({ isPlaying: false });
-    console.log('pausing...');
   }
-
-  // stop() {
-  //     this.audio.pause();
-  //     this.audio.currentTime = 0;
-  //     // this.isPaused = false;
-  // }
 
   previous() {
     if (this.isShuffled) {
@@ -285,43 +304,6 @@ class Player extends Component {
     this.play(track.play_url);
   };
 
-  // findTracks(value) {
-  //     return this.apiService.get(`${this.apiService.prepareUrl('https://api.soundcloud.com/tracks')}&q=${value}`, false)
-  //         .debounceTime(300)
-  //         .distinctUntilChanged()
-  //         .map(res => res.json());
-  // }
-
-  onTrackFinished = track => {
-    console.log('Track finished', track);
-  };
-
-  prepare = url => {
-    this.audio.src = url;
-    this.audio.load();
-  };
-
-  // listenToEvents(): void {
-  // this.events.subscribe('playTrack', track => {
-  //         console.log('Playing track', track.title);
-  //         this.playCurrentTrack(track);
-  //         this.addTrack(track);
-  // });
-
-  // this.events.subscribe('pauseTrack', () => {
-  // 	console.log('Pausing track')
-
-  //         this.pause();
-  //         console.log('track paused');
-  // });
-
-  // this.events.subscribe('stopTrack', (music) => {
-  // 	console.log('Stopping track', music)
-
-  // 	this.stop.stop(0)
-  // });
-  // }
-
   addTrack = track => {
     if (!this.contains(track)) {
       console.log('not here');
@@ -355,14 +337,6 @@ class Player extends Component {
   handleVolumeChange = (event, newVolume) => {
     this.audio.volume = newVolume / 100;
     this.setState({ volume: newVolume });
-  };
-
-  togglePlay = () => {
-    if (this.state.isPlaying) {
-      this.pause();
-    } else {
-      this.playOrResume();
-    }
   };
 
   handleQueue = () => {
@@ -399,17 +373,36 @@ class Player extends Component {
       repeat,
       duration,
       position,
-      elapsed
+      elapsed,
+      currentTrack
     } = this.state;
     console.log(duration, position, elapsed);
     return (
       <div className={classes.container}>
         <div className={classes.player}>
-          <div className={classes.posterTitle}>poster, title and artist</div>
+          <div className={classes.posterTitle}>
+            <img src={currentTrack.image} className={classes.image} />
+            <div className={classes.titleArtist}>
+              <span className={classes.title}>
+                {currentTrack.title}
+                <IconButton>
+                  {currentTrack.favorite && (
+                    <Favorite className={classes.icon} />
+                  )}
+                  {!currentTrack.favorite && (
+                    <FavoriteBorder className={classes.icon} />
+                  )}
+                </IconButton>
+              </span>
+              <span className={classes.artist}>{currentTrack.artist.name}</span>
+            </div>
+          </div>
           <div className={classes.controls}>
             <div className={classes.buttons}>
-              <Shuffle className={classes.icon} />
-              <IconButton disabled={this.state.currentPlaylist.length < 2}>
+              <IconButton>
+                <Shuffle className={classes.icon} />
+              </IconButton>
+              <IconButton>
                 <SkipPrevious className={classes.icon} />
               </IconButton>
               <IconButton
@@ -429,10 +422,13 @@ class Player extends Component {
                   />
                 )}
               </IconButton>
-              <IconButton disabled={this.state.currentPlaylist.length < 2}>
+              <IconButton>
                 <SkipNext className={classes.icon} />
               </IconButton>
-              <div className={classes.repeat} onClick={this.toggleRepeat}>
+              <IconButton
+                className={classes.repeat}
+                onClick={this.toggleRepeat}
+              >
                 {repeat === 'none' && <Repeat className={classes.icon} />}
                 {repeat === 'all' && (
                   <Repeat
@@ -446,7 +442,7 @@ class Player extends Component {
                     style={{ color: colors.primary }}
                   />
                 )}
-              </div>
+              </IconButton>
             </div>
             <div className={classes.sliderTime}>
               <div className={classes.startEndTime}>{elapsed}</div>

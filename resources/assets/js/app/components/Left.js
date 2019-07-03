@@ -1,47 +1,61 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Home, ViewQuilt } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core/styles';
 
-const Left = props => {
+const styles = theme => ({
+  logo: {
+    maxWidth: '100%',
+    width: '200px'
+  },
+  link: {
+    color: 'white',
+    display: 'flex',
+    textDecoration: 'none',
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  linkIcon: {
+    fontSize: 15,
+    marginRight: 10
+  },
+  linkText: {
+    fontSize: 15
+  }
+});
+
+const menu = [
+  {
+    name: 'Home',
+    icon: <Home />,
+    to: '/'
+  },
+  {
+    name: 'Browse',
+    icon: <ViewQuilt />,
+    to: '/'
+  }
+];
+
+const Left = ({ classes }) => {
   return (
     <>
       <Link to="/">
         <img
-          style={{ maxWidth: '100%', width: '200px' }}
+          className={classes.logo}
           src="/assets/images/logo-trans-red-white.png"
         />
       </Link>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
-      <h3>Left Side</h3>
+      <p className={classes.menu}>
+        {menu.map((menuItem, index) => (
+          <Link key={index} to={menuItem.to} className={classes.link}>
+            <span className={classes.linkIcon}>{menuItem.icon}</span>
+            <span className={classes.linkText}>{menuItem.name}</span>
+          </Link>
+        ))}
+      </p>
     </>
   );
 };
 
-export default Left;
+export default withStyles(styles)(Left);
