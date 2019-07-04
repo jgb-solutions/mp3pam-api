@@ -12,12 +12,12 @@ const styles = theme => ({
     color: 'white',
     display: 'flex',
     textDecoration: 'none',
-    alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    fontWeight: 'bold'
   },
   linkIcon: {
     fontSize: 15,
-    marginRight: 10
+    marginRight: 15
   },
   linkText: {
     fontSize: 15
@@ -33,7 +33,7 @@ const menu = [
   {
     name: 'Browse',
     icon: <ViewQuilt />,
-    to: '/'
+    to: '/browse'
   }
 ];
 
