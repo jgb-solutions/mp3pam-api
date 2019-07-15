@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ mix('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -23,6 +23,25 @@
         body {
             background-color: black;
             color: white;
+        }
+
+        #app {
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        *::-webkit-scrollbar {
+            width: 0.5em;
+            height: 0.5rem
+        }
+        *::-webkit-scrollbar-track {
+            /* -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,0.3); */
+        }
+        *::-webkit-scrollbar-thumb {
+            background-color: rgba(205,27,84,0.2);
+            outline: 1px solid slategrey;
         }
     </style>
 </head>

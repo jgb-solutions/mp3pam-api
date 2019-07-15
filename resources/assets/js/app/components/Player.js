@@ -91,17 +91,25 @@ const styles = theme => ({
     display: 'flex',
     width: '90%',
     alignSelf: 'center',
-    justifyContent: 'space-between'
+    position: 'relative'
+    // border: '1px solid white'
   },
   slider: {
     flex: 1,
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 40,
+    marginRight: 40,
     alignSelf: 'flex-end'
   },
-  startEndTime: {
+  startTime: {
     fontSize: 10,
-    paddingBottom: 20
+    position: 'absolute',
+    top: -4
+  },
+  endTime: {
+    fontSize: 10,
+    position: 'absolute',
+    top: -4,
+    right: 0
   },
   icon: {
     fontSize: 18,
@@ -445,7 +453,7 @@ class Player extends Component {
               </IconButton>
             </div>
             <div className={classes.sliderTime}>
-              <div className={classes.startEndTime}>{elapsed}</div>
+              <div className={classes.startTime}>{elapsed}</div>
               <div className={classes.slider}>
                 <Slider
                   value={position}
@@ -453,7 +461,7 @@ class Player extends Component {
                   aria-labelledby="continuous-slider"
                 />
               </div>
-              <div className={classes.startEndTime}>{duration}</div>
+              <div className={classes.endTime}>{duration}</div>
             </div>
           </div>
           <div className={classes.playlistVolume}>
