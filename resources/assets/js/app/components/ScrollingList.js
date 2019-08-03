@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import { animated, useSpring } from 'react-spring';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
@@ -50,9 +51,16 @@ const useStyles = makeStyles(theme => ({
 const ScrollingList = props => {
   const { data, listTitle } = props;
   const styles = useStyles();
+  let domElement = null;
 
   const scroll = dir => {
-    console.log(dir);
+    const distance = 400;
+
+    if (dir === 'left') {
+      domElement.scrollLeft -= distance;
+    } else {
+      domElement.scrollLeft += distance;
+    }
   };
 
   return (
@@ -67,7 +75,12 @@ const ScrollingList = props => {
           <KeyboardArrowRight onClick={() => scroll('right')} />
         </div>
       </div>
-      <div className={styles.list}>
+      <animated.div
+        className={styles.list}
+        ref={el => {
+          domElement = el;
+        }}
+      >
         {data.map(music => (
           <div key={music.title} className={styles.item}>
             <div className={styles.imgContainer}>
@@ -81,7 +94,7 @@ const ScrollingList = props => {
             </p>
           </div>
         ))}
-      </div>
+      </animated.div>
     </div>
   );
 };

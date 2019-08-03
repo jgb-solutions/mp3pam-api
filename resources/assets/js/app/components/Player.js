@@ -2,16 +2,16 @@ import {
   Repeat,
   Shuffle,
   SkipNext,
+  Favorite,
   RepeatOne,
   SkipPrevious,
+  FavoriteBorder,
   VolumeUpOutlined,
   PlayCircleOutline,
+  VolumeDownOutlined,
   PauseCircleOutline,
   VolumeMuteOutlined,
-  VolumeDownOutlined,
-  PlaylistPlayOutlined,
-  Favorite,
-  FavoriteBorder
+  PlaylistPlayOutlined
 } from '@material-ui/icons';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -98,7 +98,8 @@ const styles = theme => ({
     flex: 1,
     marginLeft: 40,
     marginRight: 40,
-    alignSelf: 'flex-end'
+    // alignSelf: 'flex-end'
+    marginTop: -9
   },
   startTime: {
     fontSize: 10,
