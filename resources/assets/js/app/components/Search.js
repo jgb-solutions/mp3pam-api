@@ -95,7 +95,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapActionsToprops = actions => {
+const mapActionsToprops = dispatch => {
   return {
     search: actions.search
   };
@@ -103,5 +103,5 @@ const mapActionsToprops = actions => {
 
 export default connect(
   mapStateToProps,
-  mapActionsToprops(actions)
+  mapActionsToprops()
 )(withRouter(Search));

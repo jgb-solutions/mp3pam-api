@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Main screens
 import HomeScreen from './screens/Home';
@@ -12,21 +13,24 @@ import Main from './components/layouts/Main';
 import Routes from './routes';
 
 // Redux Store
-import store from './store';
+import persistedStore from './store';
+const { store, persistor } = persistedStore();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <Main>
-          <Switch>
-            <Route path={Routes.root} exact component={HomeScreen} />
-            <Route path={Routes.search} exact component={SearchScreen} />
-            <Route path={Routes.about} component={AboutScreen} />
-            <Route component={FourOFour} />
-          </Switch>
-        </Main>
-      </Router>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <Main>
+            <Switch>
+              <Route path={Routes.root} exact component={HomeScreen} />
+              <Route path={Routes.search} exact component={SearchScreen} />
+              <Route path={Routes.about} component={AboutScreen} />
+              <Route component={FourOFour} />
+            </Switch>
+          </Main>
+        </Router>
+      </PersistGate>
     </Provider>
   );
 }

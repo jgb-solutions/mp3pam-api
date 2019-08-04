@@ -55,12 +55,15 @@ const ScrollingList = props => {
 
   const scroll = dir => {
     const distance = 400;
-
     if (dir === 'left') {
       domElement.scrollLeft -= distance;
     } else {
       domElement.scrollLeft += distance;
     }
+
+    console.log('clientWidth', domElement.clientWidth);
+    console.log('offsetWidth', domElement.offsetWidth);
+    console.log('scrollWidth', domElement.scrollWidth);
   };
 
   return (
