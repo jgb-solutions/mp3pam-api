@@ -143,5 +143,34 @@ get('user-has-liked-music', function()
 	dd($user->hasLiked($music));
 });
 
+post('do-spaces', function()
+{
+	$path = request()->file('image')->store('images', 'spaces');
+	// $path = request()->file('music')->storeAs(
+  //   	'musics', str_random(12) . '.mp3', 'b2', [
+  //   		'X-Bz-Info-b2-content-disposition'	 => 'attachment'
+  //   	]
+	// );
+
+	return \Storage::disk('spaces')->url($path);
+});
+
+get('do-spaces', function()
+{
+	$spaces = \Storage::disk('spaces');
+	$client = $spaces->getDriver()->getAdapter()->getClient();
+	$expiry = "+60 minutes";
+	$filename = time() .'.jpeg';
+	$command = $client->getCommand('PutObject', [
+			'Bucket'	=> 'jgb',
+			'Key'			=> "images/$filename",
+			'ACL'			=> 'public-read',
+	]);
+
+	$request = $client->createPresignedRequest($command, $expiry);
+
+	return (string) $request->getUri();
+});
+
 // Catch all routes
 Route::view('/{any}', 'pages.spa')->where('any', '^(?!api).*$');
