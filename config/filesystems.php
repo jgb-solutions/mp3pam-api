@@ -77,6 +77,19 @@ return [
             ]
         ],
 
+        'wasabi' => [
+            'driver' => 's3',
+            'key' => env('WASABI_KEY'),
+            'secret' => env('WASABI_SECRET'),
+            'region' => env('WASABI_REGION'),
+            'bucket' => env('WASABI_BUCKET'),
+            'endpoint' => env('WASABI_ENDPOINT'),
+            'visibility' => 'public',
+            'options' => [
+                'ContentDisposition' => 'attachment',
+            ]
+        ],
+
         'b2' => [
             'driver'    => 'b2',
             'account'   => env('B2_ACCOUNT'),

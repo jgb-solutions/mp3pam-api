@@ -4,6 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Main screens
 import HomeScreen from './screens/Home';
+import UploadScreen from './screens/Upload';
 import AboutScreen from './screens/About';
 import SearchScreen from './screens/Search';
 import FourOFour from './screens/FourOFour';
@@ -26,6 +27,7 @@ export default function App() {
               <Route path={Routes.root} exact component={HomeScreen} />
               <Route path={Routes.search} exact component={SearchScreen} />
               <Route path={Routes.about} component={AboutScreen} />
+              <Route path={Routes.upload} component={UploadScreen} />
               <Route component={FourOFour} />
             </Switch>
           </Main>

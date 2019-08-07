@@ -146,31 +146,51 @@ get('user-has-liked-music', function()
 post('do-spaces', function()
 {
 	$path = request()->file('image')->store('images', 'spaces');
-	// $path = request()->file('music')->storeAs(
-  //   	'musics', str_random(12) . '.mp3', 'b2', [
-  //   		'X-Bz-Info-b2-content-disposition'	 => 'attachment'
-  //   	]
-	// );
 
 	return \Storage::disk('spaces')->url($path);
 });
 
-get('do-spaces', function()
+post('wasabi', function()
+{
+	$path = request()->file('image')->store('images', 'wasabi');
+
+	return \Storage::disk('wasabi')->url($path);
+});
+
+get('do-spaces-url', function()
 {
 	$spaces = \Storage::disk('spaces');
 	$client = $spaces->getDriver()->getAdapter()->getClient();
-	$expiry = "+60 minutes";
-	$filename = time() .'.jpeg';
+
 	$command = $client->getCommand('PutObject', [
-			'Bucket'	=> 'jgb',
-			'Key'			=> "images/$filename",
+			'Bucket'	=> config('filesystems.disks.spaces.bucket'),
+			'Key'			=> 'images/' . time() . request('filename'),
 			'ACL'			=> 'public-read',
 	]);
 
-	$request = $client->createPresignedRequest($command, $expiry);
+	$request = $client->createPresignedRequest($command, "+60 minutes");
 
-	return (string) $request->getUri();
+	return $signed_url = (string) $request->getUri();
+	return compact('signed_url');
 });
 
+get('wasabi-url', function()
+{
+	$wasabi = \Storage::disk('wasabi');
+	$bucket = config('filesystems.disks.wasabi.bucket');
+	$client = $wasabi->getDriver()->getAdapter()->getClient();
+	$filename = 'images/' . time() . '.' . pathinfo(request('filename'), PATHINFO_EXTENSION);
+	$url = "https://{$bucket}/{$filename}";
+	$command = $client->getCommand('PutObject', [
+			'Bucket'	=> $bucket,
+			'Key'			=> $filename,
+			// 'ResponseContentDisposition' => 'attachment; filename=' . request('filename'),
+	]);
+
+	$request = $client->createPresignedRequest($command, "+60 minutes");
+
+	$signed_url = (string) $request->getUri();
+	return compact('signed_url', 'url');
+});
 // Catch all routes
 Route::view('/{any}', 'pages.spa')->where('any', '^(?!api).*$');
