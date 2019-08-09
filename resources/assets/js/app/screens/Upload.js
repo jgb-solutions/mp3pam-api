@@ -54,7 +54,7 @@ export default function Upload() {
         const options = {
           headers: {
             'Content-Type': file.type,
-            'Content-Disposition': 'attachment'
+            // 'Content-Disposition': 'attachment'
           },
           onUploadProgress: handleProgressEvent
         };

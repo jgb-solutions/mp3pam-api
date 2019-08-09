@@ -13,7 +13,7 @@ group(['prefix' => 'v1'], function() {
  	post('verify', 'Auth\ResetPasswordController@verify')->name('password.verify');
  	post('reset-password', 'Auth\ResetPasswordController@resetPassword')->name('password.reset');
 
-	group(['middleware' => ['auth:api']], function() {
+	// group(['middleware' => ['auth:api']], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');
 
@@ -49,5 +49,5 @@ group(['prefix' => 'v1'], function() {
 		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
 		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
 		del('artists/{artist}', 'ArtistsController@destroy')->name('musics.destroy');
-	});
+	// });
 });

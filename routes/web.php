@@ -4,7 +4,7 @@ get('t/{music}', 'MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
 get('play/{music}', 'MusicsController@play')->name('musics.play');
 
-group(['prefix' => 'admin'], function() {
+Route::domain('admin.mp3pam.loc')->group(function() {
 	// Authentication Routes...
   get('login', 'Auth\LoginController@showLoginForm')->name('admin.getLogin');
   post('login', 'Auth\LoginController@login')->name('admin.postLogin');

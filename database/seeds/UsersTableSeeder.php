@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
 		  	'name'  			=> "John Doe",
 		  	'email'     	=> "john@doe.com",
 		  	'password'  	=> bcrypt("password"),
-		  	'telephone'		=> env("36478199"),
+		  	'telephone'		=> 41830318,
 		  	'active'		=> 1,
 		];
 

@@ -52,6 +52,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'domain' => env('DOMAIN', 'mp3pam.loc'),
 
 
     'cdn_url' => env('CND_URL', 'http://localhost'),
