@@ -15,6 +15,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
+    protected $web_host;
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -23,8 +24,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
     }
 
@@ -35,11 +34,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+        $this->web_host = parse_url(config('app.url'), PHP_URL_HOST);
+
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -51,9 +49,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+        Route::domain($this->web_host)
+            ->middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -65,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        $domain = 'api.' . config('app.domain');
+        $domain = 'api.' . $this->web_host;
         Route::domain($domain)
              ->middleware('api')
              ->namespace('App\Http\Controllers\API')

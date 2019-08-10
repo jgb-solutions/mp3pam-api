@@ -1,8 +1,9 @@
 <?php
+// Admin panel API
+require_once('admin.php');
 
 group(['prefix' => 'v1'], function() {
 	// Auth routes.
-
 	post('register', 'Auth\AuthController@register')->name('auth.register');
  	post('login', 'Auth\AuthController@login')->name('auth.login');
  	get('/auth/facebook', 'Auth\AuthController@redirectToFacebook')->name('auth.facebook');

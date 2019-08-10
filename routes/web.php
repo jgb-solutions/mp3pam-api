@@ -4,29 +4,6 @@ get('t/{music}', 'MusicsController@download')->name('musics.get');
 get('musics/{hash}', 'MusicsController@show')->name('musics.show');
 get('play/{music}', 'MusicsController@play')->name('musics.play');
 
-Route::domain('admin.mp3pam.loc')->group(function() {
-	// Authentication Routes...
-  get('login', 'Auth\LoginController@showLoginForm')->name('admin.getLogin');
-  post('login', 'Auth\LoginController@login')->name('admin.postLogin');
-  get('logout', 'Auth\LoginController@logout')->name('admin.logout');
-
-  // Registration Routes...
-  get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-  post('register', 'Auth\RegisterController@register');
-
-  // Password Reset Routes...
-  get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-  post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-  get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-  post('password/reset', 'Auth\ResetPasswordController@reset');
-
-	group(['middleware' => 'auth'], function() {
-		get('/', 'AdminController@index')->name('admin.home');
-		get('/profile', 'AdminController@profile')->name('admin.profile');
-	});
-});
-
-
 get('get', function() {
 	return Cache::get('data');
 });
