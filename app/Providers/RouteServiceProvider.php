@@ -66,8 +66,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         $domain = 'api.' . $this->web_host;
         Route::domain($domain)
-             ->middleware('api')
-             ->namespace('App\Http\Controllers\API')
-             ->group(base_path('routes/api.php'));
+            ->middleware('api')
+            ->namespace('App\Http\Controllers\API')
+            ->group(base_path('routes/api.php'));
     }
 }

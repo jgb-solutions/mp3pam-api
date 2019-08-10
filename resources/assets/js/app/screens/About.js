@@ -1,9 +1,0 @@
-import React, { Component } from 'react';
-
-export default class AboutScreen extends Component {
-    render() {
-        return (
-            <h1>About Page</h1>
-        );
-    }
-}
