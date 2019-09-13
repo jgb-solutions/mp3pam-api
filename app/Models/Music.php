@@ -9,7 +9,7 @@ use Laravel\Scout\Searchable;
 
 class Music extends BaseModel
 {
-	use Searchable;
+	// use Searchable;
 
 	protected $appends = [
 		'url',

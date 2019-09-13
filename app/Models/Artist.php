@@ -8,7 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Artist extends BaseModel
 {
-	use Searchable;
+	// use Searchable;
 
 	protected $fillable = [
 		'bio',
