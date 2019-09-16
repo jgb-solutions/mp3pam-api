@@ -6,12 +6,13 @@ scalar DateTime
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query @middleware(checks: ["auth:api"]) {
-	users: [User!]! @cache @paginate
+	users(page: Int = 1): [User!]! @cache @paginate(defaultCount: 20)
 	user(id: ID @eq): User @find
-	musics: [Music!]! @paginate
-	music(id: ID @eq): Music @find
-	artists: [Artist!]! @paginate
-	artist(id: ID @eq): Artist @find
+	musics(page: Int = 1): [Music!]! @cache @paginate(defaultCount: 20)
+	music(hash: Int! @eq): Music @cache(maxAge: 300) @find
+	artists(page: Int = 1): [Artist!]! @cache @paginate(defaultCount: 20)
+	artist(hash: ID @eq): Artist @find
+	me: User! @auth
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {

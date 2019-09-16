@@ -84,5 +84,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+		}
+
+		static public function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(function ($query) {
+            $query->orderBy('created_at', 'desc');
+        });
     }
 }
