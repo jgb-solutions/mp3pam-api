@@ -1,0 +1,79 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime
+	@scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+type Query @middleware(checks: ["auth:api"]) {
+	users: [User!]! @cache @paginate
+	user(id: ID @eq): User @find
+	musics: [Music!]! @paginate
+	music(id: ID @eq): Music @find
+	artists: [Artist!]! @paginate
+	artist(id: ID @eq): Artist @find
+}
+
+type Mutation @middleware(checks: ["auth:api"]) {
+	updateUser(id: ID!, name: String): User @update
+	deleteUser(id: ID!): User @delete
+}
+
+extend type Query {
+	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
+}
+
+extend type Mutation {
+	register(input: RegisterInput! @spread): User! @create
+}
+
+input RegisterInput {
+	name: String! @rules(apply: ["required", "string"])
+	email: String! @rules(apply: ["required", "email"])
+	password: String! @rules(apply: ["required", "min:6"]) @bcrypt
+	telephone: String @rules(apply: ["string"])
+}
+
+input LoginInput {
+	email: String! @rules(apply: ["required", "email"])
+	password: String! @rules(apply: ["required", "min:6"])
+}
+
+type LoginPayload {
+	user: User!
+	token: String!
+}
+
+type User {
+	id: ID!
+	name: String!
+	email: String!
+	avatar: String!
+	active: Boolean!
+	musics: [Music!]! @hasMany
+	telephone: String!
+	created_at: DateTime!
+	updated_at: DateTime!
+}
+
+type Artist {
+	id: ID!
+	name: String!
+	stage_name: String!
+	hash: Int!
+	avatar: String!
+	musics: [Music!]
+}
+
+type Music {
+	id: ID!
+	title: String!
+	hash: Int!
+	file_name: String!
+	image: String!
+	featured: Boolean!
+	detail: String!
+	lyrics: String!
+	created_at: DateTime!
+	updated_at: DateTime!
+}

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Storage;
 use Carbon\Carbon;
@@ -53,12 +54,12 @@ class Music extends BaseModel
 		return $this->belongsToMany(User::class, 'liked_musics')->withTimestamps();
 	}
 
-	public function artist()
+	public function artist(): BelongsTo
 	{
 		return $this->belongsTo(Artist::class);
 	}
 
-	public function category()
+	public function category(): BelongsTo
 	{
 		return $this->belongsTo(Category::class);
 	}

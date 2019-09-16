@@ -80,7 +80,7 @@ class AuthController extends Controller
 
 	public function redirectToFacebook()
     {
-        return Socialite::driver('facebook')->stateless()->redirect();
+        return Socialite::driver('facebook')->stateless()->redirect()->getTargetUrl();
     }
 
     /**

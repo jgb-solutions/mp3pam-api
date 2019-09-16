@@ -1,7 +1,4 @@
 <?php
-// Admin panel API
-require_once('admin.php');
-
 group(['prefix' => 'v1'], function() {
 	// Auth routes.
 	post('register', 'Auth\AuthController@register')->name('auth.register');
@@ -14,12 +11,12 @@ group(['prefix' => 'v1'], function() {
  	post('verify', 'Auth\ResetPasswordController@verify')->name('password.verify');
  	post('reset-password', 'Auth\ResetPasswordController@resetPassword')->name('password.reset');
 
-	// group(['middleware' => ['auth:api']], function() {
+	group(['middleware' => ['auth:api']], function() {
 		// protected API routes go here
 		get('/', 'HomeController@index');
 
 		// auth
-    	get('me', 'Auth\AuthController@me');
+    get('me', 'Auth\AuthController@me');
 	   post('logout', 'Auth\AuthController@logout')->name('auth.logout');
 	   post('refresh', 'AuthController@refresh')->name('auth.refresh');
 
@@ -50,5 +47,5 @@ group(['prefix' => 'v1'], function() {
 		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
 		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
 		del('artists/{artist}', 'ArtistsController@destroy')->name('musics.destroy');
-	// });
+	});
 });
