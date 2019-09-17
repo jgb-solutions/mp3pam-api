@@ -141,7 +141,7 @@ class Music extends BaseModel
 
 	public function getUrlAttribute()
 	{
-		return MP3Pam::route('api.musics.show', ['hash' => $this->hash]);
+		return MP3Pam::route('api.musics.show', ['patih' => $this->hash]);
 	}
 
 	public function getPublicUrlAttribute()

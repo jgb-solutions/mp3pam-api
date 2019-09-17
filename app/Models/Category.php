@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Helpers\MP3Pam;
 
@@ -16,7 +17,7 @@ class Category extends BaseModel
 
 	public $timestamps = false;
 
-	public function musics()
+	public function musics(): HasMany
 	{
 		return $this->hasMany(Music::class);
 	}

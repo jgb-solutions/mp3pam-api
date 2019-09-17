@@ -7,7 +7,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class BaseModel extends Model
 {
-    use Cachable;
+    // use Cachable;
 
     static public function boot()
     {
