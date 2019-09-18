@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\MusicResource;
+use App\Http\Resources\TrackResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class MusicCollection extends ResourceCollection
+class TrackCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,8 +16,8 @@ class MusicCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->transform(function($music) {
-                return new MusicResource($music);
+            'data' => $this->collection->transform(function($track) {
+                return new TrackResource($track);
             })
         ];
     }

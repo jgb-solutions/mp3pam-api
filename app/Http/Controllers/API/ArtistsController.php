@@ -8,8 +8,8 @@ use App\Models\Artist;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreMusicRequest;
-use App\Http\Requests\UpdateMusicRequest;
+use App\Http\Requests\StoreTrackRequest;
+use App\Http\Requests\UpdateTrackRequest;
 
 class ArtistsController extends Controller
 {
@@ -19,20 +19,20 @@ class ArtistsController extends Controller
 		// 	'index',
 		// 	'listBuy',
 		// 	'show',
-		// 	'getMusic',
+		// 	'gettrack',
 		// 	'getBuy',
 		// 	'play',
 		// 	'sayHello'
 		// ]);
 
-		// $this->middleware('musicOwner')->only(['edit', 'update']);
+		// $this->middleware('trackOwner')->only(['edit', 'update']);
 	}
 
 	public function index()
 	{
 		// $data = [
-		// 	// 'musics'	=> Music::remember(120)->latest()->published()->paginate(12),
-		// 	'musics'	=> Music::latest()->published()->paginate(10),
+		// 	// 'tracks'	=> track::remember(120)->latest()->published()->paginate(12),
+		// 	'tracks'	=> track::latest()->published()->paginate(10),
 		// ];
 		return MP3Pam::cache('artists_index', function() {
 			return Artist::latest()->paginate(10, ['id', 'name', 'stageName', 'hash', 'avatar', 'verified']);
@@ -40,53 +40,53 @@ class ArtistsController extends Controller
 
 	}
 
-	public function store(StoreMusicRequest $request)
+	public function store(StoretrackRequest $request)
 	{
 		$name 	= $request->get('name');
 		$artist 	= $request->get('artist');
 
-		$storedmusic = Music::whereName($name)
+		$storedtrack = track::whereName($name)
 								->whereArtist($artist)
 								->first();
 
-		if ($storedmusic) {
+		if ($storedtrack) {
 			if ($request->ajax()) {
 	        		$response = [];
 
 	        		$response['success']  = true;
-	        		if ($storedmusic->price == 'paid') {
-	        			$response['url'] = route('music.edit', ['id' => $storedmusic->id]);
+	        		if ($storedtrack->price == 'paid') {
+	        			$response['url'] = route('track.edit', ['id' => $storedtrack->id]);
 	        		} else {
 	        		 	$response = [
 	        				'success' => true,
 	        				'emailedAndTweeted' => true,
-	        				'id' => $storedmusic->id,
-        		 			'url' => $storedmusic->url,
-	        		 		'emailAndTweetUrl' => $storedmusic->emailAndTweetUrl
+	        				'id' => $storedtrack->id,
+        		 			'url' => $storedtrack->url,
+	        		 		'emailAndTweetUrl' => $storedtrack->emailAndTweetUrl
 	        			];
 	        		}
 
 	        		return $response;
 	        	}
 
-			return redirect(route('music.show', [
-      		 		'id' =>$storedmusic->id,
-      		 		'slug' =>$storedmusic->slug
+			return redirect(route('track.show', [
+      		 		'id' =>$storedtrack->id,
+      		 		'slug' =>$storedtrack->slug
 	        	]));
 		}
 
 
-		/****** music Uploading *******/
+		/****** track Uploading *******/
 		$price 		= $request->get('price');
 		$slug		= Str::slug($name);
-		$music 		= $request->file('music');
-		$music_size = MP3Pam::size($music->getClientsize());
-		$music_ext 	= $music->getClientOriginalExtension();
-		$music_name =  Str::random(8) . time() . '.' . $music_ext;
+		$track 		= $request->file('track');
+		$track_size = MP3Pam::size($track->getClientsize());
+		$track_ext 	= $track->getClientOriginalExtension();
+		$track_name =  Str::random(8) . time() . '.' . $track_ext;
 
-		$content = file_get_contents($request->file('music')->getRealPath());
+		$content = file_get_contents($request->file('track')->getRealPath());
 
-		$music_success = Storage::disk('musics')->put($music_name, $content);
+		$track_success = Storage::disk('tracks')->put($track_name, $content);
 
 		/************ Image Uploading *****************/
 		$img 		= $request->file('image');
@@ -107,35 +107,35 @@ class ArtistsController extends Controller
 		$admin_id = User::whereAdmin(1)->first()->id;
 		$user_id  = (Auth::check()) ? Auth::user()->id : $admin_id;
 
-		if ($music_success && $img_success) {
-			$music = new Music;
-			$music->name = ucwords($name);
-			$music->artist = ucwords($artist);
-			$music->mp3name = $music_name;
-			$music->image = $img_name;
-			$music->user_id = $user_id;
-			$music->category_id = $request->get('category');
-			$music->size = $music_size;
+		if ($track_success && $img_success) {
+			$track = new track;
+			$track->name = ucwords($name);
+			$track->artist = ucwords($artist);
+			$track->mp3name = $track_name;
+			$track->image = $img_name;
+			$track->user_id = $user_id;
+			$track->category_id = $request->get('category');
+			$track->size = $track_size;
 
 			if ($price == 'free') {
-				$music->publish = 1;
+				$track->publish = 1;
 			}
 
-			$music->price = $price;
+			$track->price = $price;
 
 			if (! $price) {
-				$music->publish = 1;
-				$music->price = 'free';
+				$track->publish = 1;
+				$track->price = 'free';
 			}
 
-			$music->description = $request->get('description');
-			$music->slug = $slug;
+			$track->description = $request->get('description');
+			$track->slug = $slug;
 
-			$music->save();
+			$track->save();
 
 
 			/************** GETID3 **************/
-			MP3Pam::tag($music, $img_name, $img_type);
+			MP3Pam::tag($track, $img_name, $img_type);
 
 			/******* Flush the cache ********/
 			Cache::flush();
@@ -143,28 +143,28 @@ class ArtistsController extends Controller
         	if ($request->ajax()) {
         		$response = [];
 
-        		if ($music->paid) {
-        			$response['url'] = route('music.edit', ['id' => $music->id]);
+        		if ($track->paid) {
+        			$response['url'] = route('track.edit', ['id' => $track->id]);
         		} else {
 	        		$response = [
 	        			'success' => true,
-	        			'id' => $music->id,
-        		 		'url' => $music->url,
-        		 		'emailAndTweetUrl' => $music->emailAndTweetUrl
+	        			'id' => $track->id,
+        		 		'url' => $track->url,
+        		 		'emailAndTweetUrl' => $track->emailAndTweetUrl
 	        		];
         		}
 
         		return $response;
         	}
 
-        	Cache::forget('latest.musics');
+        	Cache::forget('latest.tracks');
 
-			if ($music->paid) {
-					return redirect(route('music.edit', ['id' => $music->id]));
+			if ($track->paid) {
+					return redirect(route('track.edit', ['id' => $track->id]));
 				} else {
-				 	return redirect (route('music.show', [
-				 		'id' =>$music->id,
-				 		'slug' =>$music->slug
+				 	return redirect (route('track.show', [
+				 		'id' =>$track->id,
+				 		'slug' =>$track->slug
 				 	]));
 			}
 		} else	{
@@ -184,30 +184,30 @@ class ArtistsController extends Controller
 
 	}
 
-	public function emailAndTweet($musicId)
+	public function emailAndTweet($trackId)
 	{
-		$music = Music::with('user')->findOrFail($musicId);
+		$track = track::with('user')->findOrFail($trackId);
 
-		if ($music->paid) {
-			// Send an email to the new user letting them know their music has been uploaded
+		if ($track->paid) {
+			// Send an email to the new user letting them know their track has been uploaded
 			$data = [
-				'music' => $music,
+				'track' => $track,
 				'subject' => 'Felisitasyon!!! Ou fèk mete yon nouvo mizik pou vann.'
 			];
 
-			MP3Pam::sendMail('emails.user.buy', $data, 'music');
+			MP3Pam::sendMail('emails.user.buy', $data, 'track');
 		} else {
-			// Send an email to the new user letting them know their music has been uploaded
+			// Send an email to the new user letting them know their track has been uploaded
 			$data = [
-				'music' 		=> $music,
+				'track' 		=> $track,
 				'subject' 	=> 'Felisitasyon!!! Ou fèk mete yon nouvo mizik'
 			];
 
-			MP3Pam::sendMail('emails.user.music', $data, 'music');
+			MP3Pam::sendMail('emails.user.track', $data, 'track');
 		}
 
 		if (! App::isLocal()) {
-			MP3Pam::tweet($music, 'music');
+			MP3Pam::tweet($track, 'track');
 		}
 
 		return [
@@ -224,22 +224,22 @@ class ArtistsController extends Controller
 		});
 	}
 
-	public function musics($hash)
+	public function tracks($hash)
 	{
-		$key = '_artist_musics';
+		$key = '_artist_tracks';
 
 		return MP3Pam::cache($key, function() use ($key, $hash) {
 			$artist = Artist::byHash($hash)->firstOrFail();
 
-			return $artist->musics()->paginate(10, ['id', 'title', 'size', 'play', 'hash', 'play', 'download']);
+			return $artist->tracks()->paginate(10, ['id', 'title', 'size', 'play', 'hash', 'play', 'download']);
 		});
 	}
 
-	public function edit(Music $music)
+	public function edit(track $track)
 	{
 		$data = [
-			'music'	=> $music,
-			'title'	=> $music->name,
+			'track'	=> $track,
+			'title'	=> $track->name,
 			'cats'	=> Category::allCategories(),
 			'user' => Auth::user()
 		];
@@ -247,14 +247,14 @@ class ArtistsController extends Controller
 		return $data;
 	}
 
-	public function update(Music $music, UpdateMusicRequest $request)
+	public function update(track $track, UpdatetrackRequest $request)
 	{
 		$code 	= $request->get('code');
 		$price 	= $request->get('price');
 
-		if ($music->paid) {
+		if ($track->paid) {
 			if (! empty($code)) {
-				$music->code = $code;
+				$track->code = $code;
 			}
 		}
 
@@ -283,100 +283,100 @@ class ArtistsController extends Controller
 		}
 
 		if (!empty($name))
-			$music->name = ucwords($name);
+			$track->name = ucwords($name);
 
 		if (!empty($artist))
-			$music->artist = ucwords($artist);
+			$track->artist = ucwords($artist);
 
 		if (! empty($description)) {
-			$music->description = $description;
+			$track->description = $description;
 		}
 
 		if (! empty($image)) {
-			$music->image = $img_name;
+			$track->image = $img_name;
 		}
 
 		if (!empty($category)) {
-			$music->category_id = $category;
+			$track->category_id = $category;
 		}
 
 		if (! empty($price)) {
-			$music->price = $price;
+			$track->price = $price;
 		}
 
 		if (Auth::user()->admin) {
 			if ($featured) {
-				$music->featured = 1;
+				$track->featured = 1;
 			} else {
-				$music->featured = 0;
+				$track->featured = 0;
 			}
 		}
 
 		if ($publish && $price == 'paid') {
-			$music->publish = 1;
+			$track->publish = 1;
 		}
 
 		elseif (! $publish && $price == 'paid') {
-			$music->publish = 0;
+			$track->publish = 0;
 		}
 
-		$music->slug = $slug;
-		$music->save();
+		$track->slug = $slug;
+		$track->save();
 
 		Cache::flush();
 
-		if ($music->price == 'paid' && ! $music->publish) {
+		if ($track->price == 'paid' && ! $track->publish) {
 			return back()
 				->withMessage(config('site.message.update'))
 				->withStatus('info');
-		} else if ($music->price == 'paid' && $music->publish) {
-			if (! $music->code){
+		} else if ($track->price == 'paid' && $track->publish) {
+			if (! $track->code){
 				return back();
 			}
 
-			return redirect(route('buy.show', ['id' => $music->id]))
+			return redirect(route('buy.show', ['id' => $track->id]))
 				->withMessage(config('site.message.update'))
 				->withStatus('info');
 		}
 
-		return redirect(route('music.show', ['id' => $music->id, 'slug' => $music->slug]))
+		return redirect(route('track.show', ['id' => $track->id, 'slug' => $track->slug]))
 			->withMessage(config('site.message.update'))
 			->withStatus('success');
 	}
 
-	public function destroy(Request $request, music $music)
+	public function destroy(Request $request, track $track)
 	{
 		$user = $request->user();
 
-		if ($user->id == $music->user_id || $user->admin) {
-			Vote::whereObj('music')
-				->whereObjId($music->id)
+		if ($user->id == $track->user_id || $user->admin) {
+			Vote::whereObj('track')
+				->whereObjId($track->id)
 				->whereUserId($user->id)
 				->delete();
 
 			Storage::disk('images')->delete([
-				$music->image,
-				'thumbs/' . $music->image,
-				'tiny/' . $music->image,
-				'show/' . $music->image
+				$track->image,
+				'thumbs/' . $track->image,
+				'tiny/' . $track->image,
+				'show/' . $track->image
 			]);
 
-			Storage::disk('musics')->delete($music->mp3name);
+			Storage::disk('tracks')->delete($track->mp3name);
 
-			MusicList::whereMusicId($music->id)->delete();
+			trackList::wheretrackId($track->id)->delete();
 
-			$music->delete();
+			$track->delete();
 
 			Cache::flush();
 
 			if ($user->admin) {
-				return redirect(route('admin.music'))
-					->withMessage(config('site.message.music-deletion-success'))
+				return redirect(route('admin.track'))
+					->withMessage(config('site.message.track-deletion-success'))
 					->withStatus('success');
 			}
 
-			return redirect(route('music'))
-				->withMessage(config('site.message.music-deletion-success'))
+			return redirect(route('track'))
+				->withMessage(config('site.message.track-deletion-success'))
 				->withStatus('success');
 		}
 
@@ -384,24 +384,24 @@ class ArtistsController extends Controller
 
 	public function download($hash, Request $request)
 	{
-		$music = Music::byHash($hash)->firstOrFail();
-		// if ($music->download >= 100) {
+		$track = track::byHash($hash)->firstOrFail();
+		// if ($track->download >= 100) {
 		// 	if ($request->has('token')) {
-		// 		MP3Pam::download($music);
+		// 		MP3Pam::download($track);
 		// 	}
 
-		// 	return view('music.download', compact('music'));
+		// 	return view('track.download', compact('track'));
 		// }
 
-		return MP3Pam::download($music);
+		return MP3Pam::download($track);
 	}
 
-	public function play(Music $music)
+	public function play(track $track)
 	{
-		$music->play += 1;
-		$music->save();
+		$track->play += 1;
+		$track->save();
 
-		return redirect($music->mp3_url);
+		return redirect($track->mp3_url);
 	}
 
 	public function upload()
@@ -411,26 +411,26 @@ class ArtistsController extends Controller
 			// 'cats'	=> Category::orderBy('name')->get()
 		];
 
-		return view('music.upload', $data);
+		return view('track.upload', $data);
 	}
 
 
 	public function getBuy($id)
 	{
-		$key = '_music_buy_' . $id;
+		$key = '_track_buy_' . $id;
 
 		if (Cache::has($key)) {
 			$data = Cache::get($key);
-			return view('music.buy', $data);
+			return view('track.buy', $data);
 		}
 
-		$music = Music::with('user', 'category')
+		$track = track::with('user', 'category')
 			->published()
 			->paid()
 			->findOrFail($id);
 
-		// $music->views += 1;
-		// $music->save();
+		// $track->views += 1;
+		// $track->save();
 
 		$data = [];
 		$data['bought'] = '';
@@ -438,20 +438,20 @@ class ArtistsController extends Controller
 		if (Auth::check()) {
 			$user = Auth::user();
 
-			$data['bought'] = $user->bought()->wheremusicId($music->id)->first();
+			$data['bought'] = $user->bought()->wheretrackId($track->id)->first();
 		}
 
-		$data['related'] = Music::remember(120)->related($music)
-		// $data['related'] = Music::related($music)
+		$data['related'] = track::remember(120)->related($track)
+		// $data['related'] = track::related($track)
 			->get(['id', 'name', 'image', 'play', 'download', 'views']);
 
-		$data['author'] = $music->user->name . ' &mdash; ';
-		$data['title'] = "Achte $music->name";
-		$data['music']	= $music;
+		$data['author'] = $track->user->name . ' &mdash; ';
+		$data['title'] = "Achte $track->name";
+		$data['track']	= $track;
 
 		Cache::put($key, $data, 120);
 
-		return view('music.buy', $data);
+		return view('track.buy', $data);
 	}
 
 	public function postBuy($id, Request $request)
@@ -459,16 +459,16 @@ class ArtistsController extends Controller
 		$code = $request->get('code');
 
 		if (Auth::check()) {
-			$music = Music::find($id);
+			$track = track::find($id);
 			$user = Auth::user();
 
-			if ($user->id == $music->user_id) {
+			if ($user->id == $track->user_id) {
 				return back()
 					->withMessage( config('site.message.cant-buy') );
 			}
 
-			$bought = musicSold::whereUserId($user->id)
-				  ->whereMusicId($music->id)
+			$bought = trackSold::whereUserId($user->id)
+				  ->wheretrackId($track->id)
 				  ->first();
 
 			if ($bought) {
@@ -477,16 +477,16 @@ class ArtistsController extends Controller
 					->withStatus('warning');
 			}
 
-			if ($code == $music->code) {
-				$sold = new musicSold;
+			if ($code == $track->code) {
+				$sold = new trackSold;
 				$sold->user_id 	= $user->id;
-				$sold->music_id 	= $music->id;
+				$sold->track_id 	= $track->id;
 				$sold->save();
 
-				$music->buy_count += 1;
-				$music->save();
+				$track->buy_count += 1;
+				$track->save();
 
-				return redirect("/user/my-bought-musics")
+				return redirect("/user/my-bought-tracks")
 					->withMessage( config('site.message.bought-success') );
 			} else {
 				return back()

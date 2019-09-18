@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-class MusicList extends BaseModel
+class TrackList extends BaseModel
 {
-	protected $fillable = ['playlist_id', 'music_id'];
+	protected $fillable = ['playlist_id', 'track_id'];
 
 	public function playlist()
 	{

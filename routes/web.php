@@ -1,12 +1,12 @@
 <?php
-// Musics routes
-get('t/{music}', 'MusicsController@download')->name('musics.get');
-get('musics/{hash}', 'MusicsController@show')->name('musics.show');
-get('play/{music}', 'MusicsController@play')->name('musics.play');
+// Tracks routes
+get('t/{track}', 'TracksController@download')->name('tracks.get');
+get('tracks/{hash}', 'TracksController@show')->name('tracks.show');
+get('play/{track}', 'TracksController@play')->name('tracks.play');
 
 get('ff', function() {
 	FFMpeg::fromDisk('public')
-		->open('music.mp3')
+		->open('track.mp3')
 		->addFilter(function($filters) {
 			$filters->addMetadata([
 				'artwork' => storage_path('app/public/final.png'),
@@ -16,7 +16,7 @@ get('ff', function() {
 		->export()
 		// ->toDisk('public')
 		->inFormat(new \FFMpeg\Format\Audio\Mp3)
-		->save('music3.mp3');
+		->save('track3.mp3');
 });
 
 get('fg', function() {

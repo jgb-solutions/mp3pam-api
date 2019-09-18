@@ -23,18 +23,18 @@ group(['prefix' => 'v1'], function() {
 		//  Users' routes
 		get('/users', 'UsersController@index')->name('users.index');
 		get('/users/{user}', 'UsersController@show')->name('users.show');
-		get('/users/liked/musics', 'UsersController@musicsLiked')->name('users.musics.liked');
-		get('/users/{id}/musics', 'UsersController@musics')->name('users.musics');
-		post('/users/toggle-like/{music}', 'UsersController@toggleLike')->name('users.musics.toggle-like');
-		get('/users/has-liked/{music}', 'UsersController@hasLiked')->name('users.musics.has-liked');
+		get('/users/liked/tracks', 'UsersController@tracksLiked')->name('users.tracks.liked');
+		get('/users/{id}/tracks', 'UsersController@tracks')->name('users.tracks');
+		post('/users/toggle-like/{track}', 'UsersController@toggleLike')->name('users.tracks.toggle-like');
+		get('/users/has-liked/{track}', 'UsersController@hasLiked')->name('users.tracks.has-liked');
 
-		// Musics routes
-		get('musics', 'MusicsController@index')->name('api.musics');
-		post('musics', 'MusicsController@store')->name('api.musics.store');
-		get('musics/{hash}', 'MusicsController@show')->name('api.musics.show');
-		get('musics/{music}/edit', 'MusicsController@edit')->name('api.musics.edit');
-		put('musics/{music}/edit', 'MusicsController@update')->name('api.musics.edit');
-		del('efase/musics/{music}', 'MusicsController@destroy')->name('api.musics.destroy');
+		// Tracks routes
+		get('tracks', 'TracksController@index')->name('api.tracks');
+		post('tracks', 'TracksController@store')->name('api.tracks.store');
+		get('tracks/{hash}', 'TracksController@show')->name('api.tracks.show');
+		get('tracks/{track}/edit', 'TracksController@edit')->name('api.tracks.edit');
+		put('tracks/{track}/edit', 'TracksController@update')->name('api.tracks.edit');
+		del('efase/tracks/{track}', 'TracksController@destroy')->name('api.tracks.destroy');
 
 		// Categories routes
 		get('categories', 'CategoriesController@index')->name('category.index');
@@ -43,9 +43,9 @@ group(['prefix' => 'v1'], function() {
 		// Artists routes
 		get('artists', 'ArtistsController@index')->name('artists');
 		get('artists/{hash}', 'ArtistsController@show')->name('artists.show');
-		get('artists/{hash}/musics', 'ArtistsController@musics')->name('artists.musics');
+		get('artists/{hash}/tracks', 'ArtistsController@tracks')->name('artists.tracks');
 		get('artists/{artist}/edit', 'ArtistsController@edit')->name('artists.edit');
 		put('artists/{artist}/edit', 'ArtistsController@update')->name('artists.update');
-		del('artists/{artist}', 'ArtistsController@destroy')->name('musics.destroy');
+		del('artists/{artist}', 'ArtistsController@destroy')->name('tracks.destroy');
 	});
 });

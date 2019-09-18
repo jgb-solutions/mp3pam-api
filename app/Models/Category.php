@@ -17,14 +17,14 @@ class Category extends BaseModel
 
 	public $timestamps = false;
 
-	public function musics(): HasMany
+	public function track(): HasMany
 	{
-		return $this->hasMany(Music::class);
+		return $this->hasMany(Track::class);
 	}
 
 	public function getCountAttribute()
 	{
-		return $this->musics()->count();
+		return $this->track()->count();
 	}
 
 	public function scopebyName($query)
@@ -40,7 +40,7 @@ class Category extends BaseModel
 	public static function allCategories()
 	{
 		return MP3Pam::cache('allCategories', function() {
-			return static::withCount('musics')->orderBy('name')->get();
+			return static::withCount('track')->orderBy('name')->get();
 		});
 	}
 }

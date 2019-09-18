@@ -5,11 +5,11 @@ namespace App\Traits;
 use App\Helpers\MP3Pam;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Artist;
 use App\Models\Category;
 
-trait MusicTrait
+trait TrackTrait
 {
 	public function user()
 	{
@@ -81,6 +81,6 @@ trait MusicTrait
 
 	public function getEmailAndTweetUrlAttribute()
 	{
-		return MP3Pam::route('music.emailAndTweet', ['id'=>$this->id]);
+		return MP3Pam::route('track.emailAndTweet', ['id'=>$this->id]);
 	}
 }

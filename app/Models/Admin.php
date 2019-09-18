@@ -33,11 +33,11 @@ class Admin extends Authenticatable
 		'password', 'remember_token',
 	];
 
-	protected $appends = ['avatar_url', 'musics_url'];
+	protected $appends = ['avatar_url', 'tracks_url'];
 
-	public function musics()
+	public function tracks()
 	{
-		return $this->hasMany(Music::class);
+		return $this->hasMany(Track::class);
 	}
 
 	public function getAvatarUrlAttribute()
@@ -55,8 +55,8 @@ class Admin extends Authenticatable
 		return MP3Pam::asset($avatarPath);
 	}
 
-	public function getMusicsUrlAttribute()
+	public function getTracksUrlAttribute()
 	{
-		return MP3Pam::route('users.musics', ['id' => $this->id]);
+		return MP3Pam::route('users.tracks', ['id' => $this->id]);
 	}
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLikedMusicsTable extends Migration
+class CreateLikedTracksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateLikedMusicsTable extends Migration
      */
     public function up()
     {
-        Schema::create('liked_musics', function (Blueprint $table) {
+        Schema::create('liked_tracks', function (Blueprint $table) {
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('music_id');
+            $table->unsignedInteger('track_id');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateLikedMusicsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('liked_musics');
+        Schema::dropIfExists('liked_tracks');
     }
 }

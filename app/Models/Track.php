@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use App\Helpers\MP3Pam;
 use Laravel\Scout\Searchable;
 
-class Music extends BaseModel
+class Track extends BaseModel
 {
 	// use Searchable;
 
@@ -51,7 +51,7 @@ class Music extends BaseModel
 
 	public function peopleWhoFavoured()
 	{
-		return $this->belongsToMany(User::class, 'liked_musics')->withTimestamps();
+		return $this->belongsToMany(User::class, 'liked_tracks')->withTimestamps();
 	}
 
 	public function artist(): BelongsTo
@@ -141,12 +141,12 @@ class Music extends BaseModel
 
 	public function getUrlAttribute()
 	{
-		return MP3Pam::route('api.musics.show', ['patih' => $this->hash]);
+		return MP3Pam::route('api.tracks.show', ['patih' => $this->hash]);
 	}
 
 	public function getPublicUrlAttribute()
 	{
-		return MP3Pam::route('musics.show', ['hash' => $this->hash]);
+		return MP3Pam::route('tracks.show', ['hash' => $this->hash]);
 	}
 
 	public function getMp3UrlAttribute()
@@ -162,7 +162,7 @@ class Music extends BaseModel
 
 	public function getPlayUrlAttribute()
 	{
-		return MP3Pam::route('musics.play', ['hash' => $this->hash]);
+		return MP3Pam::route('tracks.play', ['hash' => $this->hash]);
 	}
 
 	public function getImageUrlAttribute()
@@ -177,12 +177,12 @@ class Music extends BaseModel
 
 	public function scopeUrl()
 	{
-		return MP3Pam::route('api.musics.show', ['id' => $this->id, 'slug' => $this->slug]);
+		return MP3Pam::route('api.tracks.show', ['id' => $this->id, 'slug' => $this->slug]);
 	}
 
 	public function getDownloadUrlAttribute()
 	{
-		return MP3Pam::route('musics.get', ['music' => $this->hash]);
+		return MP3Pam::route('tracks.get', ['track' => $this->hash]);
 	}
 
 

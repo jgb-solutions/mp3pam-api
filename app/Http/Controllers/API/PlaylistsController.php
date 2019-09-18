@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Cache;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreatePlaylistRequest;
@@ -43,14 +43,14 @@ class PlaylistsController extends Controller
 
 		   $data = [
 		   	'playlist' => $playlist,
-		   	'musics' => $playlist->musics
+		   	'tracks' => $playlist->tracks
 		   ];
 
 		   return $data;
 		});
 
 		if ($request->ajax()) {
-			return $data['musics'];
+			return $data['tracks'];
 		}
 
 		return view('playlists.show', $data);
@@ -133,52 +133,52 @@ class PlaylistsController extends Controller
 			->withStatus('success');
 	}
 
-	public function listMusics(Playlist $playlist)
+	public function listTracks(Playlist $playlist)
 	{
 		$user = auth()->user();
 
 		$data = [
 			'playlist' => $playlist,
-			'musics' => $playlist->musics,
+			'tracks' => $playlist->tracks,
 			'title' => $playlist->name
 		];
 
 		return view('playlists.list', $data);
 	}
 
-	public function postAddMusic(Playlist $playlist, Music $music)
+	public function postAddTrack(Playlist $playlist, Track $track)
 	{
-		if($playlist->mList()->whereMusicId($music->id)->first()) {
+		if($playlist->mList()->whereTrackId($track->id)->first()) {
 			return redirect($playlist->url)
 				->withMessage('Ou ajoute mizik sa a nan lis la deja')
 				->withStatus('warning');
 		}
 
 		$playlist->mList()->create([
-			'music_id' => $music->id
+			'track_id' => $track->id
 		]);
 
 		Cache::forget('_playlist_show_' . $playlist->id);
 
 		return redirect($playlist->url)
-			->withMessage("Ou ajoute $music->name nan lis mizik ou a av&egrave;k siks&egrave;.")
+			->withMessage("Ou ajoute $track->name nan lis mizik ou a av&egrave;k siks&egrave;.")
 			->withStatus('success');
 	}
 
-	public function removeMusic(Playlist $playlist, Music $music)
+	public function removeTrack(Playlist $playlist, Track $track)
 	{
-		$playlist->mList()->whereMusicId($music->id)->delete();
+		$playlist->mList()->whereTrackId($track->id)->delete();
 
 		Cache::flush();
 
 		if (count($playlist->list)) {
 			return redirect($playlist->url)
-				->withMessage("Ou efase $music->name nan lis mizik ou a av&egrave;k siks&egrave;.")
+				->withMessage("Ou efase $track->name nan lis mizik ou a av&egrave;k siks&egrave;.")
 				->withStatus('success');
 		}
 
-		return redirect(route('playlist.musics', ['id' => $playlist->id]))
-			->withMessage("Ou efase $music->name nan lis mizik ou a av&egrave;k siks&egrave;.")
+		return redirect(route('playlist.tracks', ['id' => $playlist->id]))
+			->withMessage("Ou efase $track->name nan lis mizik ou a av&egrave;k siks&egrave;.")
 			->withStatus('success');
 	}
 }

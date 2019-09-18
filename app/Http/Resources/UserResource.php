@@ -20,7 +20,7 @@ class UserResource extends Resource
             'avatar'    => $this->avatar_url,
             'active'    => (boolean) $this->active,
             'facebook'  => $this->facebook_link,
-            'musics'    => $this->when($this->type == 'artist', $this->musics_url),
+            'tracks'    => $this->when($this->type == 'artist', $this->tracks_url),
             'telephone' => $this->telephone,
             'type'      => $this->type
         ];

@@ -26,16 +26,16 @@ class Artist extends BaseModel
 		'created_at',
 	];
 
-	protected $appends = ['avatar_url', 'url', 'musics_url'];
+	protected $appends = ['avatar_url', 'url', 'tracks_url'];
 
-	public function musics()
+	public function tracks()
 	{
-		return $this->hasMany(Music::class);
+		return $this->hasMany(Track::class);
 	}
 
 	public function getCountAttribute()
 	{
-		return $this->musics()->count();
+		return $this->tracks()->count();
 	}
 
 	public function scopebyName($query)
@@ -69,9 +69,9 @@ class Artist extends BaseModel
 		$query->where('hash', $hash);
 	}
 
-	public function getMusicsUrlAttribute()
+	public function getTracksUrlAttribute()
 	{
-		return MP3Pam::route('artists.musics', ['hash' => $this->hash]);
+		return MP3Pam::route('artists.tracks', ['hash' => $this->hash]);
 	}
 
 	// Algolia
@@ -82,7 +82,7 @@ class Artist extends BaseModel
          'stageName'	=> $this->stage_name,
          'hash'		=> $this->hash,
          'avatar'		=> $this->avatar_url,
-         'musics'		=> $this->musics_url,
+         'tracks'		=> $this->tracks_url,
          'bio'			=> $this->bio
 		];
 	}

@@ -6,7 +6,7 @@ use Auth;
 use Cache;
 use Validator;
 use App\Models\User;
-use App\Models\Music;
+use App\Models\track;
 use App\Models\Category;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
@@ -25,20 +25,20 @@ class AdminController extends Controller
 		return view('admin.index');
 	}
 
-	public function musics()
+	public function tracks()
 	{
-		// $music = music::remember(120)->latest()->paginate(30);
-		$music = music::latest()->paginate(30);
+		// $track = track::remember(120)->latest()->paginate(30);
+		$track = track::latest()->paginate(30);
 
-		// $music_count = music::remember(120)->count();
-		$music_count = music::count();
+		// $track_count = track::remember(120)->count();
+		$track_count = track::count();
 
-		$title = 'Administrayon Mizik (' . $music_count . ')';
+		$title = 'Administrayon Mizik (' . $track_count . ')';
 
-		return view('admin.music.index')
+		return view('admin.track.index')
 					->withTitle($title)
-					->withmusics($music)
-					->withmusicCount($music_count);
+					->withtracks($track)
+					->withtrackCount($track_count);
 	}
 
 	public function videos()
@@ -46,7 +46,7 @@ class AdminController extends Controller
 		// $video = video::remember(120)->latest()->paginate(30);
 		$video = video::latest()->paginate(30);
 
-		// $video_count = music::remember(120)->count();
+		// $video_count = track::remember(120)->count();
 		$video_count = video::count();
 
 		$title = 'Administrayon Videyo (' . $video_count . ')';
@@ -62,7 +62,7 @@ class AdminController extends Controller
 		// $video = video::remember(120)->latest()->paginate(30);
 		$playlist = playlist::latest()->paginate(30);
 
-		// $playlist_count = music::remember(120)->count();
+		// $playlist_count = track::remember(120)->count();
 		$playlist_count = playlist::count();
 
 		$title = 'Administrayon Lis Mizik (' . $playlist_count . ')';

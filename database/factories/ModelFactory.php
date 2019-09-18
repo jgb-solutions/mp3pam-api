@@ -2,7 +2,7 @@
 
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Artist;
 use App\Helpers\MP3Pam;
 use App\Models\Category;
@@ -20,14 +20,14 @@ use App\Models\Category;
 // 	];
 // });
 
-$factory->define(Music::class, function (Faker\Generator $faker)
+$factory->define(Track::class, function (Faker\Generator $faker)
 {
 	$admin = Admin::first();
 	$name = $faker->name;
 
 	return [
 		'title'			=> $name,
-		'hash' 			=> MP3Pam::getHash(Music::class),
+		'hash' 			=> MP3Pam::getHash(Track::class),
 		'detail' 		=> $faker->realText(200),
 		'lyrics' 		=> $faker->realText(1000),
 		'file_size'		=> rand(10000,99999),

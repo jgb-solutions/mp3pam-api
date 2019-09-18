@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class Playlist extends BaseModel
 {
 	protected $appends = ['url'];
-	protected $fillable = ['name', 'slug', 'user_id', 'music_list_id'];
+	protected $fillable = ['name', 'slug', 'user_id', 'track_list_id'];
 
 	public function user()
 	{
@@ -19,19 +19,19 @@ class Playlist extends BaseModel
 
 	public function mList(): HasMany
 	{
-		return $this->hasMany(MusicList::class);
+		return $this->hasMany(TrackList::class);
 	}
 
-	public function getMusicsAttribute(): HasMany
+	public function getTracksAttribute(): HasMany
 	{
-		$ids = $this->mList()->pluck('music_id')->toArray();
+		$ids = $this->mList()->pluck('track_id')->toArray();
 
-		$musics = Music::find($ids, ['id', 'artist', 'name', 'image', 'slug']);
+		$tracks = Track::find($ids, ['id', 'artist', 'name', 'image', 'slug']);
 
 		$sorted = array_flip($ids);
 
-		foreach ($musics as $music) {
-			$sorted[$music->id] = $music;
+		foreach ($tracks as $track) {
+			$sorted[$track->id] = $track;
 		}
 
 		$sorted = Collection::make(array_values($sorted));

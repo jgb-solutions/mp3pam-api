@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Category;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MusicCollection;
+use App\Http\Resources\TrackCollection;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
@@ -21,7 +21,7 @@ class UsersController extends Controller
 			'edit',
 			'update',
 			'delete',
-			'boughtMusics',
+			'boughtTracks',
 		]);
 	}
 
@@ -38,7 +38,7 @@ class UsersController extends Controller
 
 		return MP3Pam::cache($key, function() use ($id) {
 			return User::with([
-				'musics' => function($query) {
+				'tracks' => function($query) {
 					$query->select(['user_id', 'title', 'size', 'play', 'hash', 'play', 'download'])
 						->latest()->take(10);
 				}
@@ -46,29 +46,29 @@ class UsersController extends Controller
 		});
 	}
 
-	public function musics($id)
+	public function tracks($id)
 	{
-		$key = '_user_musics';
+		$key = '_user_tracks';
 
 		return MP3Pam::cache($key, function() use ($key, $id) {
 			$user = User::findOrFail($id);
 
-			return $user->musics()->latest()->paginate(10, ['id', 'title', 'size', 'play', 'hash', 'play', 'download']);
+			return $user->tracks()->latest()->paginate(10, ['id', 'title', 'size', 'play', 'hash', 'play', 'download']);
 		});
 	}
 
-	public function toggleLike(Music $music)
+	public function toggleLike(Track $track)
 	{
-		$toggle = auth()->user()->likedMusics()->toggle($music);
+		$toggle = auth()->user()->likedTracks()->toggle($track);
 
 		return (bool) count($toggle['attached']) ? 'true' : 'false';
 	}
 
-	public function musicsLiked()
+	public function tracksLiked()
 	{
-		$liked_musics = auth()->user()->likedMusics()->latest()->paginate(10);
+		$liked_tracks = auth()->user()->likedTracks()->latest()->paginate(10);
 
-		return new MusicCollection($liked_musics);
+		return new TrackCollection($liked_tracks);
 	}
 
 	public function getLogin()
@@ -150,14 +150,14 @@ class UsersController extends Controller
 
 		$data = Cache::rememberForever($key, function() use ($key, $user) {
 			$data = [
-				'musics' 				=> $user->musics()->latest()->take(6)->get(),
+				'tracks' 				=> $user->tracks()->latest()->take(6)->get(),
 				'videos'				=> $user->videos()->latest()->take(6)->get(),
-				'musiccount' 			=> $user->musics()->count(),
+				'trackcount' 			=> $user->tracks()->count(),
 				'videocount' 			=> $user->videos()->count(),
-				'musicViewsCount' 		=> $user->musics()->sum('views'),
+				'trackViewsCount' 		=> $user->tracks()->sum('views'),
 				'videoViewsCount'		=> $user->videos()->sum('views'),
-				'musicplaycount' 		=> $user->musics()->sum('play'),
-				'musicdownloadcount' 	=> $user->musics()->sum('download'),
+				'trackplaycount' 		=> $user->tracks()->sum('play'),
+				'trackdownloadcount' 	=> $user->tracks()->sum('download'),
 				'videodownloadcount' 	=> $user->videos()->sum('download'),
 				'bought_count' 		=> $user->bought()->count(),
 				'title'				=> 'Pwofil Ou',
@@ -171,27 +171,27 @@ class UsersController extends Controller
 		return view('user.profile', $data);
 	}
 
-	public function getUsermusics($usernameOrId = null)
+	public function getUsertracks($usernameOrId = null)
 	{
 		$userRoute = $this->getUserFrom($usernameOrId);
 		$user = $userRoute['user'];
 		$route = $userRoute['route'];
 
-		$user_musics = $user->musics();
+		$user_tracks = $user->tracks();
 		$user_videos = $user->videos();
 
 		$first_name = ucwords( TKPM::firstName($user->name));
 		$title = "Navige Tout Mizik $first_name Yo";
 
 		$data = [
-			'musics' 				=> $user->musics()->remember(5)->latest()->paginate(24),
-			// 'musics' 				=> $user->musics()->latest()->paginate(10),
-			'musiccount' 			=> $user_musics->count(),
+			'tracks' 				=> $user->tracks()->remember(5)->latest()->paginate(24),
+			// 'tracks' 				=> $user->tracks()->latest()->paginate(10),
+			'trackcount' 			=> $user_tracks->count(),
 			'videocount' 			=> $user_videos->count(),
-			'musicViewsCount' 	=> $user_musics->sum('views'),
+			'trackViewsCount' 	=> $user_tracks->sum('views'),
 			'videoViewsCount'		=> $user_videos->sum('views'),
-			'musicplaycount' 		=> $user_musics->sum('play'),
-			'musicdownloadcount' => $user_musics->sum('download'),
+			'trackplaycount' 		=> $user_tracks->sum('play'),
+			'trackdownloadcount' => $user_tracks->sum('download'),
 			'videodownloadcount' => $user_videos->sum('download'),
 			'bought_count' 		=> $user->bought()->count(),
 			'first_name' 			=> $first_name,
@@ -200,7 +200,7 @@ class UsersController extends Controller
 			'route' 					=> $route
 		];
 
-		return view('user.music', $data);
+		return view('user.track', $data);
 	}
 
 	public function getUservideos($usernameOrId = null)
@@ -209,7 +209,7 @@ class UsersController extends Controller
 		$user = $userRoute['user'];
 		$route = $userRoute['route'];
 
-		$user_musics = $user->musics();
+		$user_tracks = $user->tracks();
 		$user_videos = $user->videos();
 
 		$first_name = ucwords(TKPM::firstName($user->name));
@@ -218,12 +218,12 @@ class UsersController extends Controller
 		$data = [
 			'videos' 				=> $user->videos()->remember(5)->latest()->paginate(24),
 			// 'videos' 				=> $user->videos()->latest()->paginate(10),
-			'musiccount' 			=> $user_musics->count(),
+			'trackcount' 			=> $user_tracks->count(),
 			'videocount' 			=> $user_videos->count(),
-			'musicViewsCount' 	=> $user_musics->sum('views'),
+			'trackViewsCount' 	=> $user_tracks->sum('views'),
 			'videoViewsCount'		=> $user_videos->sum('views'),
-			'musicplaycount' 		=> $user_musics->sum('play'),
-			'musicdownloadcount' => $user_musics->sum('download'),
+			'trackplaycount' 		=> $user_tracks->sum('play'),
+			'trackdownloadcount' => $user_tracks->sum('download'),
 			'videodownloadcount' => $user_videos->sum('download'),
 			'bought_count' 		=> $user->bought()->count(),
 			'title'					=> $title,
@@ -241,7 +241,7 @@ class UsersController extends Controller
 		$user = $userRoute['user'];
 		$route = $userRoute['route'];
 
-		$user_musics = $user->musics();
+		$user_tracks = $user->tracks();
 		$user_videos = $user->videos();
 
 		$first_name = ucwords(TKPM::firstName($user->name));
@@ -250,12 +250,12 @@ class UsersController extends Controller
 		$title .= ' Yo';
 
 		$data = [
-			'musiccount' 			=> $user_musics->count(),
+			'trackcount' 			=> $user_tracks->count(),
 			'videocount' 			=> $user_videos->count(),
-			'musicViewsCount' 	=> $user_musics->sum('views'),
+			'trackViewsCount' 	=> $user_tracks->sum('views'),
 			'videoViewsCount'		=> $user_videos->sum('views'),
-			'musicplaycount' 		=> $user_musics->sum('play'),
-			'musicdownloadcount' => $user_musics->sum('download'),
+			'trackplaycount' 		=> $user_tracks->sum('play'),
+			'trackdownloadcount' => $user_tracks->sum('download'),
 			'videodownloadcount' => $user_videos->sum('download'),
 			'bought_count' 		=> $user->bought()->count(),
 			'title'					=> $title,
@@ -373,14 +373,14 @@ class UsersController extends Controller
 
 		$data = Cache::rememberForever($key, function() use ($user, $route) {
 			$data = [
-				'musics' 				=> $user->musics()->published()->latest()->take(12)->get(),
+				'tracks' 				=> $user->tracks()->published()->latest()->take(12)->get(),
 				'videos'					=> $user->videos()->latest()->take(12)->get(),
-				'musiccount' 			=> $user->musics()->count(),
+				'trackcount' 			=> $user->tracks()->count(),
 				'videocount' 			=> $user->videos()->count(),
-				'musicViewsCount' 	=> $user->musics()->sum('views'),
+				'trackViewsCount' 	=> $user->tracks()->sum('views'),
 				'videoViewsCount'		=> $user->videos()->sum('views'),
-				'musicplaycount' 		=> $user->musics()->sum('play'),
-				'musicdownloadcount' => $user->musics()->sum('download'),
+				'trackplaycount' 		=> $user->tracks()->sum('play'),
+				'trackdownloadcount' => $user->tracks()->sum('download'),
 				'videodownloadcount' => $user->videos()->sum('download'),
 				'first_name' 			=> ucwords( TKPM::firstName($user->name)),
 				'bought_count' 		=> $user->bought()->count(),
@@ -414,22 +414,22 @@ class UsersController extends Controller
 			}
 		}
 
-		$user->load('musics', 'videos');
+		$user->load('tracks', 'videos');
 
 		$del = $request->get('del');
 
 		$admin = $loggedUser->admin ? $loggedUser : User::whereAdmin(1)->first();
 
 		if ($loggedUser->admin) {
-			$musics = $user->musics;
+			$tracks = $user->tracks;
 			$videos = $user->videos;
 
-			foreach ($musics as $music) {
-				$music->user_id = $admin->id;
-				$music->save();
+			foreach ($tracks as $track) {
+				$track->user_id = $admin->id;
+				$track->save();
 
-				Vote::whereObj('music')
-					->whereObjId($music->id)
+				Vote::whereObj('track')
+					->whereObjId($track->id)
 					->whereUserId($user->id)
 					->delete();
 			}
@@ -444,9 +444,9 @@ class UsersController extends Controller
 					->delete();
 			}
 
-			$boughts = musicSold::whereUserId($user->id)->get();
-			$boughts->each(function($music) {
-				$music->delete();
+			$boughts = trackSold::whereUserId($user->id)->get();
+			$boughts->each(function($track) {
+				$track->delete();
 			});
 
 			if ($user->image) {
@@ -464,28 +464,28 @@ class UsersController extends Controller
 				->withStatus('success');
 		}
 
-		$musics = $user->musics;
+		$tracks = $user->tracks;
 		$videos = $user->videos;
 
-		foreach ($musics as $music) {
-			Vote::whereObj('music')
-				->whereObjId($music->id)
+		foreach ($tracks as $track) {
+			Vote::whereObj('track')
+				->whereObjId($track->id)
 				->whereUserId($user->id)
 				->delete();
 
 			if ($del) {
-				Storage::disk('musics')->delete([$music->mp3name]);
+				Storage::disk('tracks')->delete([$track->mp3name]);
 				Storage::disk('images')->delete([
-					$music->image,
-					'show/' . $music->image,
-					'thumbs/' . $music->image,
-					'thumbs/tiny/' . $music->image,
+					$track->image,
+					'show/' . $track->image,
+					'thumbs/' . $track->image,
+					'thumbs/tiny/' . $track->image,
 				]);
 
-				$music->delete();
+				$track->delete();
 			} else {
-				$music->user_id = $admin->id;
-				$music->save();
+				$track->user_id = $admin->id;
+				$track->save();
 			}
 
 		}
@@ -504,9 +504,9 @@ class UsersController extends Controller
 			}
 		}
 
-		$boughts = MusicSold::whereUserId($user->id)->get();
-		$boughts->each(function($music) {
-			$music->delete();
+		$boughts = TrackSold::whereUserId($user->id)->get();
+		$boughts->each(function($track) {
+			$track->delete();
 		});
 
 		$user->delete();
@@ -526,51 +526,51 @@ class UsersController extends Controller
 			->withStatus('success');
 	}
 
-	public function boughtmusics()
+	public function boughttracks()
 	{
 		$user 				= Auth::user();
 
-		$musiccount 			= $user->musics()->count();
+		$trackcount 			= $user->tracks()->count();
 		$videocount 			= $user->videos()->count();
-		$musicplaycount 		= $user->musics()->sum('play');
-		$musicdownloadcount 	= $user->musics()->sum('download');
+		$trackplaycount 		= $user->tracks()->sum('play');
+		$trackdownloadcount 	= $user->tracks()->sum('download');
 		$videodownloadcount 	= $user->videos()->sum('download');
-		$musicViewsCount 		= $user->musics()->sum('views');
+		$trackViewsCount 		= $user->tracks()->sum('views');
 		$videoViewsCount 		= $user->videos()->sum('views');
 
 		$firstname 			= TKPM::firstName($user->name);
 
-		$bought_musics = $user->bought()->get(['music_id']);
-		$musics = [];
-		$music_ids = [];
+		$bought_tracks = $user->bought()->get(['track_id']);
+		$tracks = [];
+		$track_ids = [];
 
-		foreach ($bought_musics as $bought_music) {
-			$music_ids[] = $bought_music->music_id;
+		foreach ($bought_tracks as $bought_track) {
+			$track_ids[] = $bought_track->track_id;
 		}
 
-		if ($music_ids) {
-			$musics = music::find($music_ids)->reverse();
+		if ($track_ids) {
+			$tracks = track::find($track_ids)->reverse();
 		}
 
-		$bought_musics_count = $bought_musics->count();
+		$bought_tracks_count = $bought_tracks->count();
 
-		$title = "Ou achte $bought_musics_count mizik";
+		$title = "Ou achte $bought_tracks_count mizik";
 
 		$data = [
 			'title' => $title,
-			'musics' => $musics,
+			'tracks' => $tracks,
 			'first_name' => $firstname,
-			'musiccount' => $musiccount,
+			'trackcount' => $trackcount,
 			'videocount' => $videocount,
-			'musicplaycount' => $musicplaycount,
-			'musicdownloadcount' => $musicdownloadcount,
+			'trackplaycount' => $trackplaycount,
+			'trackdownloadcount' => $trackdownloadcount,
 			'videodownloadcount' => $videodownloadcount,
-			'musicViewsCount' => $musicViewsCount,
+			'trackViewsCount' => $trackViewsCount,
 			'videoViewsCount' => $videoViewsCount,
 			'user' => $user,
-			'bought_count' => $bought_musics_count
+			'bought_count' => $bought_tracks_count
 		];
-		return view('user.bought-music', $data);
+		return view('user.bought-track', $data);
 	}
 
 

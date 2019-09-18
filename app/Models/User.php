@@ -34,16 +34,16 @@ class User extends Authenticatable implements JWTSubject
 		'password', 'remember_token',
 	];
 
-	protected $appends = ['avatar_url', 'musics_url'];
+	protected $appends = ['avatar_url', 'tracks_url'];
 
-	public function likedMusics()
+	public function likedTracks()
 	{
-		return $this->belongsToMany(Music::class, 'liked_musics')->withTimestamps();
+		return $this->belongsToMany(Track::class, 'liked_tracks')->withTimestamps();
 	}
 
-	public function hasLiked($music)
+	public function hasLiked($track)
 	{
-		return $this->likedMusics()->wherePivot('music_id', $music->id)->exists();
+		return $this->likedTracks()->wherePivot('track_id', $track->id)->exists();
 	}
 
 	public function getAvatarUrlAttribute()
@@ -61,9 +61,9 @@ class User extends Authenticatable implements JWTSubject
 		return MP3Pam::asset($avatarPath);
 	}
 
-	public function getMusicsUrlAttribute()
+	public function getTracksUrlAttribute()
 	{
-		return MP3Pam::route('users.musics', ['id' => $this->id]);
+		return MP3Pam::route('users.tracks', ['id' => $this->id]);
 	}
 
 	/**

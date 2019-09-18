@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Cache;
 use Carbon\Carbon;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Video;
 use Suin\RSSWriter\Feed;
 use Suin\RSSWriter\Item;
@@ -12,9 +12,9 @@ use Suin\RSSWriter\Channel;
 
 class FeedController extends Controller
 {
-	public function musics()
+	public function tracks()
 	{
-		return $this->getRss('musics');
+		return $this->getRss('tracks');
 	}
 
 	public function videos()
@@ -28,8 +28,8 @@ class FeedController extends Controller
 
 		$rss = Cache::rememberForever($key, function() use ($type) {
 			switch ($type) {
-				case 'musics':
-					$objs =  Music::published()
+				case 'tracks':
+					$objs =  Track::published()
 								->latest()
 								->with('category')
 								->take(30)

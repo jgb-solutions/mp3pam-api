@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Artist;
-use App\Models\Music;
+use App\Models\Track;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -21,12 +21,12 @@ class SearchController extends Controller
 		$key = 'search_' . $term;
 
 		$results = Cache::rememberForever($key, function() use ($term, $request) {
-			// $music_res = $this->search('musics', $query);
-			$music_res = null;
-			$music_results = Music::search($music_res['ids'], $term)
+			// $track_res = $this->search('tracks', $query);
+			$track_res = null;
+			$track_results = Track::search($track_res['ids'], $term)
 				->get(['id', 'play', 'download', 'views', 'artist', 'name', 'image']);
 
-			$music_results = $this->prepare('music', $music_results);
+			$track_results = $this->prepare('track', $track_results);
 
 			// $video_res = $this->search('videos', $query);
 			$video_res = null;
@@ -37,7 +37,7 @@ class SearchController extends Controller
 			$video_results = $this->prepare('video', $video_results);
 
 
-			$results = $music_results->merge($video_results)->shuffle();
+			$results = $track_results->merge($video_results)->shuffle();
 
 			return $results;
 		});
@@ -55,9 +55,9 @@ class SearchController extends Controller
 
 
 
-	public function search_musics($term)
+	public function search_tracks($term)
 	{
-		return Music::with('category')
+		return Track::with('category')
 			->latest()
 			->search($term)
 			->take(30)
@@ -67,7 +67,7 @@ class SearchController extends Controller
 
 	public function search_artists($term)
 	{
-		return Artist::withCount('musics')
+		return Artist::withCount('tracks')
 			->latest()
 			->search($term)
 			->take(30)
@@ -80,7 +80,7 @@ class SearchController extends Controller
 		$term = $request->term;
 
 		return [
-			'musics' => $this->search_musics($term),
+			'tracks' => $this->search_tracks($term),
 			'artists' => $this->search_artists($term)
 		];
 	}

@@ -7,13 +7,13 @@ use Auth;
 use Cache;
 use Validator;
 use App\Models\User;
-use App\Models\Music;
+use App\Models\Track;
 use App\Http\Requests;
 use App\Models\Category;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MusicCollection;
+use App\Http\Resources\TrackCollection;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\UpdateCategoryRequest;
 
@@ -63,14 +63,14 @@ class CategoriesController extends Controller
 
 	public function show($slug)
 	{
-	   $category= Category::withCount('musics')->whereSlug($slug)->firstOrFail();
+	   $category= Category::withCount('tracks')->whereSlug($slug)->firstOrFail();
 
-		$musics = $category->musics()->with('artist', 'category')->latest()->paginate(10);
+		$tracks = $category->tracks()->with('artist', 'category')->latest()->paginate(10);
 
-		return new MusicCollection($musics);
+		return new TrackCollection($tracks);
 	}
 
-	public function musics($slug)
+	public function tracks($slug)
 	{
 		if (request()->has('page')) {
 			$page = request()->get('page');
@@ -78,11 +78,11 @@ class CategoriesController extends Controller
 			$page = 1;
 		}
 
-		$key = "category_musics_" . $slug . $page;
+		$key = "category_tracks_" . $slug . $page;
 
 		$data = Cache::rememberForever($key, function() use ($slug) {
 		   $cat = Category::with([
-				'musics' => function($query) {
+				'tracks' => function($query) {
 					$query->published()->latest();
 				}
 			])
@@ -90,13 +90,13 @@ class CategoriesController extends Controller
 
 			return [
 				'cat' 	=> $cat,
-				'musics' 	=> $cat->musics()->paginate(24),
-				// 'musics' 	=> $cat->musics()->published()->latest()->paginate(10),
+				'tracks' 	=> $cat->tracks()->paginate(24),
+				// 'tracks' 	=> $cat->tracks()->published()->latest()->paginate(10),
 				'title' => $cat->name
 			];
 		});
 
-		return view('cats.music', $data);
+		return view('cats.track', $data);
 	}
 
 	public function edit(Category $category)

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\MP3Pam;
-use App\Models\Music;
+use App\Models\Track;
 
 class PagesController extends Controller
 {
@@ -20,7 +20,7 @@ class PagesController extends Controller
 	public function discover()
 	{
 		$data = [
-			'musics' => Music::published()
+			'tracks' => Track::published()
 							->rand()
 							->take(12)
 							->get()
@@ -29,13 +29,13 @@ class PagesController extends Controller
 		return view('pages.discover.index', $data);
 	}
 
-	public function discoverMusic()
+	public function discoverTrack()
 	{
-		$musics = Music::remember(120)
+		$tracks = Track::remember(120)
 						->published()
 						->rand()
 						->paginate(20);
 
-		return view('pages.discover.music', compact('musics'));
+		return view('pages.discover.track', compact('tracks'));
 	}
 }

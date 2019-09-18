@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\Music;
-use App\Jobs\TagMusic;
+use App\Models\Track;
+use App\Jobs\TagTrack;
 use App\Helpers\MP3Pam;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\MusicResource;
-use App\Http\Resources\MusicCollection;
-use App\Http\Requests\StoreMusicRequest;
-use App\Http\Requests\UpdateMusicRequest;
+use App\Http\Resources\TrackResource;
+use App\Http\Resources\TrackCollection;
+use App\Http\Requests\StoreTrackRequest;
+use App\Http\Requests\UpdateTrackRequest;
 
-class MusicsController extends Controller
+class TracksController extends Controller
 {
 	protected $user;
 
@@ -22,64 +22,64 @@ class MusicsController extends Controller
 		// 	'index',
 		// 	'listBuy',
 		// 	'show',
-		// 	'getMusic',
+		// 	'getTrack',
 		// 	'getBuy',
 		// 	'play',
 		// 	'sayHello'
 		// ]);
 
-		// $this->middleware('musicOwner')->only(['edit', 'update']);
+		// $this->middleware('trackOwner')->only(['edit', 'update']);
 	}
 
 	public function index()
 	{
-		return new MusicCollection(Music::with('category', 'artist')->latest()->paginate(10));
+		return new TrackCollection(Track::with('category', 'artist')->latest()->paginate(10));
 	}
 
 	public function store()
 	{
 		$user = MP3Pam::getUserFromToken();
 
-		$music = $user->musics()->create([
+		$track = $user->tracks()->create([
 			'title'     => $request->title,
-			'hash'          	=> MP3Pam::getHash(Music::class),
+			'hash'          	=> MP3Pam::getHash(Track::class),
 			'image' 		=> MP3Pam::image($request->file('image'), 500, null),
-			'name' 		=> MP3Pam::store($request->file('music')),
+			'name' 		=> MP3Pam::store($request->file('track')),
 			'detail' 		=> $request->detail,
 			'category_id'   	=> $request->category,
 			'artist_id' 		=> $request->artist,
 			'category_id' 	=> $request->category,
-			'size' 			=> MP3Pam::size($request->file('music')->getClientsize()),
+			'size' 			=> MP3Pam::size($request->file('track')->getClientsize()),
 		]);
 
 		// 	GETID3
 		// 	dispatch job because it's going to take some time.
-		dispatch(new TagMusic($music));
+		dispatch(new TagTrack($track));
 
-		\Mail::to('john@johndoe.com')->queue(new \App\Mail\WelcomeEmail($music));
+		\Mail::to('john@johndoe.com')->queue(new \App\Mail\WelcomeEmail($track));
 
-		return $music;
+		return $track;
 	}
 
 	public function show($hash)
 	{
-		$music = Music::with(['artist', 'category'])->byHash($hash)->firstOrFail();
+		$track = Track::with(['artist', 'category'])->byHash($hash)->firstOrFail();
 
-		$related = Music::related($music)->get();
+		$related = Track::related($track)->get();
 		// return $related;
 
 		return [
-			'music' 	=> new MusicResource($music),
-			'related' => new MusicCollection($related),
-			'hasLiked' => (bool) auth()->user()->hasLiked($music)
+			'track' 	=> new TrackResource($track),
+			'related' => new TrackCollection($related),
+			'hasLiked' => (bool) auth()->user()->hasLiked($track)
 		];
 	}
 
-	public function edit(Music $music)
+	public function edit(Track $track)
 	{
 		$data = [
-			'music'	=> $music,
-			'title'	=> $music->name,
+			'track'	=> $track,
+			'title'	=> $track->name,
 			'cats'	=> Category::allCategories(),
 			'user' => Auth::user()
 		];
@@ -87,14 +87,14 @@ class MusicsController extends Controller
 		return $data;
 	}
 
-	public function update(Music $music, UpdateMusicRequest $request)
+	public function update(Track $track, UpdateTrackRequest $request)
 	{
 		$code 	= $request->get('code');
 		$price 	= $request->get('price');
 
-		if ($music->paid) {
+		if ($track->paid) {
 			if (! empty($code)) {
-				$music->code = $code;
+				$track->code = $code;
 			}
 		}
 
@@ -123,100 +123,100 @@ class MusicsController extends Controller
 		}
 
 		if (!empty($name))
-			$music->name = ucwords($name);
+			$track->name = ucwords($name);
 
 		if (!empty($artist))
-			$music->artist = ucwords($artist);
+			$track->artist = ucwords($artist);
 
 		if (! empty($description)) {
-			$music->description = $description;
+			$track->description = $description;
 		}
 
 		if (! empty($image)) {
-			$music->image = $img_name;
+			$track->image = $img_name;
 		}
 
 		if (!empty($category)) {
-			$music->category_id = $category;
+			$track->category_id = $category;
 		}
 
 		if (! empty($price)) {
-			$music->price = $price;
+			$track->price = $price;
 		}
 
 		if (Auth::user()->admin) {
 			if ($featured) {
-				$music->featured = 1;
+				$track->featured = 1;
 			} else {
-				$music->featured = 0;
+				$track->featured = 0;
 			}
 		}
 
 		if ($publish && $price == 'paid') {
-			$music->publish = 1;
+			$track->publish = 1;
 		}
 
 		elseif (! $publish && $price == 'paid') {
-			$music->publish = 0;
+			$track->publish = 0;
 		}
 
-		$music->slug = $slug;
-		$music->save();
+		$track->slug = $slug;
+		$track->save();
 
 		Cache::flush();
 
-		if ($music->price == 'paid' && ! $music->publish) {
+		if ($track->price == 'paid' && ! $track->publish) {
 			return back()
 				->withMessage(config('site.message.update'))
 				->withStatus('info');
-		} else if ($music->price == 'paid' && $music->publish) {
-			if (! $music->code){
+		} else if ($track->price == 'paid' && $track->publish) {
+			if (! $track->code){
 				return back();
 			}
 
-			return redirect(route('buy.show', ['id' => $music->id]))
+			return redirect(route('buy.show', ['id' => $track->id]))
 				->withMessage(config('site.message.update'))
 				->withStatus('info');
 		}
 
-		return redirect(route('music.show', ['id' => $music->id, 'slug' => $music->slug]))
+		return redirect(route('track.show', ['id' => $track->id, 'slug' => $track->slug]))
 			->withMessage(config('site.message.update'))
 			->withStatus('success');
 	}
 
-	public function destroy(Request $request, music $music)
+	public function destroy(Request $request, track $track)
 	{
 		$user = $request->user();
 
-		if ($user->id == $music->user_id || $user->admin) {
-			Vote::whereObj('music')
-				->whereObjId($music->id)
+		if ($user->id == $track->user_id || $user->admin) {
+			Vote::whereObj('track')
+				->whereObjId($track->id)
 				->whereUserId($user->id)
 				->delete();
 
 			Storage::disk('images')->delete([
-				$music->image,
-				'thumbs/' . $music->image,
-				'tiny/' . $music->image,
-				'show/' . $music->image
+				$track->image,
+				'thumbs/' . $track->image,
+				'tiny/' . $track->image,
+				'show/' . $track->image
 			]);
 
-			Storage::disk('musics')->delete($music->mp3name);
+			Storage::disk('tracks')->delete($track->mp3name);
 
-			MusicList::whereMusicId($music->id)->delete();
+			TrackList::whereTrackId($track->id)->delete();
 
-			$music->delete();
+			$track->delete();
 
 			Cache::flush();
 
 			if ($user->admin) {
-				return redirect(route('admin.music'))
-					->withMessage(config('site.message.music-deletion-success'))
+				return redirect(route('admin.track'))
+					->withMessage(config('site.message.track-deletion-success'))
 					->withStatus('success');
 			}
 
-			return redirect(route('music'))
-				->withMessage(config('site.message.music-deletion-success'))
+			return redirect(route('track'))
+				->withMessage(config('site.message.track-deletion-success'))
 				->withStatus('success');
 		}
 
@@ -224,23 +224,23 @@ class MusicsController extends Controller
 
 	public function download($hash, Request $request)
 	{
-		$music = Music::byHash($hash)->firstOrFail();
-		// if ($music->download >= 100) {
+		$track = Track::byHash($hash)->firstOrFail();
+		// if ($track->download >= 100) {
 		// 	if ($request->has('token')) {
-		// 		MP3Pam::download($music);
+		// 		MP3Pam::download($track);
 		// 	}
 
-		// 	return view('music.download', compact('music'));
+		// 	return view('track.download', compact('track'));
 		// }
 
-		return MP3Pam::download($music);
+		return MP3Pam::download($track);
 	}
 
-	public function play(Music $music)
+	public function play(Track $track)
 	{
-		$music->play_count += 1;
-		$music->save();
+		$track->play_count += 1;
+		$track->save();
 
-		return redirect($music->mp3_url);
+		return redirect($track->mp3_url);
 	}
 }

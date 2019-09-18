@@ -6,16 +6,16 @@ scalar DateTime
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 type Query @middleware(checks: ["auth:api"]) {
-	users(page: Int = 1): [User!]! @cache(maxAge: 300) @paginate(defaultCount: 20)
-	musics(page: Int = 1): [Music!]! @cache(maxAge: 300) @paginate(defaultCount: 20)
+	users(page: Int = 1): [User!]! @paginate(defaultCount: 20)
+	tracks(page: Int = 1): [Track!]! @paginate(defaultCount: 20)
 	categories(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderby
-	): [Category!]! @cache @paginate(defaultCount: 20)
-	category(slug: String! @eq): Category @cache(maxAge: 300) @find
-	music(hash: Int! @eq): Music @cache(maxAge: 300) @find
-	artists(page: Int = 1): [Artist!]! @cache(maxAge: 300) @paginate(defaultCount: 20)
-	artist(hash: ID @eq): Artist @find @cache(maxAge: 300)
+	): [Category!]! @paginate(defaultCount: 20)
+	category(slug: String! @eq): Category @find
+	track(hash: Int! @eq): Track @find
+	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
+	artist(hash: ID @eq): Artist @find
 	me: User! @auth
 }
 
@@ -65,7 +65,7 @@ type User {
 	email: String!
 	avatar: String!
 	active: Boolean!
-	musics: [Music!]! @hasMany(type: "paginator", defaultCount: 20) @cache
+	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	telephone: String!
 	created_at: DateTime!
 	updated_at: DateTime!
@@ -77,10 +77,10 @@ type Artist {
 	stage_name: String!
 	hash: Int!
 	avatar: String!
-	musics: [Music!]
+	tracks: [Track!]
 }
 
-type Music {
+type Track {
 	id: ID!
 	title: String!
 	hash: Int!
@@ -98,5 +98,5 @@ type Category {
 	id: ID!
 	name: String!
 	slug: String!
-	musics: [Music!]! @hasMany(type: "paginator", defaultCount: 20) @cache
+	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Models\Vote;
-use App\Models\Music;
+use App\Models\Track;
 use App\Models\Video;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -33,14 +33,14 @@ class AJAXController extends Controller
 
 	private function vpd_count($id, $o, $action = null)
 	{
-		$obj = $o == 'music' ? Music::find($id) : Video::find($id);
+		$obj = $o == 'track' ? Track::find($id) : Video::find($id);
 		$obj->views += 1;
 		$obj->save();
 
 		$data = [
 			'views' 	=> $obj->views,
 			'download' 	=> $obj->download,
-			'play'		=> $o == 'music' ? $obj->play : ''
+			'play'		=> $o == 'track' ? $obj->play : ''
 		];
 
 		return $data;
@@ -53,7 +53,7 @@ class AJAXController extends Controller
 			return $this->$fn($query);
 		}
 
-		$musicresults = Music::published()
+		$trackresults = Track::published()
 			->search($query)
 			->orderBy('download', 'desc')
 			->orderBy('play', 'desc')
@@ -61,10 +61,10 @@ class AJAXController extends Controller
 			->take( 10 )
 			->get(['id', 'name', 'views', 'download', 'price']);
 
-		$musicresults->each( function( $music )
+		$trackresults->each(function($track)
 		{
-			$music->type = 'music';
-			$music->icon = 'music';
+			$track->type = 'track';
+			$track->icon = 'track';
 		});
 
 		$videoresults = Video::search($query)
@@ -79,28 +79,28 @@ class AJAXController extends Controller
 			$video->icon = 'video-camera';
 		});
 
-		$results = $musicresults->merge( $videoresults );
+		$results = $trackresults->merge( $videoresults );
 		$shuffle_results = $results->shuffle();
 
 		return $shuffle_results;
 	}
 
-	private function searchMusic( $query )
+	private function searchTrack( $query )
 	{
-		$musicresults = Music::published()
+		$trackresults = Track::published()
 						->search($query)
 						->orderBy('play', 'desc')
 						->orderBy('download', 'desc')
 						->take( 20 )
 						->get(['id', 'name', 'play', 'download', 'image', 'price']);
 
-		$musicresults->each( function( $music )
+		$trackresults->each( function( $track )
 		{
-			$music->icon = 'music';
-			$music->type = 'music';
+			$track->icon = 'track';
+			$track->type = 'track';
 		});
 
-		return $musicresults;
+		return $trackresults;
 	}
 
 	private function searchVideo($query)
@@ -146,7 +146,7 @@ class AJAXController extends Controller
 				]);
 			}
 
-			$obj = $obj == 'music' ? Music::find($id) : Video::find($id);
+			$obj = $obj == 'track' ? Track::find($id) : Video::find($id);
 			// $obj = $obj::find($id);
 			$obj->vote_up += 1;
 			$obj->save();
@@ -186,7 +186,7 @@ class AJAXController extends Controller
 				]);
 			}
 
-			$obj = $obj == 'music' ? Music::find($id) : Video::find($id);
+			$obj = $obj == 'track' ? Track::find($id) : Video::find($id);
 			// $obj = $obj::find($id);
 			$obj->vote_down -= 1;
 			$obj->save();
@@ -211,7 +211,7 @@ class AJAXController extends Controller
 				->first()
 				->delete();
 
-			$obj = $obj == 'music' ? Music::find($id) : Video::find($id);
+			$obj = $obj == 'track' ? Track::find($id) : Video::find($id);
 			// $obj = $obj::find($id);
 
 			if ($action == 'up') {

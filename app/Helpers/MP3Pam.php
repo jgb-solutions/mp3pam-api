@@ -136,20 +136,20 @@ class MP3Pam
 		return round($size, $round) . $sizes[$i];
 	}
 
-	public static function tag($music)
+	public static function tag($track)
 	{
 		$mp3_handler = new getID3;
 	   	$mp3_handler->setOption(['encoding'=> 'UTF-8']);
 
 	    	$mp3_writter = new getid3_writetags;
 
-	    	$mp3_writter->filename          			= storage_path('app/public/' . $music->name);
+	    	$mp3_writter->filename          			= storage_path('app/public/' . $track->name);
 	  	$mp3_writter->tagformats        			= ['id3v2.3'];
 	  	$mp3_writter->overwrite_tags    			= true;
 	  	$mp3_writter->tag_encoding      			= 'UTF-8';
 	  	$mp3_writter->remove_other_tags 		= true;
 
-	  	$data['title'][]   						= config('site.url') . ' - ' . $music->fullTitle;
+	  	$data['title'][]   						= config('site.url') . ' - ' . $track->fullTitle;
 	  	$data['artist'][]  						= config('site.name') . ' - ' . config('site.url');
 	  	$data['album'][]   					= config('site.name') . ' - ' . config('site.url');
 	  	// $data['year'][]    = $mp3_year;
@@ -166,20 +166,20 @@ class MP3Pam
 	  	return $mp3_writter->WriteTags();
 	}
 
-	public static function download($music)
+	public static function download($track)
 	{
-		$music->download_count += 1;
-		$music->save();
+		$track->download_count += 1;
+		$track->save();
 
-		if ($music->name) {
-			$mp3name = storage_path('app/public/' . $music->name);
+		if ($track->name) {
+			$mp3name = storage_path('app/public/' . $track->name);
 		} else {
 			$mp3name = public_path(config('site.defaultMP3URL'));
 		}
 
 		header('Content-Description: File Transfer');
     	header('Content-Type: application/octet-stream');
-    	header('Content-Disposition: attachment; filename=' . $music->fullTitle . '.mp3' );
+    	header('Content-Disposition: attachment; filename=' . $track->fullTitle . '.mp3' );
     	header('Expires: 0');
     	header('Cache-Control: must-revalidate');
     	header('Pragma: public');
@@ -196,7 +196,7 @@ class MP3Pam
 
 	public static function tweet($obj, $type)
 	{
-		if ( $type === 'music' ) {
+		if ( $type === 'track' ) {
 			$status = '#NouvoMizik ';
 		} elseif ( $type === 'video' ) {
 			$status = '#NouvoVideyo ';

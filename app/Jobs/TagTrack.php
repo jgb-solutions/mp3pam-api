@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Music;
+use App\Models\Track;
 use App\Helpers\MP3Pam;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -10,19 +10,19 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class TagMusic implements ShouldQueue
+class TagTrack implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-	protected $music;
+	protected $track;
 	/**
 	 * Create a new job instance.
 	 *
 	 * @return void
 	 */
-	public function __construct(Music $music)
+	public function __construct(Track $track)
 	{
-		$this->music = $music;
+		$this->track = $track;
 	}
 
 	/**
@@ -32,6 +32,6 @@ class TagMusic implements ShouldQueue
 	 */
 	public function handle()
 	{
-		MP3Pam::tag($this->music);
+		MP3Pam::tag($this->track);
 	}
 }
