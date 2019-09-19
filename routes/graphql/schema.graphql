@@ -26,7 +26,7 @@ extend type Query {
 	# Categories
 	categories(
 		page: Int = 1
-		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderby
+		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
 	): [Category!]! @paginate(defaultCount: 20)
 	category(slug: String! @eq): Category @find
 
