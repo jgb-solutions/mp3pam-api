@@ -5,27 +5,39 @@ scalar DateTime
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
+# Protected Queries
 type Query @middleware(checks: ["auth:api"]) {
-	users(page: Int = 1): [User!]! @paginate(defaultCount: 20)
+	me: User! @auth
+}
+
+# Public Queries
+extend type Query {
+	# Auth
+	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
+
+	# Tracks
 	tracks(page: Int = 1): [Track!]! @paginate(defaultCount: 20)
+	track(hash: Int! @eq): Track @find
+
+	# Users
+	users(page: Int = 1): [User!]! @paginate(defaultCount: 20)
+	user(id: ID! @eq): User @find
+
+	# Categories
 	categories(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderby
 	): [Category!]! @paginate(defaultCount: 20)
 	category(slug: String! @eq): Category @find
-	track(hash: Int! @eq): Track @find
+
+	# Artists
 	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
 	artist(hash: ID @eq): Artist @find
-	me: User! @auth
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
-}
-
-extend type Query {
-	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
 }
 
 extend type Mutation {
