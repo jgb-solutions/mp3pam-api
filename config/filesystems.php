@@ -84,10 +84,10 @@ return [
             'region' => env('WASABI_REGION'),
             'bucket' => env('WASABI_BUCKET'),
             'endpoint' => env('WASABI_ENDPOINT'),
-            'visibility' => 'public',
-            'options' => [
-                'ContentDisposition' => 'attachment',
-            ]
+            // 'visibility' => 'public',
+            // 'options' => [
+            //     'ContentDisposition' => 'attachment',
+            // ]
         ],
 
         'b2' => [

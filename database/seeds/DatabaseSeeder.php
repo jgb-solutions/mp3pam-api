@@ -27,6 +27,5 @@ class DatabaseSeeder extends Seeder
 			$this->call(TracksTableSeeder::class);
 			$this->command->info('Tracks table seeded!');
 		}
-
 	}
 }

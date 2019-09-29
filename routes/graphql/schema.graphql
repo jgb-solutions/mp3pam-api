@@ -33,6 +33,9 @@ extend type Query {
 	# Artists
 	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
 	artist(hash: ID @eq): Artist @find
+
+	# Upload URL
+	 uploadUrl(name: String!, type: String! @spread): UploadUrl! @field(resolver: "UploadUrlQuery")
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
@@ -42,6 +45,11 @@ type Mutation @middleware(checks: ["auth:api"]) {
 
 extend type Mutation {
 	register(input: RegisterInput! @spread): User! @create
+}
+
+type UploadUrl {
+	signedUrl: String!,
+	fileUrl: String!
 }
 
 input RegisterInput {
