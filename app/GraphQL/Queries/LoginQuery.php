@@ -43,7 +43,7 @@ class LoginQuery
 
 		// return response
 		return [
-			'user' => new UserResource($user),
+			'data' => new UserResource($user),
 			'token' => $token
 		];
     }

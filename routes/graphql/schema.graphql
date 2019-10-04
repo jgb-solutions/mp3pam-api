@@ -65,7 +65,7 @@ input LoginInput {
 }
 
 type LoginPayload {
-	user: User!
+	data: User!
 	token: String!
 }
 
