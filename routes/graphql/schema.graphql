@@ -36,6 +36,9 @@ extend type Query {
 
 	# Upload URL
 	 uploadUrl(name: String!, type: String! @spread): UploadUrl! @field(resolver: "UploadUrlQuery")
+
+	 # Facebook Login URL
+	 facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
@@ -45,6 +48,11 @@ type Mutation @middleware(checks: ["auth:api"]) {
 
 extend type Mutation {
 	register(input: RegisterInput! @spread): User! @create
+	handleFacebookConnect(code: String! @spread): facebookLoginPayload!  @field(resolver: "HandleFacebookConnectMutation")
+}
+
+type facebookLoginUrl {
+	url: String!
 }
 
 type UploadUrl {
@@ -69,6 +77,12 @@ type LoginPayload {
 	token: String!
 }
 
+type facebookLoginPayload {
+	data: User!
+	token: String!
+	firstLogin: Boolean!
+}
+
 input OrderByClause {
 	field: String!
 	order: SortOrder!
@@ -82,11 +96,11 @@ enum SortOrder {
 type User {
 	id: ID!
 	name: String!
-	email: String!
-	avatar: String!
+	email: String
+	avatar: String
 	active: Boolean!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
-	telephone: String!
+	telephone: String
 	created_at: DateTime!
 	updated_at: DateTime!
 }
