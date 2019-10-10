@@ -141,7 +141,7 @@ class AuthController extends Controller
 				$user->save();
 			}
 
-			$token = auth()->login($user);
+			$token = auth()->guard('api')->login($user);
 
 			return response()->json([
 			    'token'			=> $token,
