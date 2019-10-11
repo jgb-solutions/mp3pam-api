@@ -3,9 +3,12 @@
 namespace App\Exceptions;
 
 use Exception;
+use App\Exceptions\CustomJWTException;
 use Illuminate\Auth\AuthenticationException;
-use \Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+
 
 class Handler extends ExceptionHandler
 {
@@ -48,27 +51,33 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-
     	if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-				return response()->json(['message' => 'Tokenn ou an ekspire.'], $exception->getStatusCode());
+				throw new CustomJWTException("Your session has expired.", $exception->getStatusCode());
 			}
 
 			if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-				return response()->json(['message' => 'Tokenn ou an envalid.'], $exception->getStatusCode());
+				throw new CustomJWTException("Your token is invalid.", $exception->getStatusCode());
 			}
 
 			if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenMismatchException) {
-				return response()->json(['message' => 'TokenMismatchException'], $exception->getStatusCode());
+				throw new CustomJWTException("We could not authenticate you.", $exception->getStatusCode());
 			}
 
-			if ($exception instanceof ModelNotFoundException && $request->ajax()) {
-				return response()->json(['message' => 'Nou pa jwenn sa w mande a.'], 404);
+			if ($exception instanceof ModelNotFoundException) {
+				throw new CustomJWTException("The resource was not found.", $exception->getStatusCode());
 			}
 
-   //   	if ($request->expectsJson()) {
-			// 	return response()->json(['error' => 'Unauthenticated.'], 401);
-			// }
+			if ($exception instanceof UnauthorizedHttpException) {
+				throw new CustomJWTException("You need to login to access this resource.", $exception->getStatusCode());
+			}
 
      	return parent::render($request, $exception);
     }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+{
+    return $request->expectsJson()
+        ? response()->json(['message' => $exception->getMessage()], 401)
+        : redirect()->guest(route('ROUTENAME'));
+}
 }

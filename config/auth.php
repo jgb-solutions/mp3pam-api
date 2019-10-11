@@ -38,12 +38,8 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'admins',
+            'provider' => 'users',
         ],
-        // 'admins' => [
-        //     'driver' => 'session',
-        //     'provider' => 'admins',
-        // ],
 
         'api' => [
             'driver' => 'jwt',
@@ -102,11 +98,6 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
-        'admins' => [
-            'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
         ],

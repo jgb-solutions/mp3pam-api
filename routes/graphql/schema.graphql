@@ -6,8 +6,11 @@ scalar DateTime
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 # Protected Queries
-type Query @middleware(checks: ["auth:api"]) {
+type Query @middleware(checks: ["my.auth"]) {
 	me: User! @auth
+	# Upload URL
+	uploadUrl(name: String!, type: String! @spread): UploadUrl!
+		@field(resolver: "UploadUrlQuery")
 }
 
 # Public Queries
@@ -34,11 +37,8 @@ extend type Query {
 	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
 	artist(hash: ID @eq): Artist @find
 
-	# Upload URL
-	 uploadUrl(name: String!, type: String! @spread): UploadUrl! @field(resolver: "UploadUrlQuery")
-
-	 # Facebook Login URL
-	 facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
+	# Facebook Login URL
+	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
@@ -47,8 +47,10 @@ type Mutation @middleware(checks: ["auth:api"]) {
 }
 
 extend type Mutation {
+	# Auth
 	register(input: RegisterInput! @spread): User! @create
-	handleFacebookConnect(code: String! @spread): facebookLoginPayload!  @field(resolver: "HandleFacebookConnectMutation")
+	handleFacebookConnect(code: String! @spread): facebookLoginPayload!
+		@field(resolver: "HandleFacebookConnectMutation")
 }
 
 type facebookLoginUrl {
@@ -56,7 +58,7 @@ type facebookLoginUrl {
 }
 
 type UploadUrl {
-	signedUrl: String!,
+	signedUrl: String!
 	fileUrl: String!
 }
 
@@ -69,7 +71,11 @@ input RegisterInput {
 
 input LoginInput {
 	email: String! @rules(apply: ["required", "email"])
-	password: String! @rules(apply: ["required", "min:6"])
+	password: String!
+		@rules(
+			apply: ["required", "min:6"]
+			messages: { min: "The password you provided is too short." }
+		)
 }
 
 type LoginPayload {
