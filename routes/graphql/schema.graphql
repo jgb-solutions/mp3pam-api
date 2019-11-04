@@ -6,7 +6,7 @@ scalar DateTime
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 # Protected Queries
-type Query @middleware(checks: ["my.auth"]) {
+type Query @middleware(checks: ["auth:api"]) {
 	me: User! @auth
 	# Upload URL
 	uploadUrl(name: String!, type: String! @spread): UploadUrl!
@@ -26,12 +26,12 @@ extend type Query {
 	users(page: Int = 1): [User!]! @paginate(defaultCount: 20)
 	user(id: ID! @eq): User @find
 
-	# Categories
-	categories(
+	# Genres
+	genres(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
-	): [Category!]! @paginate(defaultCount: 20)
-	category(slug: String! @eq): Category @find
+	): [Genre!]! @paginate(defaultCount: 20)
+	genre(slug: String! @eq): Genre @find
 
 	# Artists
 	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
@@ -42,8 +42,12 @@ extend type Query {
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
+	# Auth
+	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
+	createTrack(input: CreateTrackInput): Track
+		@field(resolver: "CreateTrackMutation")
 }
 
 extend type Mutation {
@@ -57,9 +61,17 @@ type facebookLoginUrl {
 	url: String!
 }
 
+type LogOutSuccess {
+	success: Boolean
+}
+
 type UploadUrl {
 	signedUrl: String!
 	fileUrl: String!
+}
+
+input CreateTrackInput {
+	title: String!
 }
 
 input RegisterInput {
@@ -131,10 +143,10 @@ type Track {
 	lyrics: String!
 	created_at: DateTime!
 	updated_at: DateTime!
-	category: Category! @belongsTo
+	genre: Genre! @belongsTo
 }
 
-type Category {
+type Genre {
 	id: ID!
 	name: String!
 	slug: String!

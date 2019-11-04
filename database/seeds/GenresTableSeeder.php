@@ -1,16 +1,16 @@
 <?php
 
-use App\Models\Category;
+use App\Models\Genre;
 use Illuminate\Database\Seeder;
 
-class CategoriesTableSeeder extends Seeder
+class GenresTableSeeder extends Seeder
 {
 
 	public function run()
 	{
-		DB::table('categories')->delete();
+		DB::table('genres')->delete();
 
-		$categories = [
+		$genres = [
 			'Konpa',
 			'Rasin',
 			'Reggae',
@@ -42,10 +42,10 @@ class CategoriesTableSeeder extends Seeder
 			'Slam'
 		];
 
-		foreach ($categories as $category) {
-			Category:: create([
-				'name' 	=> $category,
-				'slug'		=> str_slug($category)
+		foreach ($genres as $genre) {
+			Genre:: create([
+				'name' 	=> $genre,
+				'slug'		=> str_slug($genre)
 			]);
 		}
 	}

@@ -2,13 +2,10 @@
 
 namespace App\GraphQL\Queries;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-
 use App\Exceptions\CustomJWTException;
 use App\Http\Resources\UserResource;
-use Laravel\Socialite\Facades\Socialite;
-use App\Http\Requests\RegisterFormRequest;
+use GraphQL\Type\Definition\ResolveInfo;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class LoginQuery
@@ -26,26 +23,26 @@ class LoginQuery
     {
         $credentials = [
             'email' => $args['input']['email'],
-            'password' => $args['input']['password']
+            'password' => $args['input']['password'],
         ];
 
-		try {
-		   	// attempt to verify the credentials and create a token for the user
-		   	if (! $token = auth()->guard('api')->attempt($credentials)) {
-          throw new CustomJWTException("The email or password is incorrect.", 401);
-		   	}
-		} catch (JWTException $e) {
-		   	// something went wrong whilst attempting to encode the token
-      throw new CustomJWTException("The token could not be created.", 500);
-		}
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (!$token = auth()->guard('api')->attempt($credentials)) {
+                throw new CustomJWTException("The email or password is incorrect.", 401);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            throw new CustomJWTException("The token could not be created.", 500);
+        }
 
-		// all good so return the token
-		$user = auth()->guard('api')->user();
+        // all good so return the token
+        $user = auth()->guard('api')->user();
 
-		// return response
-		return [
-			'data' => new UserResource($user),
-			'token' => $token
-		];
+        // return response
+        return [
+            'data' => new UserResource($user),
+            'token' => $token,
+        ];
     }
 }

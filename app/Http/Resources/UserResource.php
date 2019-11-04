@@ -15,15 +15,17 @@ class UserResource extends Resource
     public function toArray($request)
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'email'     => $this->email,
-            'avatar'    => $this->avatar_url,
-            'active'    => $this->active,
-            'facebook'  => $this->facebook_link,
-            'tracks'    => $this->when($this->type == 'artist', $this->tracks_url),
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'avatar' => $this->avatar_url,
+            'active' => $this->active,
+            'facebook' => $this->facebook_link,
+            'tracks' => $this->when($this->type == 'artist', $this->tracks_url),
             'telephone' => $this->telephone,
-            'type'      => $this->type
+            'type' => $this->type,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

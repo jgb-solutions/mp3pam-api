@@ -5,18 +5,26 @@ use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
-	public function run()
-	{
-		DB::table('users')->delete();
+    public function run()
+    {
+        DB::table('users')->delete();
+        $users = [
+            [
+                'name' => "Jean Gérard",
+                'email' => "jgbneatdesign@gmail.com",
+                'password' => bcrypt("asdf,,,"),
+                'admin' => 1,
+                'telephone' => 41830318,
+            ],
+            [
+                'name' => "John Doe",
+                'email' => "john@doe.com",
+                'password' => bcrypt("password"),
+                'telephone' => 41830318,
+                'admin' => 0,
+            ],
+        ];
 
-		$user = [
-		  	'name'  			=> "John Doe",
-		  	'email'     	=> "john@doe.com",
-		  	'password'  	=> bcrypt("password"),
-		  	'telephone'		=> 41830318,
-		  	'active'		=> 1,
-		];
-
-		User::create($user);
-	}
+        User::insert($users);
+    }
 }

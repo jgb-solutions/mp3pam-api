@@ -19,20 +19,9 @@ class User extends Authenticatable implements JWTSubject
 	 */
 	protected $guarded = [];
 
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
-
-	protected $hidden = [
-		'id',
-		'created_at',
-		'updated_at',
-		'password', 'remember_token',
-	];
-
-	protected $appends = ['avatar_url', 'tracks_url'];
+	public function scopeAdmin($query) {
+		return $query->whereAdmin(1);
+	}
 
 	public function likedTracks()
 	{
