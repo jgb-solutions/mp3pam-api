@@ -46,8 +46,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
-	createTrack(input: CreateTrackInput): Track
-		@field(resolver: "CreateTrackMutation")
+	createTrack(input: TrackInput): Track @field(resolver: "CreateTrackMutation")
 }
 
 extend type Mutation {
@@ -70,8 +69,15 @@ type UploadUrl {
 	fileUrl: String!
 }
 
-input CreateTrackInput {
+input TrackInput {
 	title: String!
+	audioName: String!
+	poster: String!
+	detail: String!
+	lyrics: String!
+	audioFileSize: Int!
+	artistId: Int!
+	genreId: Int!
 }
 
 input RegisterInput {
@@ -136,14 +142,14 @@ type Track {
 	id: ID!
 	title: String!
 	hash: Int!
-	file_name: String!
-	image: String!
+	audio_name: String!
+	post: String!
 	featured: Boolean!
 	detail: String!
 	lyrics: String!
+	genre: Genre! @belongsTo
 	created_at: DateTime!
 	updated_at: DateTime!
-	genre: Genre! @belongsTo
 }
 
 type Genre {
