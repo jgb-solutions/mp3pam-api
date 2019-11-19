@@ -18,7 +18,7 @@ $factory->define(Track::class, function (Faker\Generator $faker) {
         'lyrics' => $faker->realText(1000),
         'audio_file_size' => rand(10000, 99999),
         'audio_name' => '',
-        'image' => '',
+        'poster' => '',
         'user_id' => $admin->id,
         'artist_id' => Artist::inRandomOrder()->first()->id,
         'genre_id' => Genre::inRandomOrder()->first()->id,
