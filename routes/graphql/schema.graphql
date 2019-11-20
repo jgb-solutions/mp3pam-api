@@ -46,7 +46,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
-	addTrack(input: TrackInput): Track @field(resolver: "CreateTrackMutation")
+	addTrack(input: TrackInput!): Track @field(resolver: "CreateTrackMutation")
 }
 
 extend type Mutation {
@@ -73,8 +73,8 @@ input TrackInput {
 	title: String!
 	audioName: String!
 	poster: String!
-	detail: String!
-	lyrics: String!
+	detail: String
+	lyrics: String
 	audioFileSize: Int!
 	artistId: Int!
 	genreId: Int!

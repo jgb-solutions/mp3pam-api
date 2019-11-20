@@ -4,6 +4,8 @@ namespace App\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use \App\Helpers\MP3Pam;
+use \App\Models\Track;
 
 class CreateTrackMutation
 {
@@ -18,6 +20,22 @@ class CreateTrackMutation
      */
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        // TODO implement the resolver
+        extract($args['input']);
+
+        $trackData = [
+            'title' => $title,
+            'audio_name' => $audioName,
+            'poster' => $poster,
+            'detail' => $detail,
+            'lyrics' => $lyrics,
+            'audio_file_size' => $audioFileSize,
+            'genre_id' => $genreId,
+            'artist_id' => $artistId,
+            'hash' => MP3Pam::getHash(Track::class),
+        ];
+
+        $track = auth()->user()->tracks()->create($trackData);
+
+        return $track;
     }
 }
