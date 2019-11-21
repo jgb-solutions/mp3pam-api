@@ -9,7 +9,7 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 type Query @middleware(checks: ["auth:api"]) {
 	me: User! @auth
 	# Upload URL
-	uploadUrl(name: String!, type: String! @spread): UploadUrl!
+	uploadUrl(name: String!, bucket: String! @spread): UploadUrl!
 		@field(resolver: "UploadUrlQuery")
 }
 
@@ -67,6 +67,7 @@ type LogOutSuccess {
 type UploadUrl {
 	signedUrl: String!
 	fileUrl: String!
+	filename: String!
 }
 
 input TrackInput {

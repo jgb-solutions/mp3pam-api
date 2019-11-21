@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Queries;
 
-use JWTAuth;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -19,18 +18,17 @@ class UploadUrlQuery
      */
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $name = $args['name'];
-        $type = $args['type'];
+        extract($args);
         $wasabi = \Storage::disk('wasabi');
-        $bucket = $type . '.mp3pam.com';
+        $bucket = $bucket . '.mp3pam.com';
         $client = $wasabi->getDriver()->getAdapter()->getClient();
-        $filename = static::makeUploadFilePath($name);
-        $file_url = static::makeFileUrl($bucket, $filename);
+        $filePath = static::makeUploadFilePath($name);
+        $file_url = static::makeFileUrl($bucket, $filePath);
         $command = $client->getCommand('PutObject', [
             'Bucket' => $bucket,
-            'Key'    => static::makeUploadFilePath($name),
+            'Key' => static::makeUploadFilePath($name),
             // 'ResponseContentDisposition' => 'attachment; filename=' . request('filename'),
-            'ACL'    => 'public-read',
+            'ACL' => 'public-read',
         ]);
 
         $request = $client->createPresignedRequest($command, "+30 minutes");
@@ -39,7 +37,8 @@ class UploadUrlQuery
 
         return [
             'signedUrl' => $signed_url,
-            'fileUrl' => $file_url
+            'fileUrl' => $file_url,
+            'filename' => $filePath,
         ];
     }
 
@@ -59,8 +58,8 @@ class UploadUrlQuery
         return static::makeUploadFolder() . '/' . static::makeUploadFileName($name);
     }
 
-    public static function makeFileUrl($bucket, $filename)
+    public static function makeFileUrl($bucket, $filePath)
     {
-        return "https://{$bucket}/{$filename}";
+        return "https://{$bucket}/{$filePath}";
     }
 }
