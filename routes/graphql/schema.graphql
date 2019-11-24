@@ -125,6 +125,9 @@ type User {
 	avatar: String
 	active: Boolean!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	artists: [Artist!]!
+		@hasMany(type: "paginator", defaultCount: 20)
+		@orderBy(field: "created_at", order: ASC)
 	telephone: String
 	created_at: DateTime!
 	updated_at: DateTime!
@@ -135,8 +138,10 @@ type Artist {
 	name: String!
 	stage_name: String!
 	hash: Int!
-	avatar: String!
+	poster: String!
 	tracks: [Track!]
+	created_at: DateTime!
+	updated_at: DateTime!
 }
 
 type Track {
@@ -158,4 +163,6 @@ type Genre {
 	name: String!
 	slug: String!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	created_at: DateTime!
+	updated_at: DateTime!
 }

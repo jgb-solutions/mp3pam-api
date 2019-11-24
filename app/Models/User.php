@@ -40,6 +40,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->likedTracks()->wherePivot('track_id', $track->id)->exists();
     }
 
+    public function artists(): HasMany
+    {
+        return $this->hasMany(Artist::class);
+    }
+
     public function getAvatarUrlAttribute()
     {
         if (!empty($this->facebook_id)) {

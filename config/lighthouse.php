@@ -11,7 +11,7 @@ return [
     | You may set `route` => false, to disable the default route
     | registration and take full control.
     |
-    */
+     */
 
     'route' => [
         /*
@@ -44,7 +44,7 @@ return [
     | relative to the app path. You should define your entire GraphQL
     | schema in this file (additional files may be imported).
     |
-    */
+     */
 
     'schema' => [
         'register' => base_path('routes/graphql/schema.graphql'),
@@ -59,7 +59,7 @@ return [
     | This operation is very expensive, so it is highly recommended to enable
     | caching of the final schema to optimize performance of large schemas.
     |
-    */
+     */
 
     'cache' => [
         'enable' => env('LIGHTHOUSE_CACHE_ENABLE', true),
@@ -76,7 +76,7 @@ return [
     | that extend functionality of the schema. You may pass either a string
     | or an array, they are tried in order and the first match is used.
     |
-    */
+     */
 
     'namespaces' => [
         'models' => ['App', 'App\\Models'],
@@ -97,7 +97,7 @@ return [
     | Control how Lighthouse handles security related query validation.
     | This configures the options from http://webonyx.github.io/graphql-php/security/
     |
-    */
+     */
 
     'security' => [
         'max_query_complexity' => \GraphQL\Validator\Rules\QueryComplexity::DISABLED,
@@ -114,9 +114,9 @@ return [
     | to fields that are paginated with the @paginate directive.
     | A setting of "null" means the count is unrestricted.
     |
-    */
+     */
 
-    'paginate_max_count' => 20,
+    'paginate_max_count' => 100,
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
     | that controls how many results are returned.
     | This setting will be removed in v5.
     |
-    */
+     */
 
     'pagination_amount_argument' => 'take',
 
@@ -139,7 +139,7 @@ return [
     | Control the debug level as described in http://webonyx.github.io/graphql-php/error-handling/
     | Debugging is only applied if the global Laravel debug config is set to true.
     |
-    */
+     */
 
     'debug' => \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE | \GraphQL\Error\Debug::INCLUDE_TRACE,
 
@@ -152,7 +152,7 @@ return [
     | and handle them. You may use this to log, filter or format the errors.
     | The classes must implement \Nuwave\Lighthouse\Execution\ErrorHandler
     |
-    */
+     */
 
     'error_handlers' => [
         \Nuwave\Lighthouse\Execution\ExtensionErrorHandler::class,
@@ -166,7 +166,7 @@ return [
     | The name that is used for the global id field on the Node interface.
     | When creating a Relay compliant server, this must be named "id".
     |
-    */
+     */
 
     'global_id_field' => 'id',
 
@@ -178,7 +178,7 @@ return [
     | GraphQL query batching means sending multiple queries to the server in one request,
     | You may set this flag to either process or deny batched queries.
     |
-    */
+     */
 
     'batched_queries' => true,
 
@@ -190,7 +190,7 @@ return [
     | Sets default setting for transactional mutations.
     | You may set this flag to have @create|@update mutations transactional or not.
     |
-    */
+     */
 
     'transactional_mutations' => true,
 
@@ -202,7 +202,7 @@ return [
     | Here you can define GraphQL subscription "broadcasters" and "storage" drivers
     | as well their required configuration options.
     |
-    */
+     */
 
     'subscriptions' => [
         /*
@@ -231,7 +231,7 @@ return [
             ],
             'pusher' => [
                 'driver' => 'pusher',
-                'routes' => \Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class.'@pusher',
+                'routes' => \Nuwave\Lighthouse\Subscriptions\SubscriptionRouter::class . '@pusher',
                 'connection' => 'pusher',
             ],
         ],
