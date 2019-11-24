@@ -5,30 +5,15 @@ namespace App\Models;
 use Storage;
 use App\Helpers\MP3Pam;
 use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Artist extends BaseModel
 {
 	// use Searchable;
 
-	protected $fillable = [
-		'bio',
-		'name',
-		'hash',
-		'avatar',
-		'user_id',
-		'stageName',
-	];
+	protected $guarded = [];
 
-	protected $hidden = [
-		'id',
-		'hash',
-		'updated_at',
-		'created_at',
-	];
-
-	protected $appends = ['avatar_url', 'url', 'tracks_url'];
-
-	public function tracks()
+	public function tracks(): HasMany
 	{
 		return $this->hasMany(Track::class);
 	}
