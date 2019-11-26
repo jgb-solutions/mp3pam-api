@@ -46,7 +46,8 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
-	addTrack(input: TrackInput!): Track @field(resolver: "CreateTrackMutation")
+	addTrack(input: TrackInput!): Track! @field(resolver: "CreateTrackMutation")
+	addGenre(input: GenreInput!): Genre! @field(resolver: "CreateGenreMutation")
 	addArtist(input: ArtistInput!): Artist!
 		@field(resolver: "CreateArtistMutation")
 }
@@ -81,6 +82,10 @@ input TrackInput {
 	audioFileSize: Int!
 	artistId: Int!
 	genreId: Int!
+}
+
+input GenreInput {
+	name: String!
 }
 
 input ArtistInput {
@@ -134,9 +139,9 @@ type User {
 	avatar: String
 	active: Boolean!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
-	artists: [Artist!]!
+	artists: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
+	artists_by_stage_name_asc: [Artist!]!
 		@hasMany(type: "paginator", defaultCount: 20)
-		@orderBy(field: "created_at", order: ASC)
 	telephone: String
 	created_at: DateTime!
 	updated_at: DateTime!

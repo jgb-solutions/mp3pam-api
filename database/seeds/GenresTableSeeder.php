@@ -11,18 +11,19 @@ class GenresTableSeeder extends Seeder
 		DB::table('genres')->delete();
 
 		$genres = [
-			'Konpa',
-			'Rasin',
+			'Compas (Konpa)',
+			'Roots (Rasin)',
 			'Reggae',
 			'Yanvalou',
 			'R&B',
+			'Rap',
 			'Rap Kreyòl',
 			'Dancehall',
-			'Lòt Jan',
-			'Kanaval',
+			'Other',
+			'Carnival',
 			'Gospel',
-			'Levanjil',
 			'DJ',
+			'Mixtape',
 			'Rabòday',
 			'Rara',
 			'Reggaeton',
@@ -36,7 +37,7 @@ class GenresTableSeeder extends Seeder
 			'Techno',
 			'Slow',
 			'Salsa',
-			'Twoubadou',
+			'Troubadour',
 			'Riddim',
 			'Afro',
 			'Slam'
