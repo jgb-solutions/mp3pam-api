@@ -6,6 +6,7 @@ use Storage;
 use App\Helpers\MP3Pam;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongTo;
 
 class Artist extends BaseModel
 {
@@ -26,6 +27,11 @@ class Artist extends BaseModel
 	public function scopebyName($query)
 	{
 		$query->orderBy('name');
+	}
+
+	public function user(): BelongTo
+	{
+		return $this->belongsTo(User::class);
 	}
 
 	public function scopeSearch($query, $term)

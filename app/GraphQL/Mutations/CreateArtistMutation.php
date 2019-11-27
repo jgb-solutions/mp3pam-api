@@ -21,15 +21,24 @@ class CreateArtistMutation
     {
         extract($args['input']);
 
-        $artistData = [
+        $artist = auth()->user()->artists()->firstOrNew([
             'name' => $name,
             'stage_name' => $stage_name,
-            'poster' => $poster ?? null,
-            'bio' => $bio ?? null,
-            'hash' => MP3Pam::getHash(Artist::class),
-        ];
+        ]);
 
-        $artist = auth()->user()->artists()->create($artistData);
+        if (isset($poster)) {
+            $artist->poster = $poster;
+        }
+
+        if (isset($bio)) {
+            $artist->bio = $bio;
+        }
+
+        if (!$artist->hash) {
+            $artist->hash = MP3Pam::getHash(Artist::class);
+        }
+
+        $artist->save();
 
         return $artist;
     }
