@@ -19,11 +19,13 @@ extend type Query {
 	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
 
 	# Tracks
-	tracks(page: Int = 1): [Track!]! @paginate(defaultCount: 20)
+	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
+		@paginate(defaultCount: 20)
 	track(hash: Int! @eq): Track @find
 
 	# Users
-	users(page: Int = 1): [User!]! @paginate(defaultCount: 20)
+	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
+		@paginate(defaultCount: 20)
 	user(id: ID! @eq): User @find
 
 	# Genres
@@ -34,8 +36,13 @@ extend type Query {
 	genre(slug: String! @eq): Genre @find
 
 	# Artists
-	artists(page: Int = 1): [Artist!]! @paginate(defaultCount: 20)
+	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
+		@paginate(defaultCount: 20)
 	artist(hash: ID @eq): Artist @find
+
+	albumss(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
+		@paginate(defaultCount: 20)
+	albums(hash: ID @eq): Album @find
 
 	# Facebook Login URL
 	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
@@ -50,6 +57,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	addGenre(input: GenreInput!): Genre! @field(resolver: "CreateGenreMutation")
 	addArtist(input: ArtistInput!): Artist!
 		@field(resolver: "CreateArtistMutation")
+	addAlbum(input: AlbumInput!): Album! @field(resolver: "CreateAlbumMutation")
 }
 
 extend type Mutation {
@@ -69,7 +77,6 @@ type LogOutSuccess {
 
 type UploadUrl {
 	signedUrl: String!
-	fileUrl: String!
 	filename: String!
 }
 
@@ -82,6 +89,9 @@ input TrackInput {
 	audioFileSize: Int!
 	artistId: Int!
 	genreId: Int!
+	number: Int
+	img_bucket: String!
+	audio_bucket: String!
 }
 
 input GenreInput {
@@ -91,8 +101,22 @@ input GenreInput {
 input ArtistInput {
 	name: String!
 	stage_name: String!
-	poster: String
+	poster: String!
+	img_bucket: String!
 	bio: String
+	facebook: String
+	twitter: String
+	instagram: String
+	youtube: String
+}
+
+input AlbumInput {
+	title: String!
+	year: Int!
+	artist_id: Int!
+	poster: String!
+	detail: String
+	img_bucket: String!
 }
 
 input RegisterInput {
@@ -139,7 +163,8 @@ type User {
 	avatar: String
 	active: Boolean!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
-	artists: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
+	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	albums: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
 	artists_by_stage_name_asc: [Artist!]!
 		@hasMany(type: "paginator", defaultCount: 20)
 	telephone: String
@@ -152,8 +177,22 @@ type Artist {
 	name: String!
 	stage_name: String!
 	hash: Int!
-	poster: String!
+	poster_url: String!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	user: User! @belongsTo
+	created_at: DateTime!
+	updated_at: DateTime!
+}
+
+type Album {
+	id: ID!
+	title: String!
+	hash: Int!
+	poster_url: String!
+	detail: String!
+	user: User! @belongsTo
+	artist: Artist! @belongsTo
+	year: DateTime!
 	created_at: DateTime!
 	updated_at: DateTime!
 }
@@ -162,12 +201,15 @@ type Track {
 	id: ID!
 	title: String!
 	hash: Int!
-	audio_name: String!
-	post: String!
+	audio_url: String!
+	poster_url: String!
 	featured: Boolean!
 	detail: String!
 	lyrics: String!
 	genre: Genre! @belongsTo
+	artist: Artist! @belongsTo
+	user: User! @belongsTo
+	number: Int!
 	created_at: DateTime!
 	updated_at: DateTime!
 }

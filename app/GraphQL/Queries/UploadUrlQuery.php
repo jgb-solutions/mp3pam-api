@@ -7,23 +7,12 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class UploadUrlQuery
 {
-    /**
-     * Return a value for the field.
-     *
-     * @param  null  $rootValue Usually contains the result returned from the parent field. In this case, it is always `null`.
-     * @param  mixed[]  $args The arguments that were passed into the field.
-     * @param  \Nuwave\Lighthouse\Support\Contracts\GraphQLContext  $context Arbitrary data that is shared between all fields of a single query.
-     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo Information about the query itself, such as the execution state, the field name, path to the field from the root, and more.
-     * @return mixed
-     */
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         extract($args);
         $wasabi = \Storage::disk('wasabi');
-        $bucket = $bucket . '.mp3pam.com';
         $client = $wasabi->getDriver()->getAdapter()->getClient();
         $filePath = static::makeUploadFilePath($name);
-        $file_url = static::makeFileUrl($bucket, $filePath);
         $command = $client->getCommand('PutObject', [
             'Bucket' => $bucket,
             'Key' => static::makeUploadFilePath($name),
@@ -37,7 +26,6 @@ class UploadUrlQuery
 
         return [
             'signedUrl' => $signed_url,
-            'fileUrl' => $file_url,
             'filename' => $filePath,
         ];
     }
@@ -56,10 +44,5 @@ class UploadUrlQuery
     public static function makeUploadFilePath($name)
     {
         return static::makeUploadFolder() . '/' . static::makeUploadFileName($name);
-    }
-
-    public static function makeFileUrl($bucket, $filePath)
-    {
-        return "https://{$bucket}/{$filePath}";
     }
 }

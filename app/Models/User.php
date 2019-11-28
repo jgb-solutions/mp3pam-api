@@ -45,6 +45,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Artist::class);
     }
 
+    public function albums(): HasMany
+    {
+        return $this->hasMany(Album::class);
+    }
+
     public function artists_by_stage_name_asc(): HasMany
     {
         return $this->hasMany(Artist::class)->orderBy('stage_name');

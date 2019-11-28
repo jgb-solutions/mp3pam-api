@@ -22,6 +22,8 @@ $factory->define(Track::class, function (Faker\Generator $faker) {
         'user_id' => $admin->id,
         'artist_id' => Artist::inRandomOrder()->first()->id,
         'genre_id' => Genre::inRandomOrder()->first()->id,
+        'img_bucket' => 'img-storage-dev.mp3pam.com',
+        'audio_bucket' => 'audio-storage-dev.mp3pam.com'
     ];
 });
 
@@ -31,5 +33,6 @@ $factory->define(Artist::class, function (Faker\Generator $faker) {
         'stage_name' => $faker->name,
         'hash' => MP3Pam::getHash(Artist::class),
         'user_id' => User::first(),
+        'img_bucket' => 'img-storage-dev.mp3pam.com'
     ];
 });

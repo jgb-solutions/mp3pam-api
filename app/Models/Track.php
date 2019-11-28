@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HelperTrait;
 use App\Helpers\MP3Pam;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Storage;
 class Track extends BaseModel
 {
     // use Searchable;
+    use HelperTrait;
 
     protected $guarded = [];
 
@@ -26,6 +28,11 @@ class Track extends BaseModel
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);
+    }
+
+     public function album(): BelongsTo
+    {
+        return $this->belongsTo(Album::class);
     }
 
     public function scopeByHash($query, $hash)

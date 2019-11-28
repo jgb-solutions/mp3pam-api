@@ -19,8 +19,13 @@ class CreateArtistsTable extends Migration
             $table->string('stage_name');
             $table->integer('hash')->unsigned()->unique();
             $table->string('poster')->nullable();
+            $table->string('img_bucket');
             $table->integer('user_id')->unsigned();
             $table->text('bio')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('youtube')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
 

@@ -24,6 +24,7 @@ class CreateArtistMutation
         $artist = auth()->user()->artists()->firstOrNew([
             'name' => $name,
             'stage_name' => $stage_name,
+             'img_bucket' => $img_bucket,
         ]);
 
         if (isset($poster)) {
@@ -32,6 +33,20 @@ class CreateArtistMutation
 
         if (isset($bio)) {
             $artist->bio = $bio;
+        }
+
+        if (isset($facebook)) {
+            $artist->facebook = $facebook;
+        }
+
+        if (isset($twitter)) {
+            $artist->twitter = $twitter;
+        }
+        if (isset($instagram)) {
+            $artist->instagram = $instagram;
+        }
+        if (isset($youtube)) {
+            $artist->youtube = $youtube;
         }
 
         if (!$artist->hash) {

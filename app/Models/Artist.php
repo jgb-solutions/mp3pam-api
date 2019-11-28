@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Storage;
+use App\Traits\HelperTrait;
 use App\Helpers\MP3Pam;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Artist extends BaseModel
 {
 	// use Searchable;
+	use HelperTrait;
 
 	protected $guarded = [];
 
@@ -29,7 +31,7 @@ class Artist extends BaseModel
 		$query->orderBy('name');
 	}
 
-	public function user(): BelongTo
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}
@@ -48,11 +50,6 @@ class Artist extends BaseModel
 		if ($this->avatar) $avatarPath = Storage::url($this->avatar);
 
 		return MP3Pam::asset($avatarPath);
-	}
-
-	public function getUrlAttribute()
-	{
-		return MP3Pam::route('artists.show', ['hash' => $this->hash]);
 	}
 
 	public function scopeByHash($query, $hash)
