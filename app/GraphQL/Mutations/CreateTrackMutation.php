@@ -16,7 +16,7 @@ class CreateTrackMutation
         $trackData = [
             'title' => $title,
             'audio_name' => $audioName,
-            'gits' => $poster,
+            'poster' => $poster,
             'detail' => $detail,
             'lyrics' => $lyrics,
             'audio_file_size' => $audioFileSize,
