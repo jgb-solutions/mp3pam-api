@@ -1,57 +1,65 @@
 <?php
 
-namespace App\Traits;
+  namespace App\Traits;
 
-trait HelperTrait
-{
-	public function scopeRand($query)
-	{
-		$query->orderByRaw('RAND()');
-	}
+  use Carbon\Carbon;
 
-	public function scopeRelated($query, $obj, $nb_rows = 6)
-	{
-		$query
-			->whereCategoryId($obj->category_id)
-			->where('id', '!=', $obj->id)
-			->orderByRaw('RAND()') // get random rows from the DB
-			->take($nb_rows);
-	}
+  trait HelperTrait
+  {
+    public function scopeRand($query)
+    {
+      $query->orderByRaw('RAND()');
+    }
 
-	public function scopeLastMonth($query)
-	{
-		$today = Carbon::today();
-		$lastMonth = Carbon::today()->subMonth();
+    public function scopeRelated($query, $obj, $nb_rows = 6)
+    {
+      $query
+        ->whereCategoryId($obj->category_id)
+        ->where('id', '!=', $obj->id)
+        ->orderByRaw('RAND()')// get random rows from the DB
+        ->take($nb_rows);
+    }
 
-		$query
-			->where('created_at',  '<',  $today)
-			->where('created_at', '>', $lastMonth);
-	}
+    public function scopeLastMonth($query)
+    {
+      $today     = Carbon::today();
+      $lastMonth = Carbon::today()->subMonth();
 
-	public function scopePopular($query)
-	{
-		$query
-			->orderBy('download', 'desc')
-			->orderBy('views', 'desc');
-	}
+      $query
+        ->where('created_at', '<', $today)
+        ->where('created_at', '>', $lastMonth);
+    }
 
-	public function scopeFeatured($query)
-	{
-		$query->whereFeatured(1);
-	}
+    public function scopePopular($query)
+    {
+      $query
+        ->orderBy('download', 'desc')
+        ->orderBy('views', 'desc');
+    }
 
-	   public static function makeFileUrl($bucket, $filePath)
+
+    public function scopeFeatured($query)
+    {
+      $query->whereFeatured(1);
+    }
+
+    public static function makeFileUrl($bucket, $filePath)
     {
 
     }
 
-	public function getPosterUrlAttribute()
-	{
-		return "https://" . $this->img_bucket . '/' . $this->poster;
-	}
+    public function getPosterUrlAttribute()
+    {
+      return "https://" . $this->img_bucket . '/' . $this->poster;
+    }
 
-	public function getAudioUrlAttribute()
-	{
-		return "https://" . $this->audio_bucket . '/' . $this->poster;
-	}
-}
+    public function getCoverUrlAttribute()
+    {
+      return "https://" . $this->img_bucket . '/' . $this->cover;
+    }
+
+    public function getAudioUrlAttribute()
+    {
+      return "https://" . $this->audio_bucket . '/' . $this->poster;
+    }
+  }

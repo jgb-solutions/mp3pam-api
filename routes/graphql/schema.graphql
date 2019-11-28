@@ -1,6 +1,5 @@
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
-scalar DateTime
-	@scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
@@ -51,13 +50,23 @@ extend type Query {
 type Mutation @middleware(checks: ["auth:api"]) {
 	# Auth
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
+
+	# Users
 	updateUser(id: ID!, name: String): User @update
 	deleteUser(id: ID!): User @delete
+
+	# Tracks
 	addTrack(input: TrackInput!): Track! @field(resolver: "CreateTrackMutation")
+
+	# Genres
 	addGenre(input: GenreInput!): Genre! @field(resolver: "CreateGenreMutation")
+
+	#Artists
 	addArtist(input: ArtistInput!): Artist!
 		@field(resolver: "CreateArtistMutation")
-	addAlbum(input: AlbumInput!): Album! @field(resolver: "CreateAlbumMutation")
+
+	# Albums
+	createAlbum(input: AlbumInput!): Album! @field(resolver: "CreateAlbumMutation")
 }
 
 extend type Mutation {
@@ -101,7 +110,7 @@ input GenreInput {
 input ArtistInput {
 	name: String!
 	stage_name: String!
-	poster: String!
+	poster: String
 	img_bucket: String!
 	bio: String
 	facebook: String
@@ -112,9 +121,9 @@ input ArtistInput {
 
 input AlbumInput {
 	title: String!
-	year: Int!
+	release_year: Int!
 	artist_id: Int!
-	poster: String!
+	cover: String!
 	detail: String
 	img_bucket: String!
 }
@@ -162,11 +171,10 @@ type User {
 	email: String
 	avatar: String
 	active: Boolean!
-	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	artists: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	albums: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
-	artists_by_stage_name_asc: [Artist!]!
-		@hasMany(type: "paginator", defaultCount: 20)
+	artists_by_stage_name_asc: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
 	telephone: String
 	created_at: DateTime!
 	updated_at: DateTime!
@@ -188,11 +196,11 @@ type Album {
 	id: ID!
 	title: String!
 	hash: Int!
-	poster_url: String!
+	cover_url: String!
 	detail: String!
 	user: User! @belongsTo
 	artist: Artist! @belongsTo
-	year: DateTime!
+	release_year: DateTime!
 	created_at: DateTime!
 	updated_at: DateTime!
 }
