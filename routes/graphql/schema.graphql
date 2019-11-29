@@ -188,6 +188,10 @@ type Artist {
 	poster_url: String!
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	user: User! @belongsTo
+	facebook_url: String
+	twitter_url: String
+	instagram_url: String
+	youtube_url: String
 	created_at: DateTime!
 	updated_at: DateTime!
 }

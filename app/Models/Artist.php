@@ -1,77 +1,110 @@
 <?php
 
-namespace App\Models;
+  namespace App\Models;
 
-use Storage;
-use App\Traits\HelperTrait;
-use App\Helpers\MP3Pam;
-use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+  use Storage;
+  use App\Traits\HelperTrait;
+  use App\Helpers\MP3Pam;
+  use Laravel\Scout\Searchable;
+  use Illuminate\Database\Eloquent\Relations\HasMany;
+  use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Artist extends BaseModel
-{
-	// use Searchable;
-	use HelperTrait;
+  class Artist extends BaseModel
+  {
+    // use Searchable;
+    use HelperTrait;
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	public function tracks(): HasMany
-	{
-		return $this->hasMany(Track::class);
-	}
+    public function tracks(): HasMany
+    {
+      return $this->hasMany(Track::class);
+    }
 
-	public function getCountAttribute()
-	{
-		return $this->tracks()->count();
-	}
+    public function getCountAttribute()
+    {
+      return $this->tracks()->count();
+    }
 
-	public function scopebyName($query)
-	{
-		$query->orderBy('name');
-	}
+    public function scopebyName($query)
+    {
+      $query->orderBy('name');
+    }
 
-	public function user(): BelongsTo
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function user(): BelongsTo
+    {
+      return $this->belongsTo(User::class);
+    }
 
-	public function scopeSearch($query, $term)
-	{
-		// $query->whereIn('id', $ids)
-		$query->where('name', 'like', "%$term%")
-			->orWhere('stageName', 'like', "%$term%")
-			->orWhere('bio', 'like', "%$term%");
-	}
+    public function scopeSearch($query, $term)
+    {
+      // $query->whereIn('id', $ids)
+      $query->where('name', 'like', "%$term%")
+        ->orWhere('stageName', 'like', "%$term%")
+        ->orWhere('bio', 'like', "%$term%");
+    }
 
-	public function getAvatarUrlAttribute()
-	{
-		$avatarPath = config('site.defaultThumbnail');
-		if ($this->avatar) $avatarPath = Storage::url($this->avatar);
+    public function getAvatarUrlAttribute()
+    {
+      $avatarPath = config('site.defaultThumbnail');
+      if ($this->avatar) $avatarPath = Storage::url($this->avatar);
 
-		return MP3Pam::asset($avatarPath);
-	}
+      return MP3Pam::asset($avatarPath);
+    }
 
-	public function scopeByHash($query, $hash)
-	{
-		$query->where('hash', $hash);
-	}
+    public function scopeByHash($query, $hash)
+    {
+      $query->where('hash', $hash);
+    }
 
-	public function getTracksUrlAttribute()
-	{
-		return MP3Pam::route('artists.tracks', ['hash' => $this->hash]);
-	}
+    public function getFacebookUrlAttribute()
+    {
+      return $this->getSocialNetworkUrl("facebook");
+    }
 
-	// Algolia
-	public function toSearchableArray()
-	{
-		return [
-			'name'		=> $this->name,
-         'stageName'	=> $this->stage_name,
-         'hash'		=> $this->hash,
-         'avatar'		=> $this->avatar_url,
-         'tracks'		=> $this->tracks_url,
-         'bio'			=> $this->bio
-		];
-	}
-}
+
+    public function getTwitterUrlAttribute()
+    {
+      return $this->getSocialNetworkUrl("twitter");
+    }
+
+
+    public function getInstagramUrlAttribute()
+    {
+      return $this->getSocialNetworkUrl("instagram");
+    }
+
+    public function getYouTubeUrlAttribute()
+    {
+      return $this->getSocialNetworkUrl("youtube");
+    }
+
+    private function getSocialNetworkUrl($social_network)
+    {
+      switch ($social_network) {
+        case "facebook":
+          return $this->makeSocialNetworkUrl("https://www.facebook.com/", $this->facebook);
+          break;
+        case "twitter":
+          return $this->makeSocialNetworkUrl("https://www.twitter.com/", $this->twitter);
+          break;
+        case "instagram":
+          return $this->makeSocialNetworkUrl("https://www.instagram.com/", $this->instagram);
+          break;
+        case "youtube":
+          return $this->makeSocialNetworkUrl("https://www.youtube.com/", $this->youtube);
+          break;
+      }
+    }
+
+    private function makeSocialNetworkUrl($link, $username)
+    {
+      if ($username) {
+        return filter_var($username, FILTER_VALIDATE_URL) ?
+          $username :
+          $link . $username;
+      } else {
+        return null;
+      }
+    }
+  }
