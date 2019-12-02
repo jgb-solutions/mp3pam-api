@@ -49,9 +49,9 @@
     }
 
     public function getPosterUrlAttribute()
-    {
-      return "https://" . $this->img_bucket . '/' . $this->poster;
-    }
+  {
+    return "https://" . $this->img_bucket . '/' . $this->poster;
+  }
 
     public function getCoverUrlAttribute()
     {
