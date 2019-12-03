@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Helpers\MP3Pam;
 use App\Traits\HelperTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

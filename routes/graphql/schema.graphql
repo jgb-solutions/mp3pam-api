@@ -20,7 +20,7 @@ extend type Query {
 	# Tracks
 	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
 		@paginate(defaultCount: 20)
-	track(hash: Int! @eq): Track @find
+	track(hash: String! @eq): Track @find
 
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
@@ -39,7 +39,7 @@ extend type Query {
 		@paginate(defaultCount: 20)
 	artist(hash: ID @eq): Artist @find
 
-	albumss(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
+	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
 		@paginate(defaultCount: 20)
 	albums(hash: ID @eq): Album @find
 
@@ -216,8 +216,8 @@ type Track {
 	audio_url: String!
 	poster_url: String!
 	featured: Boolean!
-	detail: String!
-	lyrics: String!
+	detail: String
+	lyrics: String
 	genre: Genre! @belongsTo
 	artist: Artist! @belongsTo
 	user: User! @belongsTo

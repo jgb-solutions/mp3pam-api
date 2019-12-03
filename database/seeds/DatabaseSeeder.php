@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             $this->call(ArtistsTableSeeder::class);
             $this->command->info('Artists table seeded!');
 
+            $this->call(AlbumsTableSeeder::class);
+            $this->command->info('Albums table seeded!');
+
             $this->call(TracksTableSeeder::class);
             $this->command->info('Tracks table seeded!');
         }

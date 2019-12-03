@@ -49,6 +49,11 @@ type ArtistPaginator {
     paginatorInfo: PaginatorInfo!
 }
 
+type AlbumPaginator {
+    data: [Album!]!
+    paginatorInfo: PaginatorInfo!
+}
+
 type Genre {
     created_at: DateTime!
     id: ID!
@@ -128,8 +133,8 @@ type PaginatorInfo {
 }
 
 type Query {
-    albums(hash: ID): Album
-    albumss(
+    album(hash: ID): Album
+    albums(
         orderBy: [OrderByClause!],
         #The offset from which elements are returned.
         page: Int,

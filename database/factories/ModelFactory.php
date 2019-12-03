@@ -5,6 +5,7 @@
   use App\Models\Genre;
   use App\Models\Track;
   use App\Models\User;
+  use App\Models\Album;
 
 
   /** @var \Illuminate\Database\Eloquent\Factory $factory */
@@ -12,7 +13,7 @@
     $admin   = User::admin()->first();
     $name    = $faker->name;
 
-    $tracks = [
+    $posters = [
       "cover256x256-558f05a20d704c239b77f8d806886464.jpg",
       "cover256x256-4de6dd257b8347e7bebe00b3b4630b71.jpg",
       "cover256x256-bd6bca6cfcae4825ab8e40ff2ea89596.jpg",
@@ -41,7 +42,7 @@
       'lyrics' => $faker->realText(1000),
       'audio_file_size' => rand(10000, 99999),
       'audio_name' => '',
-      'poster' => "tracks/" . $tracks[array_rand($tracks)],
+      'poster' => "tracks/" . $posters[array_rand($posters)],
       'user_id' => $admin->id,
       'artist_id' => Artist::inRandomOrder()->first()->id,
       'genre_id' => Genre::inRandomOrder()->first()->id,
@@ -51,7 +52,7 @@
   });
 
   $factory->define(Artist::class, function (Faker\Generator $faker) {
-    $artists = [
+    $posters = [
       "p06b4ktw.jpg", "_2Xp8Hde_400x400.png", "p01bqgmc.jpg",
       "p05kdhc3.jpg", "256x256.jpg", "GettyImages-521943452-e1527600573393-256x256.jpg",
       "oU7C04AF_400x400.jpg", "SM9t8paa_400x400.jpg", "p01br7j4.jpg",
@@ -65,9 +66,35 @@
     return [
       'name' => $faker->name,
       'stage_name' => $faker->name,
-      'poster' => "artists/" . $artists[array_rand($artists)],
+      'poster' => "artists/" . $posters[array_rand($posters)],
       'hash' => MP3Pam::getHash(Artist::class),
       'user_id' => User::first(),
       'img_bucket' => 'img-storage-dev.mp3pam.com',
+    ];
+  });
+
+  $factory->define(Album::class, function (Faker\Generator $faker) {
+    $covers = [
+      "images.jpeg", "180408-stereo-williams-cardi-b-hero_es4khm.jpeg",
+      "kendrick-lamar-damn.-album-artwork.jpg",
+      "2109c873c3f33ea6dfe2ca6842881c3a.jpg",
+      "everybody-s-something.jpg", "e6eddf74f552b58f044564937c4d03f7.jpg",
+      "p01jq74x.jpg", "Birdman_and_Lil_Wayne_Leather_So_Soft.jpg",
+      "51+Cgm4HBUL._AA256_.jpg", "d03ffbb2-4558-4ffe-846f-62d58ab2d3a2.jpg",
+      "YT-Drumma-Boy-256x256.jpg", "mkrmvba8-7903915.jpg",
+      "2pac_instrumentals-rap-revolution_2.jpg", "UserAvatar.jpg",
+      "itchHR-1-256x256.jpg", "41j0zn-UXnL._AA256_.jpg",
+      "3d6c58c6-4572-4c72-a6e6-63b0f5d0b446.jpg", "p02lppdp.jpg"
+    ];
+
+    return [
+      'title' => $faker->name,
+      'detail' => $faker->realText(200),
+      'cover' => "albums/" . $covers[array_rand($covers)],
+      'hash' => MP3Pam::getHash(Album::class),
+      'user_id' => User::first(),
+      'artist_id' => Artist::inRandomOrder()->first()->id,
+      'img_bucket' => 'img-storage-dev.mp3pam.com',
+      'release_year' => rand(1950, 2019)
     ];
   });

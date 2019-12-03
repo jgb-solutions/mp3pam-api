@@ -235,7 +235,7 @@ class MP3Pam
         // }
 
         do {
-            $hash = rand(00000000, 99999999);
+            $hash = rand(000000, 999999);
         } while ($model::whereHash($hash)->first());
 
         return $hash;
