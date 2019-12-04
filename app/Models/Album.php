@@ -10,6 +10,8 @@ class Album extends BaseModel
 {
   use HelperTrait;
 
+  private $default_poster_url = "https://img-storage-prod.mp3pam.com/placeholders/album-placeholder.jpg";
+
   protected $guarded = [];
 
   public function peopleWhoFavoured()

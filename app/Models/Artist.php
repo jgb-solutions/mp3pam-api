@@ -11,8 +11,9 @@
 
   class Artist extends BaseModel
   {
-    // use Searchable;
     use HelperTrait;
+
+    private $default_poster_url = "https://img-storage-prod.mp3pam.com/placeholders/artist-placeholder.jpg";
 
     protected $guarded = [];
 

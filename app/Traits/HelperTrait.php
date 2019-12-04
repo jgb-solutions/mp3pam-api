@@ -50,12 +50,20 @@
 
     public function getPosterUrlAttribute()
   {
-    return "https://" . $this->img_bucket . '/' . $this->poster;
+    if ($this->poster) {
+      return "https://" . $this->img_bucket . '/' . $this->poster;
+    } else {
+      return $this->default_poster_url;
+    }
   }
 
     public function getCoverUrlAttribute()
     {
-      return "https://" . $this->img_bucket . '/' . $this->cover;
+      if ($this->cover) {
+        return "https://" . $this->img_bucket . '/' . $this->cover;
+      } else {
+        return $this->default_poster_url;
+      }
     }
 
     public function getAudioUrlAttribute()
