@@ -33,4 +33,9 @@ class Album extends BaseModel
   {
     return $this->hasMany(Track::class);
   }
+
+  public function setDetailAttribute($detail)
+  {
+    $this->attributes['detail'] = nl2br($detail);
+  }
 }

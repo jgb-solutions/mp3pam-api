@@ -22,6 +22,11 @@
       return $this->hasMany(Track::class);
     }
 
+    public function setBioAttribute($bio)
+    {
+      $this->attributes['bio'] = nl2br($bio);
+    }
+
     public function getCountAttribute()
     {
       return $this->tracks()->count();

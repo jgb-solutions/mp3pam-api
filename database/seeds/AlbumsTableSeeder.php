@@ -9,6 +9,6 @@ class AlbumsTableSeeder extends Seeder
 	{
 		Album::truncate();
 
-		factory(Album::class, 18)->create();
+		factory(Album::class, 50)->create();
 	}
 }

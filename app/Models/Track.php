@@ -36,6 +36,17 @@
       return $this->belongsTo(Album::class);
     }
 
+    public function setDetailAttribute($detail)
+    {
+      $this->attributes['detail'] = nl2br($detail);
+    }
+
+    public function setLyricsAttribute($lyrics)
+    {
+      $this->attributes['lyrics'] = nl2br($lyrics);
+    }
+
+
     public function scopeByHash($query, $hash)
     {
       return $query->where('hash', $hash);

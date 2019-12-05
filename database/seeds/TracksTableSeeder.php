@@ -10,6 +10,6 @@ class TracksTableSeeder extends Seeder
 	{
 		Track::truncate();
 
-		factory(Track::class, 50)->create();
+		factory(Track::class, 200)->create();
 	}
 }
