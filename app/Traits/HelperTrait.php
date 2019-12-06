@@ -68,6 +68,6 @@
 
     public function getAudioUrlAttribute()
     {
-      return "https://" . $this->audio_bucket . '/' . $this->poster;
+      return "https://" . $this->audio_bucket . '/' . $this->audio_name;
     }
   }

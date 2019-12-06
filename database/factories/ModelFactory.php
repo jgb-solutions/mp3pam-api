@@ -35,19 +35,29 @@
       "Pu5fUTwO_400x400.jpg", "image.jpg"
     ];
 
+    $audios = [
+      "1565202793.mp3",
+      "1565203033.mp3",
+      "1565203084.mp3",
+      "1565211592.mp3",
+      "Daville_-_Mirrors_(mp3.pm).mp3",
+      "Gym Class Heroes ft. Adam Levine - Stereo Hearts.mp3",
+      "Jason Derulo - It Girl.mp3",
+    ];
+
     return [
       'title' => $name,
       'hash' => MP3Pam::getHash(Track::class),
       'detail' => $faker->realText(200),
       'lyrics' => $faker->realText(1000),
       'audio_file_size' => rand(10000, 99999),
-      'audio_name' => '',
+      'audio_name' => $audios[array_rand($audios)],
       'poster' => "tracks/" . $posters[array_rand($posters)],
       'user_id' => $admin->id,
       'artist_id' => Artist::inRandomOrder()->first()->id,
       'genre_id' => Genre::inRandomOrder()->first()->id,
       'img_bucket' => 'img-storage-dev.mp3pam.com',
-      'audio_bucket' => 'audio-storage-dev.mp3pam.com',
+      'audio_bucket' => 'audios.mp3pam.com',
     ];
   });
 
