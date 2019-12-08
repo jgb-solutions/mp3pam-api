@@ -1,5 +1,6 @@
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
-scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+scalar DateTime
+	@scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
@@ -20,6 +21,9 @@ extend type Query {
 	# Tracks
 	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
 		@paginate(defaultCount: 20)
+
+	relatedTracks(input: RelatedTracksInput!): [Track!]  @field(resolver: "RelatedTracksQuery")
+
 	track(hash: String! @eq): Track @find
 
 	# Users
@@ -66,7 +70,8 @@ type Mutation @middleware(checks: ["auth:api"]) {
 		@field(resolver: "CreateArtistMutation")
 
 	# Albums
-	createAlbum(input: AlbumInput!): Album! @field(resolver: "CreateAlbumMutation")
+	createAlbum(input: AlbumInput!): Album!
+		@field(resolver: "CreateAlbumMutation")
 }
 
 extend type Mutation {
@@ -160,6 +165,11 @@ input OrderByClause {
 	order: SortOrder!
 }
 
+input RelatedTracksInput {
+    hash: String!
+    take: String!
+}
+
 enum SortOrder {
 	ASC
 	DESC
@@ -174,7 +184,8 @@ type User {
 	artists: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	albums: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
-	artists_by_stage_name_asc: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
+	artists_by_stage_name_asc: [Artist!]!
+		@hasMany(type: "paginator", defaultCount: 20)
 	telephone: String
 	created_at: DateTime!
 	updated_at: DateTime!
@@ -218,6 +229,7 @@ type Track {
 	featured: Boolean!
 	detail: String
 	lyrics: String
+	@with(relation: "genre")
 	genre: Genre! @belongsTo
 	artist: Artist! @belongsTo
 	user: User! @belongsTo
