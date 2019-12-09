@@ -16,6 +16,10 @@
 
     protected $guarded = [];
 
+    protected $casts = [
+      'allowDownload' => 'boolean',
+    ];
+
     public function peopleWhoFavoured()
     {
       return $this->belongsToMany(User::class, 'liked_tracks')->withTimestamps();

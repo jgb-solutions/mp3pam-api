@@ -58,6 +58,7 @@
       'genre_id' => Genre::inRandomOrder()->first()->id,
       'img_bucket' => 'img-storage-dev.mp3pam.com',
       'audio_bucket' => 'audios.mp3pam.com',
+      'allowDownload' => true,
     ];
   });
 

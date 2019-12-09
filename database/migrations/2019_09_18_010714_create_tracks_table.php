@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+  use Illuminate\Database\Migrations\Migration;
+  use Illuminate\Database\Schema\Blueprint;
+  use Illuminate\Support\Facades\Schema;
 
-class CreateTracksTable extends Migration
-{
+  class CreateTracksTable extends Migration
+  {
     /**
      * Run the migrations.
      *
@@ -13,28 +13,29 @@ class CreateTracksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tracks', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title')->index();
-            $table->integer('hash')->unsigned()->unique();
-            $table->string('audio_name');
-            $table->string('poster');
-            $table->string('img_bucket');
-            $table->string('audio_bucket');
-            $table->boolean('featured')->default(false);
-            $table->text('detail')->nullable();
-            $table->text('lyrics')->nullable();
-            $table->string('audio_file_size', 10);
-            $table->integer('user_id')->unsigned();
-            $table->integer('artist_id')->unsigned();
-            $table->integer('album_id')->unsigned()->nullable();
-            $table->integer('genre_id')->unsigned();
-            $table->integer('number')->nullable();
-            $table->integer('play_count')->unsigned()->default(0);
-            $table->integer('download_count')->unsigned()->default(0);
-            $table->boolean('publish')->default(true);
-            $table->timestamps();
-        });
+      Schema::create('tracks', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('title')->index();
+        $table->integer('hash')->unsigned()->unique();
+        $table->string('audio_name');
+        $table->string('poster');
+        $table->string('img_bucket');
+        $table->string('audio_bucket');
+        $table->boolean('featured')->default(false);
+        $table->text('detail')->nullable();
+        $table->text('lyrics')->nullable();
+        $table->string('audio_file_size', 10);
+        $table->integer('user_id')->unsigned();
+        $table->integer('artist_id')->unsigned();
+        $table->integer('album_id')->unsigned()->nullable();
+        $table->integer('genre_id')->unsigned();
+        $table->integer('number')->nullable();
+        $table->integer('play_count')->unsigned()->default(0);
+        $table->integer('download_count')->unsigned()->default(0);
+        $table->boolean('publish')->default(true);
+        $table->boolean('allowDownload')->default(false);
+        $table->timestamps();
+      });
     }
 
     /**
@@ -44,6 +45,6 @@ class CreateTracksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tracks');
+      Schema::dropIfExists('tracks');
     }
-}
+  }

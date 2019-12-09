@@ -106,6 +106,7 @@ input TrackInput {
 	number: Int
 	img_bucket: String!
 	audio_bucket: String!
+	allowDownload: Boolean
 }
 
 input GenreInput {
@@ -229,11 +230,11 @@ type Track {
 	featured: Boolean!
 	detail: String
 	lyrics: String
-	@with(relation: "genre")
 	genre: Genre! @belongsTo
 	artist: Artist! @belongsTo
 	user: User! @belongsTo
 	number: Int!
+	allowDownload: Boolean!
 	created_at: DateTime!
 	updated_at: DateTime!
 }
