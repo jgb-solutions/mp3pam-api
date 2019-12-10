@@ -49,6 +49,7 @@ extend type Query {
 
 	# Facebook Login URL
 	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
+	download(input: DownloadInput! @spread): Download! @field(resolver: "DownloadQuery")
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
@@ -77,8 +78,9 @@ type Mutation @middleware(checks: ["auth:api"]) {
 extend type Mutation {
 	# Auth
 	register(input: RegisterInput! @spread): User! @create
-	handleFacebookConnect(code: String! @spread): facebookLoginPayload!
+	handleFacebookConnect(code: String!): facebookLoginPayload!
 		@field(resolver: "HandleFacebookConnectMutation")
+	updateDownloadCount(input: DownloadInput @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
 }
 
 type facebookLoginUrl {
@@ -169,6 +171,15 @@ input OrderByClause {
 input RelatedTracksInput {
     hash: String!
     take: String!
+}
+
+input DownloadInput {
+	hash: String!
+	type: String!
+}
+
+type Download {
+	url: String!
 }
 
 enum SortOrder {
