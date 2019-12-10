@@ -9,7 +9,7 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 type Query @middleware(checks: ["auth:api"]) {
 	me: User! @auth
 	# Upload URL
-	uploadUrl(name: String!, bucket: String! @spread): UploadUrl!
+	uploadUrl(input: UploadUrlInput! @spread): UploadUrl!
 		@field(resolver: "UploadUrlQuery")
 }
 
@@ -182,6 +182,13 @@ type Download {
 	url: String!
 }
 
+input UploadUrlInput {
+	name: String!
+	bucket: String!
+	public: Boolean
+	attachment: Boolean
+}
+
 enum SortOrder {
 	ASC
 	DESC
@@ -246,6 +253,9 @@ type Track {
 	user: User! @belongsTo
 	number: Int!
 	allowDownload: Boolean!
+	play_count: Int!
+	audio_file_size: String!
+	download_count: Int!
 	created_at: DateTime!
 	updated_at: DateTime!
 }

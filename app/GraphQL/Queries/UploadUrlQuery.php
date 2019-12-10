@@ -13,14 +13,23 @@ class UploadUrlQuery
         $wasabi = \Storage::disk('wasabi');
         $client = $wasabi->getDriver()->getAdapter()->getClient();
         $filePath = static::makeUploadFilePath($name);
-        $command = $client->getCommand('PutObject', [
-            'Bucket' => $bucket,
-            'Key' => static::makeUploadFilePath($name),
-            // 'ResponseContentDisposition' => 'attachment; filename=' . request('filename'),
-            'ACL' => 'public-read',
-        ]);
 
-        $request = $client->createPresignedRequest($command, "+30 minutes");
+        $options = [
+          'Bucket' => $bucket,
+          'Key' => static::makeUploadFilePath($name)
+        ];
+
+        if (isset($public)) {
+          $options['ACL'] = 'public-read';
+        }
+
+        if (isset($attachment)) {
+          $options['ResponseContentDisposition'] =  'attachment; filename=' . $name;
+        }
+
+        $command = $client->getCommand('PutObject', $options);
+
+        $request = $client->createPresignedRequest($command, "+10 minutes");
 
         $signed_url = (string) $request->getUri();
 

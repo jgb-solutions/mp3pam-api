@@ -2,6 +2,7 @@
 
   namespace App\Traits;
 
+  use App\Helpers\MP3Pam;
   use Carbon\Carbon;
 
   trait HelperTrait
@@ -68,6 +69,25 @@
 
     public function getAudioUrlAttribute()
     {
-      return "https://" . $this->audio_bucket . '/' . $this->audio_name;
+      // return "https://" . $this->audio_bucket . '/' . $this->audio_name; if public
+      $wasabi   = \Storage::disk('wasabi');
+
+      $client   = $wasabi->getDriver()->getAdapter()->getClient();
+
+      $command  = $client->getCommand('GetObject', [
+        'Bucket' => $this->audio_bucket,
+        'Key' => $this->audio_name,
+      ]);
+
+      $request = $client->createPresignedRequest($command, "+10 minutes");
+
+      $url = (string) $request->getUri();
+
+      return $url;
+    }
+
+    public function getAudioFileSizeAttribute($size)
+    {
+      return MP3Pam::size($size);
     }
   }
