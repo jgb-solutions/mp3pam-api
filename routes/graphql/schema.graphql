@@ -250,6 +250,7 @@ type Track {
 	lyrics: String
 	genre: Genre! @belongsTo
 	artist: Artist! @belongsTo
+	album: Album @belongsTo
 	user: User! @belongsTo
 	number: Int!
 	allowDownload: Boolean!
