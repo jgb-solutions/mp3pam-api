@@ -50,6 +50,7 @@ extend type Query {
 	# Facebook Login URL
 	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
 	download(input: DownloadInput! @spread): Download! @field(resolver: "DownloadQuery")
+	search(query: String!): SearchResults! @field(resolver: "SearchQuery")
 }
 
 type Mutation @middleware(checks: ["auth:api"]) {
@@ -94,6 +95,12 @@ type LogOutSuccess {
 type UploadUrl {
 	signedUrl: String!
 	filename: String!
+}
+
+type SearchResults {
+	tracks: [Track!]!
+	artists: [Artist!]!
+	albums: [Album!]!
 }
 
 input TrackInput {

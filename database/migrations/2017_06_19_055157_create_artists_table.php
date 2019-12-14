@@ -21,7 +21,7 @@ class CreateArtistsTable extends Migration
             $table->string('poster')->nullable();
             $table->string('img_bucket');
             $table->integer('user_id')->unsigned();
-            $table->text('bio')->nullable();
+            $table->text('bio', 5000)->nullable();
             $table->string('facebook')->nullable();
             $table->string('twitter')->nullable();
             $table->string('instagram')->nullable();

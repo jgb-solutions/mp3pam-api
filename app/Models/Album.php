@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use App\Traits\HelperTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Album extends BaseModel
 {
+  use Searchable;
   use HelperTrait;
 
   private $default_poster_url = "https://img-storage-prod.mp3pam.com/placeholders/album-placeholder.jpg";
@@ -37,5 +39,12 @@ class Album extends BaseModel
   public function setDetailAttribute($detail)
   {
     $this->attributes['detail'] = nl2br($detail);
+  }
+
+  public function toSearchableArray()
+  {
+    extract($this->toArray());
+
+    return compact('id', 'title', 'detail');
   }
 }

@@ -12,6 +12,7 @@
   $factory->define(Track::class, function (Faker\Generator $faker) {
     $admin   = User::admin()->first();
     $name    = $faker->name;
+    extract(MP3Pam::getRandomTimestamps());
 
     $posters = [
       "cover256x256-558f05a20d704c239b77f8d806886464.jpg",
@@ -62,10 +63,14 @@
       'img_bucket' => 'img-storage-dev.mp3pam.com',
       'audio_bucket' => 'audio-storage-dev.mp3pam.com',
       'allowDownload' => true,
+      'created_at' => $created_at,
+      'updated_at' => $updated_at,
     ];
   });
 
   $factory->define(Artist::class, function (Faker\Generator $faker) {
+    extract(MP3Pam::getRandomTimestamps());
+
     $posters = [
       "p06b4ktw.jpg", "_2Xp8Hde_400x400.png", "p01bqgmc.jpg",
       "p05kdhc3.jpg", "256x256.jpg", "GettyImages-521943452-e1527600573393-256x256.jpg",
@@ -84,10 +89,14 @@
       'hash' => MP3Pam::getHash(Artist::class),
       'user_id' => User::first(),
       'img_bucket' => 'img-storage-dev.mp3pam.com',
+      'created_at' => $created_at,
+      'updated_at' => $updated_at,
     ];
   });
 
   $factory->define(Album::class, function (Faker\Generator $faker) {
+    extract(MP3Pam::getRandomTimestamps());
+
     $covers = [
       "images.jpeg", "180408-stereo-williams-cardi-b-hero_es4khm.jpeg",
       "kendrick-lamar-damn.-album-artwork.jpg",
@@ -109,6 +118,8 @@
       'user_id' => User::first(),
       'artist_id' => Artist::inRandomOrder()->first()->id,
       'img_bucket' => 'img-storage-dev.mp3pam.com',
-      'release_year' => rand(1950, 2019)
+      'release_year' => rand(1950, 2019),
+      'created_at' => $created_at,
+      'updated_at' => $updated_at,
     ];
   });

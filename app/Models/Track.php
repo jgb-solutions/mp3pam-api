@@ -2,14 +2,15 @@
 
   namespace App\Models;
 
+  use Laravel\Scout\Searchable;
   use App\Traits\HelperTrait;
-  use App\Helpers\MP3Pam;
   use Carbon\Carbon;
   use Illuminate\Database\Eloquent\Relations\BelongsTo;
   use Storage;
 
   class Track extends BaseModel
   {
+    use Searchable;
     use HelperTrait;
 
     private $default_poster_url = "https://img-storage-prod.mp3pam.com/placeholders/track-placeholder.jpg";
@@ -119,5 +120,12 @@
     public function scopeByPlay($query)
     {
       $query->orderBy('play_count', 'desc');
+    }
+
+    public function toSearchableArray()
+    {
+      extract($this->toArray());
+
+      return compact('id', 'title', 'detail', 'lyrics');
     }
   }
