@@ -82,6 +82,7 @@ extend type Mutation {
 	handleFacebookConnect(code: String!): facebookLoginPayload!
 		@field(resolver: "HandleFacebookConnectMutation")
 	updateDownloadCount(input: DownloadInput @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
+	updatePlayCount(input: PlayInput @spread): Boolean @field(resolver: "UpdatePlayCountMutation")
 }
 
 type facebookLoginUrl {
@@ -181,6 +182,11 @@ input RelatedTracksInput {
 }
 
 input DownloadInput {
+	hash: String!
+	type: String!
+}
+
+input PlayInput {
 	hash: String!
 	type: String!
 }

@@ -77,9 +77,10 @@
       $command  = $client->getCommand('GetObject', [
         'Bucket' => $this->audio_bucket,
         'Key' => $this->audio_name,
+        'ResponseCacheControl' => 'max-age=86400',
       ]);
 
-      $request = $client->createPresignedRequest($command, "+10 minutes");
+      $request = $client->createPresignedRequest($command, "+7 days");
 
       $url = (string) $request->getUri();
 
