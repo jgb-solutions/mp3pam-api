@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models;
+  namespace App\Models;
 
-use App\Helpers\MP3Pam;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Storage;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+  use App\Helpers\MP3Pam;
+  use Illuminate\Database\Eloquent\Relations\HasMany;
+  use Illuminate\Foundation\Auth\User as Authenticatable;
+  use Illuminate\Notifications\Notifiable;
+  use Storage;
+  use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
-{
+  class User extends Authenticatable implements JWTSubject
+  {
     use Notifiable;
 
     /**
@@ -18,61 +18,59 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
-    public function scopeAdmin($query)
+    protected $casts = [
+      'first_login' => 'boolean',
+    ];
+
+    public function scopeIsAdmin($query)
     {
-        return $query->whereAdmin(1);
+      return $query->whereAdmin(1);
     }
 
     public function likedTracks()
     {
-        return $this->belongsToMany(Track::class, 'liked_tracks')->withTimestamps();
+      return $this->belongsToMany(Track::class, 'liked_tracks')->withTimestamps();
     }
 
     public function tracks(): HasMany
     {
-        return $this->hasMany(Track::class);
+      return $this->hasMany(Track::class);
     }
 
     public function hasLiked($track)
     {
-        return $this->likedTracks()->wherePivot('track_id', $track->id)->exists();
+      return $this->likedTracks()->wherePivot('track_id', $track->id)->exists();
     }
 
     public function artists(): HasMany
     {
-        return $this->hasMany(Artist::class);
+      return $this->hasMany(Artist::class);
     }
 
     public function albums(): HasMany
     {
-        return $this->hasMany(Album::class);
+      return $this->hasMany(Album::class);
     }
 
     public function artists_by_stage_name_asc(): HasMany
     {
-        return $this->hasMany(Artist::class)->orderBy('stage_name');
+      return $this->hasMany(Artist::class)->orderBy('stage_name');
     }
 
     public function getAvatarUrlAttribute()
     {
-        if (!empty($this->facebook_id)) {
-            return $this->avatar;
-        }
+      if ($this->avatar) {
+        return 'https://' . $this->img_bucket . '/' . $this->avatar;
+      }
 
-        $avatarPath = config('site.defaultAvatar');
-
-        if (!empty($this->avatar)) {
-            $avatarPath = Storage::url($this->avatar);
-        }
-
-        return MP3Pam::asset($avatarPath);
+      return $this->fb_avatar;
     }
 
     public function getTracksUrlAttribute()
     {
-        return MP3Pam::route('users.tracks', ['id' => $this->id]);
+      return MP3Pam::route('users.tracks', ['id' => $this->id]);
     }
 
     /**
@@ -82,7 +80,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTIdentifier()
     {
-        return $this->getKey();
+      return $this->getKey();
     }
 
     /**
@@ -92,15 +90,15 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+      return [];
     }
 
     public static function boot()
     {
-        parent::boot();
+      parent::boot();
 
-        static::addGlobalScope(function ($query) {
-            $query->orderBy('created_at', 'desc');
-        });
+      static::addGlobalScope(function ($query) {
+        $query->orderBy('created_at', 'desc');
+      });
     }
-}
+  }

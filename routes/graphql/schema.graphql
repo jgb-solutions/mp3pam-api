@@ -58,7 +58,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 
 	# Users
-	updateUser(id: ID!, name: String): User @update
+	updateUser(input: UpdateUserInput!): User! @field(resolver: "UpdateUserMutation")
 	deleteUser(id: ID!): User @delete
 
 	# Tracks
@@ -74,6 +74,10 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	# Albums
 	createAlbum(input: AlbumInput!): Album!
 		@field(resolver: "CreateAlbumMutation")
+
+	# Play/Download stats
+	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
+	updatePlayCount(input: PlayInput! @spread): Boolean @field(resolver: "UpdatePlayCountMutation")
 }
 
 extend type Mutation {
@@ -81,8 +85,6 @@ extend type Mutation {
 	register(input: RegisterInput! @spread): User! @create
 	handleFacebookConnect(code: String!): facebookLoginPayload!
 		@field(resolver: "HandleFacebookConnectMutation")
-	updateDownloadCount(input: DownloadInput @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
-	updatePlayCount(input: PlayInput @spread): Boolean @field(resolver: "UpdatePlayCountMutation")
 }
 
 type facebookLoginUrl {
@@ -151,6 +153,16 @@ input RegisterInput {
 	telephone: String @rules(apply: ["string"])
 }
 
+input UpdateUserInput {
+	id: ID!
+	name: String
+	email: String
+	password: String
+	telephone: String
+	avatar: String
+	img_bucket: String
+}
+
 input LoginInput {
 	email: String! @rules(apply: ["required", "email"])
 	password: String!
@@ -168,7 +180,6 @@ type LoginPayload {
 type facebookLoginPayload {
 	data: User!
 	token: String!
-	firstLogin: Boolean!
 }
 
 input OrderByClause {
@@ -211,7 +222,7 @@ type User {
 	id: ID!
 	name: String!
 	email: String
-	avatar: String
+	avatar_url: String
 	active: Boolean!
 	artists: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
@@ -219,6 +230,7 @@ type User {
 	artists_by_stage_name_asc: [Artist!]!
 		@hasMany(type: "paginator", defaultCount: 20)
 	telephone: String
+	first_login: Boolean!
 	created_at: DateTime!
 	updated_at: DateTime!
 }

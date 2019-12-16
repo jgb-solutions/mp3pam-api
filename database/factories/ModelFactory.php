@@ -10,7 +10,7 @@
 
   /** @var \Illuminate\Database\Eloquent\Factory $factory */
   $factory->define(Track::class, function (Faker\Generator $faker) {
-    $admin   = User::admin()->first();
+    $admin   = User::isAdmin()->first();
     $name    = $faker->name;
     extract(MP3Pam::getRandomTimestamps());
 
