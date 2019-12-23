@@ -29,6 +29,11 @@
       return $query->whereAdmin(1);
     }
 
+    public function setPasswordAttribute($value)
+    {
+      $this->attributes['password'] = bcrypt($value);
+    }
+
     public function likedTracks()
     {
       return $this->belongsToMany(Track::class, 'liked_tracks')->withTimestamps();

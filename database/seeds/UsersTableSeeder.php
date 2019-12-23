@@ -12,14 +12,14 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => "Jean Gérard",
                 'email' => "jgbneatdesign@gmail.com",
-                'password' => bcrypt("asdf,,,"),
+                'password' => "asdf,,,",
                 'admin' => 1,
                 'telephone' => 41830318,
             ],
             [
                 'name' => "John Doe",
                 'email' => "john@doe.com",
-                'password' => bcrypt("password"),
+                'password' => "password",
                 'telephone' => 41830318,
                 'admin' => 0,
             ],

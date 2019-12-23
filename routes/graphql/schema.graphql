@@ -29,7 +29,7 @@ extend type Query {
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
 		@paginate(defaultCount: 20)
-	user(id: ID! @eq): User @find
+	user(id: String! @eq): User @find
 
 	# Genres
 	genres(
@@ -41,11 +41,11 @@ extend type Query {
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
 		@paginate(defaultCount: 20)
-	artist(hash: ID @eq): Artist @find
+	artist(hash: String! @eq): Artist @find
 
 	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
-		@paginate(defaultCount: 20)
-	albums(hash: ID @eq): Album @find
+		@paginate(defaultCount: 20, scopes: ["hasTracks"])
+	album(hash: String! @eq): Album @find
 
 	# Facebook Login URL
 	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
@@ -241,7 +241,9 @@ type Artist {
 	stage_name: String!
 	hash: Int!
 	poster_url: String!
-	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	bio: String
+	tracks: [Track!]!
+	albums: [Album!]!
 	user: User! @belongsTo
 	facebook_url: String
 	twitter_url: String
@@ -258,6 +260,7 @@ type Album {
 	cover_url: String!
 	detail: String!
 	user: User! @belongsTo
+	tracks: [Track!]!
 	artist: Artist! @belongsTo
 	release_year: DateTime!
 	created_at: DateTime!

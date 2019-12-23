@@ -20,7 +20,12 @@
 
     public function tracks(): HasMany
     {
-      return $this->hasMany(Track::class);
+      return $this->hasMany(Track::class)->orderBy('created_at', 'DESC');;
+    }
+
+    public function albums(): HasMany
+    {
+      return $this->hasMany(Album::class)->orderBy('created_at', 'DESC');
     }
 
     public function setBioAttribute($bio)

@@ -14,4 +14,6 @@ npm-debug.log
 */*/.DS_Store
 _ide_helper.php
 schema-directives.graphql
-/storage/*.index
+storage/artists.index
+storage/albums.index
+storage/tracks.index

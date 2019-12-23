@@ -16,6 +16,11 @@ class Album extends BaseModel
 
   protected $guarded = [];
 
+  public function scopeHasTracks($query)
+  {
+    return $query->has('tracks');
+  }
+
   public function peopleWhoFavoured()
   {
       return $this->belongsToMany(User::class, 'liked_tracks')->withTimestamps();
@@ -33,7 +38,7 @@ class Album extends BaseModel
 
   public function tracks(): HasMany
   {
-    return $this->hasMany(Track::class);
+    return $this->hasMany(Track::class)->orderBy('number', 'ASC');
   }
 
   public function setDetailAttribute($detail)

@@ -10,8 +10,8 @@
 
   /** @var \Illuminate\Database\Eloquent\Factory $factory */
   $factory->define(Track::class, function (Faker\Generator $faker) {
-    $admin   = User::isAdmin()->first();
-    $name    = $faker->name;
+    $admin = User::isAdmin()->first();
+    $name  = $faker->name;
     extract(MP3Pam::getRandomTimestamps());
 
     $posters = [
@@ -33,7 +33,7 @@
       "weebie.jpeg", "cover256x256-2df51bf5cf51437691ed27ca7e1981df.jpg",
       "apa7remqyqce2xx87c18.jpeg", "5820f738b9bdcdcde097aa9334e5c00a.jpg",
       "616j6KySGPL._AA256_.jpg", "1357828077_uploaded.jpg", "download3.jpeg",
-      "Pu5fUTwO_400x400.jpg", "image.jpg"
+      "Pu5fUTwO_400x400.jpg", "image.jpg",
     ];
 
     $audios = [
@@ -88,6 +88,11 @@
       'poster' => "artists/" . $posters[array_rand($posters)],
       'hash' => MP3Pam::getHash(Artist::class),
       'user_id' => User::first(),
+      'bio' => $faker->realText(1000),
+      'facebook' => $faker->userName,
+      'twitter' => $faker->userName,
+      'youtube' => $faker->userName,
+      'instagram' => $faker->userName,
       'img_bucket' => 'img-storage-dev.mp3pam.com',
       'created_at' => $created_at,
       'updated_at' => $updated_at,
@@ -107,7 +112,7 @@
       "YT-Drumma-Boy-256x256.jpg", "mkrmvba8-7903915.jpg",
       "2pac_instrumentals-rap-revolution_2.jpg", "UserAvatar.jpg",
       "itchHR-1-256x256.jpg", "41j0zn-UXnL._AA256_.jpg",
-      "3d6c58c6-4572-4c72-a6e6-63b0f5d0b446.jpg", "p02lppdp.jpg"
+      "3d6c58c6-4572-4c72-a6e6-63b0f5d0b446.jpg", "p02lppdp.jpg",
     ];
 
     return [
