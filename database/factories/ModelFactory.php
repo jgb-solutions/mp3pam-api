@@ -60,6 +60,8 @@
       'user_id' => $admin->id,
       'artist_id' => Artist::inRandomOrder()->first()->id,
       'genre_id' => Genre::inRandomOrder()->first()->id,
+      'album_id' => Album::inRandomOrder()->first()->id,
+      'number' => rand(00, 99),
       'img_bucket' => 'img-storage-dev.mp3pam.com',
       'audio_bucket' => 'audio-storage-dev.mp3pam.com',
       'allowDownload' => true,

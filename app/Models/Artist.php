@@ -48,26 +48,13 @@
       return $this->belongsTo(User::class);
     }
 
-    public function scopeSearch($query, $term)
+    public function scopeRandom($query, $hash)
     {
-      // $query->whereIn('id', $ids)
-      $query->where('name', 'like', "%$term%")
-        ->orWhere('stageName', 'like', "%$term%")
-        ->orWhere('bio', 'like', "%$term%");
+      $query
+        ->where('hash', '!=', $hash)
+        ->orderByRaw('RAND()'); // get random rows from the DB
     }
 
-    public function getAvatarUrlAttribute()
-    {
-      $avatarPath = config('site.defaultThumbnail');
-      if ($this->avatar) $avatarPath = Storage::url($this->avatar);
-
-      return MP3Pam::asset($avatarPath);
-    }
-
-    public function scopeByHash($query, $hash)
-    {
-      $query->where('hash', $hash);
-    }
 
     public function getFacebookUrlAttribute()
     {

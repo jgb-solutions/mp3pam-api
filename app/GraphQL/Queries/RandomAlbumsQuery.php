@@ -2,11 +2,11 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Track;
+use App\Models\Album;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class RelatedTracksQuery
+class RandomAlbumsQuery
 {
     /**
      * Return a value for the field.
@@ -21,14 +21,6 @@ class RelatedTracksQuery
     {
       extract($args['input']);
 
-      $track = Track::whereHash($hash)->first();
-
-      if ($track) {
-        $relatedTracks = Track::related($track)->take($take)->get();
-
-        return $relatedTracks;
-      }
-
-      return null;
+      return Album::random($hash)->take($take)->get();
     }
 }

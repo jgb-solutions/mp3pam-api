@@ -21,6 +21,13 @@ class Album extends BaseModel
     return $query->has('tracks');
   }
 
+  public function scopeRandom($query, $hash)
+  {
+    $query
+      ->where('hash', '!=', $hash)
+      ->orderByRaw('RAND()'); // get random rows from the DB
+  }
+
   public function peopleWhoFavoured()
   {
       return $this->belongsToMany(User::class, 'liked_tracks')->withTimestamps();

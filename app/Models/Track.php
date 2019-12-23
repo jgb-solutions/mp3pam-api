@@ -75,14 +75,13 @@
       $query->orderByRaw('RAND()');
     }
 
-    public function scopeRelated($query, $obj, $nb_rows = 6)
+    public function scopeRelated($query, $obj)
     {
       $query
         ->whereGenreId($obj->genre_id)
         ->where('id', '!=', $obj->id)
-        ->orderByRaw('RAND()')// get random rows from the DB
+        ->orderByRaw('RAND()'); // get random rows from the DB
 //        ->published()
-        ->take($nb_rows);
     }
 
     public function scopeLastMonth($query)
