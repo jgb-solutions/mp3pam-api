@@ -57,8 +57,10 @@
       return $query->where('hash', $hash);
     }
 
-    public function scopeByGenre($query, $genre)
+    public function scopeByGenre($query, $genre_slug)
     {
+      $genre = Genre::whereSlug($genre_slug)->first();
+
       $query->where('genre_id', $genre->id);
     }
 

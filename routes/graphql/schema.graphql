@@ -19,8 +19,16 @@ extend type Query {
 	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
 
 	# Tracks
-	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
-		@paginate(defaultCount: 20)
+	tracks(
+		page: Int = 1,
+		orderBy: [OrderByClause!] @orderBy
+	): [Track!]! @paginate(defaultCount: 20,  model: "Track")
+
+	tracksByGenre(
+		page: Int = 1,
+		orderBy: [OrderByClause!] @orderBy,
+		slug: String! @scope(name: "byGenre")
+	): [Track!]! @paginate(defaultCount: 20, model: "Track")
 
 	relatedTracks(input: RelatedTracksInput!): [Track!]  @field(resolver: "RelatedTracksQuery")
 
@@ -28,25 +36,25 @@ extend type Query {
 
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
-		@paginate(defaultCount: 20)
+		@paginate(defaultCount: 20,  model: "User")
 	user(id: String! @eq): User @find
 
 	# Genres
 	genres(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
-	): [Genre!]! @paginate(defaultCount: 20)
+	): [Genre!]! @all
 	genre(slug: String! @eq): Genre @find
 
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
-		@paginate(defaultCount: 20)
+		@paginate(defaultCount: 20,  model: "Artist")
 	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
 	randomArtists(input: RandomArtistsInput!): [Artist!]  @field(resolver: "RandomArtistsQuery")
 
 	#Albums
 	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
-		@paginate(defaultCount: 20, scopes: ["hasTracks"])
+		@paginate(defaultCount: 20, scopes: ["hasTracks"],  model: "Album")
 	album(hash: String! @eq): Album @find
 	randomAlbums(input: RandomAlbumsInput!): [Album!]  @field(resolver: "RandomAlbumsQuery")
 

@@ -2224,16 +2224,16 @@
         },
         {
             "name": "nuwave/lighthouse",
-            "version": "v4.4.0",
+            "version": "v4.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nuwave/lighthouse.git",
-                "reference": "3a46ebcbdd0e3ca21e67b078c7bffb9928b10774"
+                "reference": "c048a6a1aa9af4fec71ff4a397a44d2d3938a54d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/3a46ebcbdd0e3ca21e67b078c7bffb9928b10774",
-                "reference": "3a46ebcbdd0e3ca21e67b078c7bffb9928b10774",
+                "url": "https://api.github.com/repos/nuwave/lighthouse/zipball/c048a6a1aa9af4fec71ff4a397a44d2d3938a54d",
+                "reference": "c048a6a1aa9af4fec71ff4a397a44d2d3938a54d",
                 "shasum": ""
             },
             "require": {
@@ -2255,9 +2255,11 @@
                 "localheinz/composer-normalize": "^1.3",
                 "mll-lab/graphql-php-scalars": "^2.1",
                 "mockery/mockery": "^1.0",
+                "nunomaduro/larastan": "^0.4.1",
                 "orchestra/database": "3.5.* || 3.6.* || 3.7.* || 3.8.* || 3.9.* || ^4.0",
                 "orchestra/testbench": "3.5.* || 3.6.* || 3.7.* || 3.8.* || 3.9.* || ^4.0",
                 "phpbench/phpbench": "@dev",
+                "phpunit/phpunit": "^6.5 || ^7.5 || ^8.4",
                 "pusher/pusher-php-server": "^3.2"
             },
             "suggest": {
@@ -2307,7 +2309,7 @@
                 "laravel",
                 "laravel-graphql"
             ],
-            "time": "2019-10-09T06:58:46+00:00"
+            "time": "2019-12-13T07:09:34+00:00"
         },
         {
             "name": "opis/closure",
