@@ -245,9 +245,9 @@ type User {
 	email: String
 	avatar_url: String
 	active: Boolean!
-	artists: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
+	artists: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
-	albums: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
+	albums: [Album!]! @hasMany(type: "paginator", defaultCount: 20)
 	artists_by_stage_name_asc: [Artist!]!
 		@hasMany(type: "paginator", defaultCount: 20)
 	telephone: String

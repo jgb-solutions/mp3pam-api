@@ -41,7 +41,7 @@
 
     public function tracks(): HasMany
     {
-      return $this->hasMany(Track::class);
+      return $this->hasMany(Track::class)->orderBy('created_at', 'DESC');
     }
 
     public function hasLiked($track)
@@ -51,12 +51,12 @@
 
     public function artists(): HasMany
     {
-      return $this->hasMany(Artist::class);
+      return $this->hasMany(Artist::class)->orderBy('created_at', 'DESC');
     }
 
     public function albums(): HasMany
     {
-      return $this->hasMany(Album::class);
+      return $this->hasMany(Album::class)->orderBy('created_at', 'DESC');
     }
 
     public function artists_by_stage_name_asc(): HasMany
