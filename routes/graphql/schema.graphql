@@ -85,6 +85,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	# Albums
 	createAlbum(input: AlbumInput!): Album!
 		@field(resolver: "CreateAlbumMutation")
+	deleteAlbum(hash: String!): DeleteAlbumResponse! @field(resolver: "DeleteAlbumMutation")
 
 	# Play/Download stats
 	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
@@ -186,6 +187,10 @@ input LoginInput {
 type LoginPayload {
 	data: User!
 	token: String!
+}
+
+type DeleteAlbumResponse {
+	success: Boolean
 }
 
 type facebookLoginPayload {
