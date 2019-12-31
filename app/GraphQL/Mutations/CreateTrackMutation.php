@@ -26,6 +26,8 @@
         'audio_bucket' => $audio_bucket,
         'hash' => MP3Pam::getHash(Track::class),
         'allowDownload' => $allowDownload ?? false,
+        'album_id' => $album_id ?? null,
+        'number' => $number ?? null
       ];
 
       $track = auth()->user()->tracks()->create($trackData);

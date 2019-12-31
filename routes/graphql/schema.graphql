@@ -86,6 +86,8 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	createAlbum(input: AlbumInput!): Album!
 		@field(resolver: "CreateAlbumMutation")
 	deleteAlbum(hash: String!): DeleteAlbumResponse! @field(resolver: "DeleteAlbumMutation")
+	deleteAlbumTrack(hash: String!): DeleteAlbumTrackResponse! @field(resolver: "DeleteAlbumTrackMutation")
+	addTrackToAlbum(input: AddTrackToAlbumInput!): AddTrackToAlbumResponse! @field(resolver: "AddTrackToAlbumMutation")
 
 	# Play/Download stats
 	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
@@ -127,14 +129,21 @@ input TrackInput {
 	audioFileSize: Int!
 	artistId: Int!
 	genreId: Int!
-	number: Int
 	img_bucket: String!
 	audio_bucket: String!
 	allowDownload: Boolean
+	album_id: String
+	number: Int
 }
 
 input GenreInput {
 	name: String!
+}
+
+input AddTrackToAlbumInput {
+	album_id: String!
+	track_hash: String!
+	track_number: Int!
 }
 
 input ArtistInput {
@@ -190,6 +199,14 @@ type LoginPayload {
 }
 
 type DeleteAlbumResponse {
+	success: Boolean
+}
+
+type DeleteAlbumTrackResponse {
+	success: Boolean
+}
+
+type AddTrackToAlbumResponse {
 	success: Boolean
 }
 
