@@ -301,7 +301,7 @@ type Album {
 	title: String!
 	hash: Int!
 	cover_url: String!
-	detail: String!
+	detail: String
 	user: User! @belongsTo
 	tracks: [Track!]!
 	artist: Artist! @belongsTo

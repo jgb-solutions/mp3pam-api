@@ -15,14 +15,7 @@ class UsersTableSeeder extends Seeder
                 'password' => "asdf,,,",
                 'admin' => 1,
                 'telephone' => 41830318,
-            ],
-            [
-                'name' => "John Doe",
-                'email' => "john@doe.com",
-                'password' => "password",
-                'telephone' => 41830318,
-                'admin' => 0,
-            ],
+            ]
         ];
 
         foreach ($users as $user) {
