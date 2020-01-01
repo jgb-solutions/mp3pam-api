@@ -1,145 +1,114 @@
 <?php
 
-namespace App\Http\Controllers;
+  namespace App\Http\Controllers\API;
 
-use Cache;
-use Carbon\Carbon;
-use App\Models\Track;
-use App\Models\Video;
-use Suin\RSSWriter\Feed;
-use Suin\RSSWriter\Item;
-use Suin\RSSWriter\Channel;
+  use App\Models\Artist;
+  use Carbon\Carbon;
+  use App\Models\Album;
+  use App\Models\Track;
+  use Illuminate\Http\Request;
+  use Suin\RSSWriter\Feed;
+  use Suin\RSSWriter\Item;
+  use Suin\RSSWriter\Channel;
+  use App\Http\Controllers\Controller;
 
-class FeedController extends Controller
-{
-	public function tracks()
-	{
-		return $this->getRss('tracks');
-	}
+  class FeedController extends Controller
+  {
+    public function __invoke(Request $request, $type)
+    {
+      // $key = $type . '_rss_feed_';
 
-	public function videos()
-	{
-		return $this->getRss('videos');
-	}
+      switch ($type) {
+        case 'track':
+          $objs = Track::latest()->with('genre', 'artist')->take(30)->get();
 
-	private function getRSS($type)
-	{
-		$key = $type . '_rss_feed_';
+          $hash = 'Track';
+          break;
 
-		$rss = Cache::rememberForever($key, function() use ($type) {
-			switch ($type) {
-				case 'tracks':
-					$objs =  Track::published()
-								->latest()
-								->with('category')
-								->take(30)
-								->get();
+        case 'album':
+          $objs = Album::latest()->with('artist')->take(30)->get();
 
-					$hash = 'Mizik';
-					$type = 'mizik';
-				break;
+          $hash = 'Album';
+          break;
 
-				case 'videos':
-					$objs = Video::latest()
-								->with('category')
-								->take(30)
-								->get();
+        case 'artist':
+          $objs = Artist::latest()->take(30)->get();
+          break;
+      }
 
-					$hash = 'Videyo';
-					$type = 'videyo';
-				break;
-			}
+      $rss = $this->buildRssData($objs, $type);
 
-			$rss = $this->buildRssData($objs, $type, $hash);
+      $rss = response($rss)->header('Content-type', 'application/rss+xml');
 
-			$rss = response($rss)->header('Content-type', 'application/rss+xml');
+      return $rss;
+    }
 
-			return $rss;
-		});
+    /**
+     * Return a string with the feed data
+     *
+     * @return string
+     */
+    protected function buildRssData($objs, $type)
+    {
+      $now     = Carbon::now();
+      $feed    = new Feed();
+      $channel = new Channel();
 
-		return $rss;
-	}
+      $channel->title(config('site.name'))
+        ->description(config('site.description'))
+        ->url(config('site.url'))
+        ->language('en')
+        ->copyright(date('Y') . ' ' . config('site.name') . ', All Rights Reserved.')
+        ->lastBuildDate($now->timestamp)
+        ->appendTo($feed);
 
-	/**
-	* Return a string with the feed data
-	*
-	* @return string
-	*/
-	protected function buildRssData($objs, $type, $hash)
-	{
-		$now 		= Carbon::now();
-		$feed 		= new Feed();
-		$channel 	= new Channel();
+      foreach ($objs as $obj) {
+        $item = new Item();
 
-		$channel->title(config('site.name'))
-				->description(config('site.description'))
-				->url(config('site.url'))
-				->language('ht')
-				->copyright('2012 - ' . date('Y') . ' ' . config('site.name') . ', Tout Dwa Rezève.')
-				->lastBuildDate($now->timestamp)
-				->appendTo($feed);
+        switch ($type) {
+          case 'track':
+            $title       = "#newTrack {$obj->title} by {$obj->artist->stage_name}";
+            $url         = config('site.url') . "/track/{$obj->hash}";
+            $description = "Listen to {$obj->title} by {$obj->artist->stage_name} on " . config('site.name');
+            break;
 
-		foreach ($objs as $obj)
-		{
-			$item = new Item();
+          case 'album':
+            $title       = "#newAlbum {$obj->title} (album) by {$obj->artist->stage_name}";
+            $url         = config('site.url') . "/album/{$obj->hash}";
+            $description = "Listen to {$obj->title} by {$obj->artist->stage_name} on " . config('site.name');
+            break;
 
-			$title = "#Nouvo$hash $obj->name #{$obj->category->slug} via @TKPMizik @TiKwenPam";
+          case 'artist':
+            $title       = "#newArtist {$obj->stage_name} on " . config('site.name');
+            $url         = config('site.url') . "/artist/{$obj->hash}";
+            $description = "Listen to {$obj->stage_name} on " . config('site.name');
+            break;
+        }
 
-			$item->title($title)
-				->description($obj->description)
-				->url($obj->url)
-				->pubDate($obj->created_at->timestamp)
-				->guid($obj->url, true)
-				->appendTo($channel);
-		}
+        $item->title($title)
+          ->description($description)
+          ->url($url)
+          ->pubDate($obj->created_at->timestamp)
+          ->guid($url, true)
+          ->appendTo($channel);
+      }
 
-		$feed = (string) $feed;
+      $feed = (string)$feed;
 
-		// Replace a couple items to make the feed more compliant
-		$feed = str_replace(
-			'<rss version="2.0">',
-			'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
-			$feed
-		);
+      // Replace a couple items to make the feed more compliant
+      $feed = str_replace(
+        '<rss version="2.0">',
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+        $feed
+      );
 
-		$feed = str_replace(
-			'<channel>',
-			'<channel>
-			<atom:link href="'. secure_url(config('site.url') . "/feed/$type") . '" rel="self" type="application/rss+xml" />',
-			$feed
-		);
+      $feed = str_replace(
+        '<channel>',
+        '<channel>
+			<atom:link href="' . secure_url(config('site.url') . "/feed/$type") . '" rel="self" type="application/rss+xml" />',
+        $feed
+      );
 
-		return $feed;
-
-		// $feed = new Feed();
-
-		// $channel = new Channel();
-		// $channel
-		//     ->title(config('site.name'))
-		//     ->description(config('site.description'))
-		//     ->url(config('site.url'))
-		//     ->language('ht-HT')
-		//     ->copyright('2012 - ' . date('Y') . ' ' . config('site.name') . ', Tout Dwa Rezève.')
-		//     ->pubDate($now)
-		//     ->lastBuildDate($now)
-		//     ->ttl(60)
-		//     // ->pubsubhubbub('http://example.com/feed.xml', 'http://pubsubhubbub.appspot.com') // This is optional. Specify PubSubHubbub discovery if you want.
-		//     ->appendTo($feed);
-
-		// foreach ($objs as $obj) {
-		// 	$item = new Item();
-		// 	$item
-		// 	    ->title($obj->title)
-		// 	    ->description($obj->description)
-		// 	    // ->contentEncoded('<div>Blog body</div>')
-		// 	    ->url($obj->url)
-		// 	    ->author($obj->user->name)
-		// 	    ->pubDate($obj->create_at)
-		// 	    ->guid($obj->url, true)
-		// 	    ->preferCdata(true) // By this, title and description become CDATA wrapped HTML.
-		// 	    ->appendTo($channel);
-		// 	}
-
-		// return (string) $feed; // or echo $feed->render();
-	}
-}
+      return $feed;
+    }
+  }

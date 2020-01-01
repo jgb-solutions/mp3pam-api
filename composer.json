@@ -24,6 +24,7 @@
 		"spatie/laravel-backup": "^6.4",
 		"spatie/laravel-cors": "^1.6",
 		"spatie/laravel-medialibrary": "^7.12",
+		"suin/php-rss-writer": "^1.6",
 		"teamtnt/laravel-scout-tntsearch-driver": "^7.2",
 		"tymon/jwt-auth": "1.0.0-rc.5"
 	},
