@@ -49,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        $domain = 'web.' . $this->web_host;
+        $domain = $this->web_host;
         Route::domain($domain)
             ->middleware('web')
             ->namespace($this->namespace)
@@ -65,7 +65,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        $domain = 'api.' . $this->web_host;
+        $domain = $this->web_host;
         Route::domain($domain)
             ->middleware('api')
             ->namespace('App\Http\Controllers\API')
