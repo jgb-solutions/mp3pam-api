@@ -6,6 +6,7 @@
   use App\Traits\HelperTrait;
   use Carbon\Carbon;
   use Illuminate\Database\Eloquent\Relations\BelongsTo;
+  use Illuminate\Database\Eloquent\Relations\BelongsToMany;
   use Storage;
 
   class Track extends BaseModel
@@ -21,14 +22,21 @@
       'allowDownload' => 'boolean',
     ];
 
-    public function peopleWhoFavoured()
+    public function playlists(): BelongsToMany
     {
-      return $this->belongsToMany(User::class, 'liked_tracks')->withTimestamps();
+      return $this->belongsToMany(Playlist::class)
+        ->withTimestamps()
+        ->orderBy('playlist_track.created_at');
     }
 
     public function artist(): BelongsTo
     {
       return $this->belongsTo(Artist::class);
+    }
+
+    public function user(): BelongsTo
+    {
+      return $this->belongsTo(User::class);
     }
 
     public function genre(): BelongsTo
@@ -62,14 +70,6 @@
       $genre = Genre::whereSlug($genre_slug)->first();
 
       $query->where('genre_id', $genre->id);
-    }
-
-    public function scopeSearch($query, $term)
-    {
-      // $query->whereIn('id', $ids)
-      $query->where('title', 'like', "%$term%")
-        ->orWhere('detail', 'like', "%$term%")
-        ->orWhere('lyrics', 'like', "%$term%");
     }
 
     public function scopeRand($query)

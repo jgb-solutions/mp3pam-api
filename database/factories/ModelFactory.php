@@ -3,6 +3,7 @@
   use App\Helpers\MP3Pam;
   use App\Models\Artist;
   use App\Models\Genre;
+  use App\Models\Playlist;
   use App\Models\Track;
   use App\Models\User;
   use App\Models\Album;
@@ -65,6 +66,19 @@
       'img_bucket' => 'img-storage-dev.mp3pam.com',
       'audio_bucket' => 'audio-storage-dev.mp3pam.com',
       'allowDownload' => true,
+      'created_at' => $created_at,
+      'updated_at' => $updated_at,
+    ];
+  });
+
+  $factory->define(Playlist::class, function (Faker\Generator $faker) {
+    $admin_id = User::isAdmin()->first()->id;
+    extract(MP3Pam::getRandomTimestamps());
+
+    return [
+      'title' => $faker->name,
+      'hash' => MP3Pam::getHash(Playlist::class),
+      'user_id' => $admin_id,
       'created_at' => $created_at,
       'updated_at' => $updated_at,
     ];

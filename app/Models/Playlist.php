@@ -1,46 +1,28 @@
 <?php
 
-namespace App\Models;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+  namespace App\Models;
 
-use TKPM;
-use Illuminate\Support\Collection;
+  use Illuminate\Database\Eloquent\Relations\BelongsTo;
+  use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Playlist extends BaseModel
-{
-	protected $appends = ['url'];
-	protected $fillable = ['name', 'slug', 'user_id', 'track_list_id'];
+  class Playlist extends BaseModel
+  {
+    protected $guarded = [];
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function scopeHasTracks($query)
+    {
+      return $query->has('tracks');
+    }
 
-	public function mList(): HasMany
-	{
-		return $this->hasMany(TrackList::class);
-	}
+    public function user(): BelongsTo
+    {
+      return $this->belongsTo(User::class);
+    }
 
-	public function getTracksAttribute(): HasMany
-	{
-		$ids = $this->mList()->pluck('track_id')->toArray();
-
-		$tracks = Track::find($ids, ['id', 'artist', 'name', 'image', 'slug']);
-
-		$sorted = array_flip($ids);
-
-		foreach ($tracks as $track) {
-			$sorted[$track->id] = $track;
-		}
-
-		$sorted = Collection::make(array_values($sorted));
-
-		return $sorted;
-	}
-
-	public function getUrlAttribute()
-	{
-		return TKPM::route('playlist.show', ['id' => $this->id,'name' => $this->slug ]);
-	}
-}
+    public function tracks(): BelongsToMany
+    {
+      return $this->belongsToMany(Track::class)
+        ->withTimestamps()
+        ->orderBy('playlist_track.created_at');
+    }
+  }

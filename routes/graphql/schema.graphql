@@ -34,6 +34,13 @@ extend type Query {
 
 	track(hash: String! @eq): Track @find
 
+	# Playlists
+	playlists(
+		page: Int = 1,
+		orderBy: [OrderByClause!] @orderBy
+	): [Playlist!]! @paginate(defaultCount: 20,  model: "Playlist")
+	playlist(hash: String! @eq): Playlist @find
+
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
 		@paginate(defaultCount: 20,  model: "User")
@@ -323,11 +330,22 @@ type Track {
 	artist: Artist! @belongsTo
 	album: Album @belongsTo
 	user: User! @belongsTo
+	playlists: [Playlist!]! @belongsToMany
 	number: Int
 	allowDownload: Boolean!
 	play_count: Int!
 	audio_file_size: String!
 	download_count: Int!
+	created_at: DateTime!
+	updated_at: DateTime!
+}
+
+type Playlist {
+	id: ID!
+	title: String!
+	hash: Int!
+	user: User! @belongsTo
+	tracks: [Track!]! @belongsToMany
 	created_at: DateTime!
 	updated_at: DateTime!
 }
