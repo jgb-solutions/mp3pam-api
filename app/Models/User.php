@@ -59,6 +59,11 @@
       return $this->hasMany(Album::class)->orderBy('created_at', 'DESC');
     }
 
+    public function playlists(): HasMany
+    {
+      return $this->hasMany(Playlist::class)->orderBy('created_at', 'DESC');
+    }
+
     public function artists_by_stage_name_asc(): HasMany
     {
       return $this->hasMany(Artist::class)->orderBy('stage_name');

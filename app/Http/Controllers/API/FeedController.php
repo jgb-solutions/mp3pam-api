@@ -68,19 +68,19 @@
         switch ($type) {
           case 'track':
             $title       = "#newTrack {$obj->title} by {$obj->artist->stage_name}";
-            $url         = config('site.url') . "/track/{$obj->hash}";
+            $url         = "https://mp3pam.com/track/{$obj->hash}";
             $description = "Listen to {$obj->title} by {$obj->artist->stage_name} on " . config('site.name');
             break;
 
           case 'album':
             $title       = "#newAlbum {$obj->title} (album) by {$obj->artist->stage_name}";
-            $url         = config('site.url') . "/album/{$obj->hash}";
+            $url         = "https://mp3pam.com/album/{$obj->hash}";
             $description = "Listen to {$obj->title} by {$obj->artist->stage_name} on " . config('site.name');
             break;
 
           case 'artist':
             $title       = "#newArtist {$obj->stage_name} on " . config('site.name');
-            $url         = config('site.url') . "/artist/{$obj->hash}";
+            $url         = "https://mp3pam.com/artist/{$obj->hash}";
             $description = "Listen to {$obj->stage_name} on " . config('site.name');
             break;
         }

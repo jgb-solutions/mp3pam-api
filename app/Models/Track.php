@@ -26,7 +26,7 @@
     {
       return $this->belongsToMany(Playlist::class)
         ->withTimestamps()
-        ->orderBy('playlist_track.created_at');
+        ->orderBy('playlist_track.created_at', 'desc');
     }
 
     public function artist(): BelongsTo

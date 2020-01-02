@@ -38,8 +38,9 @@ extend type Query {
 	playlists(
 		page: Int = 1,
 		orderBy: [OrderByClause!] @orderBy
-	): [Playlist!]! @paginate(defaultCount: 20,  model: "Playlist")
+	): [Playlist!]! @paginate(defaultCount: 20, scopes:["hasTracks"],  model: "Playlist")
 	playlist(hash: String! @eq): Playlist @find
+	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]  @field(resolver: "RandomPlaylistsQuery")
 
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
@@ -242,6 +243,11 @@ input RandomAlbumsInput {
     take: String!
 }
 
+input RandomPlaylistsInput {
+    hash: String!
+    take: String!
+}
+
 input DownloadInput {
 	hash: String!
 	type: String!
@@ -277,6 +283,7 @@ type User {
 	artists: [Artist!]! @hasMany(type: "paginator", defaultCount: 20)
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	albums: [Album!]! @hasMany(type: "paginator", defaultCount: 20)
+	playlists: [Playlist!]! @hasMany(type: "paginator", defaultCount: 20)
 	artists_by_stage_name_asc: [Artist!]!
 		@hasMany(type: "paginator", defaultCount: 20)
 	telephone: String
@@ -344,6 +351,7 @@ type Playlist {
 	id: ID!
 	title: String!
 	hash: Int!
+	cover_url: String
 	user: User! @belongsTo
 	tracks: [Track!]! @belongsToMany
 	created_at: DateTime!
