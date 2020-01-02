@@ -5,5 +5,5 @@ return [
 	'defaultThumbnail' 	=> '/assets/images/logo.jpg',
 	'defaultAvatar' 		=> '/assets/images/logo.jpg',
 	'url' 					=> env('APP_URL'),
-	'name' 					=> env('APP_NAME')
+	'name' 					=> env('APP_NAME', 'MP3Pam')
 ];
