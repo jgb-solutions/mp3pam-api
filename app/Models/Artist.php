@@ -18,6 +18,11 @@
 
     protected $guarded = [];
 
+    public function scopeHasTracks($query)
+    {
+      return $query->has('tracks');
+    }
+
     public function tracks(): HasMany
     {
       return $this->hasMany(Track::class)->orderBy('created_at', 'DESC');;

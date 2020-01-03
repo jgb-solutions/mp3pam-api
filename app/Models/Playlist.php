@@ -9,6 +9,8 @@
 
   class Playlist extends BaseModel
   {
+    private $default_poster_url = "https://img-storage-prod.mp3pam.com/placeholders/playlist-placeholder.png";
+
     protected $guarded = [];
 
     public function scopeRandom($query, $hash)
@@ -25,7 +27,13 @@
 
     public function getCoverUrlAttribute()
     {
-      return $this->tracks()->first()->poster_url;
+      $track = $this->tracks()->first();
+
+      if ($track) {
+        return $track->poster_url;
+      } else {
+        return $this->default_poster_url;
+      }
     }
 
     public function trackList(): HasMany

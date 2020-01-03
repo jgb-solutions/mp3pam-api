@@ -51,12 +51,12 @@ extend type Query {
 	genres(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
-	): [Genre!]! @all
+	): [Genre!]! @all(scopes: ["hasTracks"])
 	genre(slug: String! @eq): Genre @find
 
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
-		@paginate(defaultCount: 20,  model: "Artist")
+		@paginate(defaultCount: 20, scopes: ["hasTracks"],  model: "Artist")
 	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
 	randomArtists(input: RandomArtistsInput!): [Artist!]  @field(resolver: "RandomArtistsQuery")
 
@@ -96,6 +96,10 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	deleteAlbum(hash: String!): DeleteAlbumResponse! @field(resolver: "DeleteAlbumMutation")
 	deleteAlbumTrack(hash: String!): DeleteAlbumTrackResponse! @field(resolver: "DeleteAlbumTrackMutation")
 	addTrackToAlbum(input: AddTrackToAlbumInput!): AddTrackToAlbumResponse! @field(resolver: "AddTrackToAlbumMutation")
+
+	# Playlists
+	deletePlaylist(hash: String!): DeletePlaylistResponse! @field(resolver: "DeletePlaylistMutation")
+	deletePlaylistTrack(trackHash: String!, playlistHash: String!): DeletePlaylistTrackResponse! @field(resolver: "DeletePlaylistTrackMutation")
 
 	# Play/Download stats
 	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
@@ -210,7 +214,15 @@ type DeleteAlbumResponse {
 	success: Boolean
 }
 
+type DeletePlaylistResponse {
+	success: Boolean
+}
+
 type DeleteAlbumTrackResponse {
+	success: Boolean
+}
+
+type DeletePlaylistTrackResponse {
 	success: Boolean
 }
 
