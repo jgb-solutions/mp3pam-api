@@ -51,12 +51,12 @@ extend type Query {
 	genres(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
-	): [Genre!]! @all(scopes: ["hasTracks"])
+	): [Genre!]! @all
 	genre(slug: String! @eq): Genre @find
 
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
-		@paginate(defaultCount: 20, scopes: ["hasTracks"],  model: "Artist")
+		@paginate(defaultCount: 20,  model: "Artist")
 	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
 	randomArtists(input: RandomArtistsInput!): [Artist!]  @field(resolver: "RandomArtistsQuery")
 

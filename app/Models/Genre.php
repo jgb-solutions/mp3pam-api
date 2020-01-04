@@ -11,10 +11,10 @@
 
     public $timestamps = false;
 
-    public function scopeHasTracks($query)
-    {
-      return $query->has('tracks');
-    }
+//    public function scopeHasTracks($query)
+//    {
+//      return $query->has('tracks');
+//    }
 
     public function tracks(): HasMany
     {
