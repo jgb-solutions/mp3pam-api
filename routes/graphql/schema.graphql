@@ -100,6 +100,8 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	# Playlists
 	deletePlaylist(hash: String!): DeletePlaylistResponse! @field(resolver: "DeletePlaylistMutation")
 	deletePlaylistTrack(trackHash: String!, playlistHash: String!): DeletePlaylistTrackResponse! @field(resolver: "DeletePlaylistTrackMutation")
+	addTrackToPlaylist(trackHash: String!, playlistHash: String!): AddTrackToPlaylistResponse! @field(resolver: "AddTrackToPlaylistMutation")
+	CreatePlaylist(title: String!): Playlist! @field(resolver: "CreatePlaylistMutation")
 
 	# Play/Download stats
 	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
@@ -227,6 +229,10 @@ type DeletePlaylistTrackResponse {
 }
 
 type AddTrackToAlbumResponse {
+	success: Boolean
+}
+
+type AddTrackToPlaylistResponse {
 	success: Boolean
 }
 
