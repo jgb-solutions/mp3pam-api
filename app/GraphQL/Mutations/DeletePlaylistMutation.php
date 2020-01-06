@@ -15,13 +15,9 @@
 
       $auth_user = auth()->user();
 
-      if ($auth_user->admin) {
-        $playlist->delete();
+      if ($auth_user->admin || $playlist->user_id === $auth_user->id) {
+        $playlist->tracks()->delete();
 
-        return ['success' => true];
-      }
-
-      if ($playlist->user_id === $auth_user->id) {
         $playlist->delete();
 
         return ['success' => true];

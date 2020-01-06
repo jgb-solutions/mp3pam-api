@@ -82,6 +82,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 
 	# Tracks
 	addTrack(input: TrackInput!): Track! @field(resolver: "CreateTrackMutation")
+	deleteTrack(hash: String!): DeleteTrackResponse! @field(resolver: "DeleteTrackMutation")
 
 	# Genres
 	addGenre(input: GenreInput!): Genre! @field(resolver: "CreateGenreMutation")
@@ -89,6 +90,7 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	#Artists
 	addArtist(input: ArtistInput!): Artist!
 		@field(resolver: "CreateArtistMutation")
+	deleteArtist(hash: String!): DeleteArtistResponse! @field(resolver: "DeleteArtistMutation")
 
 	# Albums
 	createAlbum(input: AlbumInput!): Album!
@@ -213,6 +215,14 @@ type LoginPayload {
 }
 
 type DeleteAlbumResponse {
+	success: Boolean
+}
+
+type DeleteTrackResponse {
+	success: Boolean
+}
+
+type DeleteArtistResponse {
 	success: Boolean
 }
 

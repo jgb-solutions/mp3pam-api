@@ -2,21 +2,22 @@
 
   namespace App\GraphQL\Mutations;
 
-  use App\Models\Album;
+  use App\Models\Track;
   use GraphQL\Type\Definition\ResolveInfo;
   use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-  class DeleteAlbumMutation
+  class DeleteTrackMutation
   {
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-      $albumHash = $args['hash'];
-      $album     = Album::whereHash($albumHash)->firstOrFail();
+      $trackHash = $args['hash'];
+      $track     = Track::whereHash($trackHash)->firstOrFail();
 
       $auth_user = auth()->user();
 
-      if ($auth_user->admin || $album->user_id === $auth_user->id) {
-        $album->delete();
+      if ($auth_user->admin || $track->user_id === $auth_user->id) {
+        $track->playlists()->delete();
+        $track->delete();
 
         return ['success' => true];
       }
