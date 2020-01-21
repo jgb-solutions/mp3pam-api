@@ -16,7 +16,7 @@
       $auth_user = auth()->user();
 
       if ($auth_user->admin || $track->user_id === $auth_user->id) {
-        $track->playlists()->delete();
+        $track->trackList()->delete();
         $track->delete();
 
         return ['success' => true];

@@ -17,3 +17,4 @@ schema-directives.graphql
 storage/artists.index
 storage/albums.index
 storage/tracks.index
+.DS_Store

@@ -2,6 +2,7 @@
 
   namespace App\Models;
 
+  use Illuminate\Database\Eloquent\Relations\HasMany;
   use Laravel\Scout\Searchable;
   use App\Traits\HelperTrait;
   use Carbon\Carbon;
@@ -21,6 +22,11 @@
     protected $casts = [
       'allowDownload' => 'boolean',
     ];
+
+    public function trackList(): HasMany
+    {
+      return $this->hasMany(PlaylistTrack::class);
+    }
 
     public function playlists(): BelongsToMany
     {
