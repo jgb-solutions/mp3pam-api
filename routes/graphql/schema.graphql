@@ -6,7 +6,7 @@ scalar DateTime
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 # Protected Queries
-type Query @middleware(checks: ["auth:api"]) {
+type Query @guard(checks: ["auth:api"]) {
 	me: User! @auth
 	# Upload URL
 	uploadUrl(input: UploadUrlInput! @spread): UploadUrl!
@@ -19,32 +19,30 @@ extend type Query {
 	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
 
 	# Tracks
-	tracks(
-		page: Int = 1,
-		orderBy: [OrderByClause!] @orderBy
-	): [Track!]! @paginate(defaultCount: 20,  model: "Track")
+	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
+		@paginate(defaultCount: 20, model: "Track")
 
 	tracksByGenre(
-		page: Int = 1,
-		orderBy: [OrderByClause!] @orderBy,
+		page: Int = 1
+		orderBy: [OrderByClause!] @orderBy
 		slug: String! @scope(name: "byGenre")
 	): [Track!]! @paginate(defaultCount: 20, model: "Track")
 
-	relatedTracks(input: RelatedTracksInput!): [Track!]  @field(resolver: "RelatedTracksQuery")
+	relatedTracks(input: RelatedTracksInput!): [Track!]
+		@field(resolver: "RelatedTracksQuery")
 
 	track(hash: String! @eq): Track @find
 
 	# Playlists
-	playlists(
-		page: Int = 1,
-		orderBy: [OrderByClause!] @orderBy
-	): [Playlist!]! @paginate(defaultCount: 20, scopes:["hasTracks"],  model: "Playlist")
+	playlists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Playlist!]!
+		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Playlist")
 	playlist(hash: String! @eq): Playlist @find
-	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]  @field(resolver: "RandomPlaylistsQuery")
+	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]
+		@field(resolver: "RandomPlaylistsQuery")
 
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
-		@paginate(defaultCount: 20,  model: "User")
+		@paginate(defaultCount: 20, model: "User")
 	user(id: String! @eq): User @find
 
 	# Genres
@@ -56,33 +54,38 @@ extend type Query {
 
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
-		@paginate(defaultCount: 20,  model: "Artist")
+		@paginate(defaultCount: 20, model: "Artist")
 	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
-	randomArtists(input: RandomArtistsInput!): [Artist!]  @field(resolver: "RandomArtistsQuery")
+	randomArtists(input: RandomArtistsInput!): [Artist!]
+		@field(resolver: "RandomArtistsQuery")
 
 	#Albums
 	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
-		@paginate(defaultCount: 20, scopes: ["hasTracks"],  model: "Album")
+		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Album")
 	album(hash: String! @eq): Album @find
-	randomAlbums(input: RandomAlbumsInput!): [Album!]  @field(resolver: "RandomAlbumsQuery")
+	randomAlbums(input: RandomAlbumsInput!): [Album!]
+		@field(resolver: "RandomAlbumsQuery")
 
 	# Facebook Login URL
 	facebookLoginUrl: facebookLoginUrl! @field(resolver: "FacebookLoginUrlQuery")
-	download(input: DownloadInput! @spread): Download! @field(resolver: "DownloadQuery")
+	download(input: DownloadInput! @spread): Download!
+		@field(resolver: "DownloadQuery")
 	search(query: String!): SearchResults! @field(resolver: "SearchQuery")
 }
 
-type Mutation @middleware(checks: ["auth:api"]) {
+type Mutation @guard(checks: ["auth:api"]) {
 	# Auth
 	logout: LogOutSuccess! @field(resolver: "LogOutMutation")
 
 	# Users
-	updateUser(input: UpdateUserInput!): User! @field(resolver: "UpdateUserMutation")
+	updateUser(input: UpdateUserInput!): User!
+		@field(resolver: "UpdateUserMutation")
 	deleteUser(id: ID!): User @delete
 
 	# Tracks
 	addTrack(input: TrackInput!): Track! @field(resolver: "CreateTrackMutation")
-	deleteTrack(hash: String!): DeleteTrackResponse! @field(resolver: "DeleteTrackMutation")
+	deleteTrack(hash: String!): DeleteTrackResponse!
+		@field(resolver: "DeleteTrackMutation")
 
 	# Genres
 	addGenre(input: GenreInput!): Genre! @field(resolver: "CreateGenreMutation")
@@ -90,24 +93,39 @@ type Mutation @middleware(checks: ["auth:api"]) {
 	#Artists
 	addArtist(input: ArtistInput!): Artist!
 		@field(resolver: "CreateArtistMutation")
-	deleteArtist(hash: String!): DeleteArtistResponse! @field(resolver: "DeleteArtistMutation")
+	deleteArtist(hash: String!): DeleteArtistResponse!
+		@field(resolver: "DeleteArtistMutation")
 
 	# Albums
 	createAlbum(input: AlbumInput!): Album!
 		@field(resolver: "CreateAlbumMutation")
-	deleteAlbum(hash: String!): DeleteAlbumResponse! @field(resolver: "DeleteAlbumMutation")
-	deleteAlbumTrack(hash: String!): DeleteAlbumTrackResponse! @field(resolver: "DeleteAlbumTrackMutation")
-	addTrackToAlbum(input: AddTrackToAlbumInput!): AddTrackToAlbumResponse! @field(resolver: "AddTrackToAlbumMutation")
+	deleteAlbum(hash: String!): DeleteAlbumResponse!
+		@field(resolver: "DeleteAlbumMutation")
+	deleteAlbumTrack(hash: String!): DeleteAlbumTrackResponse!
+		@field(resolver: "DeleteAlbumTrackMutation")
+	addTrackToAlbum(input: AddTrackToAlbumInput!): AddTrackToAlbumResponse!
+		@field(resolver: "AddTrackToAlbumMutation")
 
 	# Playlists
-	deletePlaylist(hash: String!): DeletePlaylistResponse! @field(resolver: "DeletePlaylistMutation")
-	deletePlaylistTrack(trackHash: String!, playlistHash: String!): DeletePlaylistTrackResponse! @field(resolver: "DeletePlaylistTrackMutation")
-	addTrackToPlaylist(trackHash: String!, playlistHash: String!): AddTrackToPlaylistResponse! @field(resolver: "AddTrackToPlaylistMutation")
-	CreatePlaylist(title: String!): Playlist! @field(resolver: "CreatePlaylistMutation")
+	deletePlaylist(hash: String!): DeletePlaylistResponse!
+		@field(resolver: "DeletePlaylistMutation")
+	deletePlaylistTrack(
+		trackHash: String!
+		playlistHash: String!
+	): DeletePlaylistTrackResponse!
+		@field(resolver: "DeletePlaylistTrackMutation")
+	addTrackToPlaylist(
+		trackHash: String!
+		playlistHash: String!
+	): AddTrackToPlaylistResponse! @field(resolver: "AddTrackToPlaylistMutation")
+	CreatePlaylist(title: String!): Playlist!
+		@field(resolver: "CreatePlaylistMutation")
 
 	# Play/Download stats
-	updateDownloadCount(input: DownloadInput! @spread): Boolean @field(resolver: "UpdateDownloadCountMutation")
-	updatePlayCount(input: PlayInput! @spread): Boolean @field(resolver: "UpdatePlayCountMutation")
+	updateDownloadCount(input: DownloadInput! @spread): Boolean
+		@field(resolver: "UpdateDownloadCountMutation")
+	updatePlayCount(input: PlayInput! @spread): Boolean
+		@field(resolver: "UpdatePlayCountMutation")
 }
 
 extend type Mutation {
@@ -186,7 +204,7 @@ input AlbumInput {
 input RegisterInput {
 	name: String! @rules(apply: ["required", "string"])
 	email: String! @rules(apply: ["required", "email"])
-	password: String! @rules(apply: ["required", "min:6"]) @bcrypt
+	password: String! @rules(apply: ["required", "min:6"]) @hash
 	telephone: String @rules(apply: ["string"])
 }
 
@@ -252,28 +270,28 @@ type facebookLoginPayload {
 }
 
 input OrderByClause {
-	field: String!
+	column: String!
 	order: SortOrder!
 }
 
 input RelatedTracksInput {
-    hash: String!
-    take: String!
+	hash: String!
+	first: Int!
 }
 
 input RandomArtistsInput {
-    hash: String!
-    take: String!
+	hash: String!
+	first: Int!
 }
 
 input RandomAlbumsInput {
-    hash: String!
-    take: String!
+	hash: String!
+	first: Int!
 }
 
 input RandomPlaylistsInput {
-    hash: String!
-    take: String!
+	hash: String!
+	first: Int!
 }
 
 input DownloadInput {

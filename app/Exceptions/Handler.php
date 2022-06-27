@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Throwable;
 use App\Exceptions\CustomJWTException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +13,15 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    /**
+     * A list of exception types with their corresponding custom log levels.
+     *
+     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
+     */
+    protected $levels = [
+        //
+    ];
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -27,6 +37,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
@@ -37,10 +48,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
-    {
-        parent::report($exception);
-    }
+
 
     /**
      * Render an exception into an HTTP response.
@@ -49,9 +57,10 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function register()
     {
-    	if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+        $this->renderable(function (InvalidOrderException $e, $request) {
+            if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 				throw new CustomJWTException("Your session has expired.", $exception->getStatusCode());
 			}
 
@@ -70,8 +79,8 @@ class Handler extends ExceptionHandler
 			if ($exception instanceof UnauthorizedHttpException) {
 				throw new CustomJWTException("You need to login to access this resource.", $exception->getStatusCode());
 			}
+        });
 
-     	return parent::render($request, $exception);
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)

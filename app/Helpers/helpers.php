@@ -20,7 +20,7 @@ function del($path, $controllerOrFunction) {
 	return Route::delete($path, $controllerOrFunction);
 }
 
-function group(array $array = [], $fun) {
+function group(array $array, $fun) {
 	return Route::group($array, $fun);
 }
 

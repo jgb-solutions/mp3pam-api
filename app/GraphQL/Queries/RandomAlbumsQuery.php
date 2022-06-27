@@ -12,6 +12,6 @@ class RandomAlbumsQuery
     {
       extract($args['input']);
 
-      return Album::random($hash)->take($take)->get();
+      return Album::random($hash)->take($first)->get();
     }
 }

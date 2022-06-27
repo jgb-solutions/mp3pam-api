@@ -21,6 +21,6 @@
     {
       extract($args['input']);
 
-      return Artist::random($hash)->take($take)->get();
+      return Artist::random($hash)->take($first)->get();
     }
   }

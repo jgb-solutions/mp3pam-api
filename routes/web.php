@@ -58,7 +58,7 @@ post('wasabi', function()
 get('do-spaces-url', function()
 {
 	$spaces = \Storage::disk('spaces');
-	$client = $spaces->getDriver()->getAdapter()->getClient();
+	$client = $spaces->getClient();
 
 	$command = $client->getCommand('PutObject', [
 			'Bucket'	=> config('filesystems.disks.spaces.bucket'),
@@ -76,7 +76,7 @@ get('wasabi-url', function()
 {
 	$wasabi = \Storage::disk('wasabi');
 	$bucket = config('filesystems.disks.wasabi.bucket');
-	$client = $wasabi->getDriver()->getAdapter()->getClient();
+	$client = $wasabi->getClient();
 	$filename = 'images/' . time() . '.' . pathinfo(request('filename'), PATHINFO_EXTENSION);
 	$url = "https://{$bucket}/{$filename}";
 	$command = $client->getCommand('PutObject', [

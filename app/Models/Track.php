@@ -80,7 +80,7 @@
 
     public function scopeRand($query)
     {
-      $query->orderByRaw('RAND()');
+      $query->inRandomOrder();
     }
 
     public function scopeRelated($query, $obj)
@@ -88,7 +88,7 @@
       $query
         ->whereGenreId($obj->genre_id)
         ->where('id', '!=', $obj->id)
-        ->orderByRaw('RAND()'); // get random rows from the DB
+        ->inRandomOrder(); // get random rows from the DB
 //        ->published()
     }
 

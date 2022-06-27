@@ -37,7 +37,7 @@
       }
 
       $wasabi   = \Storage::disk('wasabi');
-      $client   = $wasabi->getDriver()->getAdapter()->getClient();
+      $client   = $wasabi->getClient();
       $command  = $client->getCommand('GetObject', [
         'Bucket' => $bucket,
         'Key' => $filename,

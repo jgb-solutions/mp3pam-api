@@ -11,7 +11,7 @@ class UploadUrlQuery
     {
         extract($args);
         $wasabi = \Storage::disk('wasabi');
-        $client = $wasabi->getDriver()->getAdapter()->getClient();
+        $client = $wasabi->getClient();
         $filePath = static::makeUploadFilePath($name);
 
         $options = [

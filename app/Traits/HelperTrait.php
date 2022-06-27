@@ -9,7 +9,7 @@
   {
     public function scopeRand($query)
     {
-      $query->orderByRaw('RAND()');
+      $query->inRandomOrder();
     }
 
     public function scopeRelated($query, $obj, $nb_rows = 6)
@@ -17,7 +17,7 @@
       $query
         ->whereCategoryId($obj->category_id)
         ->where('id', '!=', $obj->id)
-        ->orderByRaw('RAND()')// get random rows from the DB
+        ->inRandomOrder()// get random rows from the DB
         ->take($nb_rows);
     }
 
@@ -72,7 +72,7 @@
       // return "https://" . $this->audio_bucket . '/' . $this->audio_name; if public
       $wasabi   = \Storage::disk('wasabi');
 
-      $client   = $wasabi->getDriver()->getAdapter()->getClient();
+      $client   = $wasabi->getClient();
 
       $command  = $client->getCommand('GetObject', [
         'Bucket' => $this->audio_bucket,

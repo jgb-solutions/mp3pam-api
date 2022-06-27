@@ -15,7 +15,7 @@ class RelatedTracksQuery
       $track = Track::whereHash($hash)->first();
 
       if ($track) {
-        $relatedTracks = Track::related($track)->take($take)->get();
+        $relatedTracks = Track::related($track)->take($first)->get();
 
         return $relatedTracks;
       }

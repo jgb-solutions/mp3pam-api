@@ -57,7 +57,7 @@
     {
       $query
         ->where('hash', '!=', $hash)
-        ->orderByRaw('RAND()'); // get random rows from the DB
+        ->inRandomOrder(); // get random rows from the DB
     }
 
 

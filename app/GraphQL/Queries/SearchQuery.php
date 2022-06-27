@@ -22,12 +22,12 @@
     public function __invoke($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
       $query = $args['query'];
-      $take  = 5;
+      $first  = 5;
 
       return [
-        'tracks' => Track::search($query)->take($take)->get(),
-        'artists' => Artist::search($query)->take($take)->get(),
-        'albums' => Album::search($query)->take($take)->get(),
+        'tracks' => Track::search($query)->take($first)->get(),
+        'artists' => Artist::search($query)->take($first)->get(),
+        'albums' => Album::search($query)->take($first)->get(),
       ];
     }
   }

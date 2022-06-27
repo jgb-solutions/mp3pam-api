@@ -13,6 +13,6 @@ class RandomPlaylistsQuery
     {
       extract($args['input']);
 
-      return Playlist::random($hash)->take($take)->get();
+      return Playlist::random($hash)->take($first)->get();
     }
 }
