@@ -112,7 +112,7 @@ return [
          * Duration in seconds the schema should remain cached, null means forever.
          * Only relevant if version is set to 1.
          */
-        'ttl' => env('LIGHTHOUSE_CACHE_TTL', null),
+        'ttl' => env('LIGHTHOUSE_CACHE_TTL', 300),
 
         /*
          * File path to store the lighthouse schema.

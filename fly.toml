@@ -16,8 +16,8 @@ processes = []
   DB_USERNAME = "mp3pam_api_laravel"
   DB_PASSWORD = "yNhvZNu5IUcxQWy"
 
-  APP_DEBUG = true
-  APP_LOG_LEVEL = "debug"
+  APP_DEBUG = false
+  APP_LOG_LEVEL = "info"
 
   BROADCAST_DRIVER = "log"
   CACHE_DRIVER = "file"

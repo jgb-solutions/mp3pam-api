@@ -21,40 +21,44 @@ extend type Query {
 	# Tracks
 	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
 		@paginate(defaultCount: 20, model: "Track")
+		@cache(maxAge: 300)
 
 	tracksByGenre(
 		page: Int = 1
 		orderBy: [OrderByClause!] @orderBy
 		slug: String! @scope(name: "byGenre")
-	): [Track!]! @paginate(defaultCount: 20, model: "Track")
+	): [Track!]! @paginate(defaultCount: 20, model: "Track") @cache(maxAge: 300)
 
 	relatedTracks(input: RelatedTracksInput!): [Track!]
 		@field(resolver: "RelatedTracksQuery")
+		@cache(maxAge: 300)
 
-	track(hash: String! @eq): Track @find
+	track(hash: String! @eq): Track @find @cache(maxAge: 300)
 
 	# Playlists
 	playlists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Playlist!]!
 		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Playlist")
-	playlist(hash: String! @eq): Playlist @find
+		@cache(maxAge: 300)
+	playlist(hash: String! @eq): Playlist @find @cache(maxAge: 300)
 	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]
 		@field(resolver: "RandomPlaylistsQuery")
 
 	# Users
 	users(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [User!]!
 		@paginate(defaultCount: 20, model: "User")
-	user(id: String! @eq): User @find
+	user(id: String! @eq): User @find @cache(maxAge: 300)
 
 	# Genres
 	genres(
 		page: Int = 1
 		orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
 	): [Genre!]! @all
-	genre(slug: String! @eq): Genre @find
+	genre(slug: String! @eq): Genre @find @cache(maxAge: 300)
 
 	# Artists
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
 		@paginate(defaultCount: 20, model: "Artist")
+		@cache(maxAge: 300)
 	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
 	randomArtists(input: RandomArtistsInput!): [Artist!]
 		@field(resolver: "RandomArtistsQuery")
@@ -62,7 +66,8 @@ extend type Query {
 	#Albums
 	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
 		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Album")
-	album(hash: String! @eq): Album @find
+		@cache(maxAge: 300)
+	album(hash: String! @eq): Album @find @cache(maxAge: 300)
 	randomAlbums(input: RandomAlbumsInput!): [Album!]
 		@field(resolver: "RandomAlbumsQuery")
 
@@ -342,7 +347,7 @@ type Artist {
 	id: ID!
 	name: String!
 	stage_name: String!
-	hash: Int!
+	hash: String!
 	poster_url: String!
 	bio: String
 	tracks: [Track!]!
@@ -359,7 +364,7 @@ type Artist {
 type Album {
 	id: ID!
 	title: String!
-	hash: Int!
+	hash: String!
 	cover_url: String!
 	detail: String
 	user: User! @belongsTo
@@ -373,7 +378,7 @@ type Album {
 type Track {
 	id: ID!
 	title: String!
-	hash: Int!
+	hash: String!
 	audio_url: String!
 	poster_url: String!
 	featured: Boolean!
@@ -396,7 +401,7 @@ type Track {
 type Playlist {
 	id: ID!
 	title: String!
-	hash: Int!
+	hash: String!
 	cover_url: String
 	user: User! @belongsTo
 	tracks: [Track!]! @belongsToMany
