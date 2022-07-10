@@ -16,10 +16,10 @@ type Query @guard(checks: ["auth:api"]) {
 # Public Queries
 extend type Query {
 	# Auth
-	login(input: LoginInput!): LoginPayload @field(resolver: "LoginQuery")
+	login(input: LoginInput!): LoginPayload! @field(resolver: "LoginQuery")
 
 	# Tracks
-	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track!]!
+	tracks(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Track]!
 		@paginate(defaultCount: 20, model: "Track")
 		@cache(maxAge: 300)
 
@@ -29,18 +29,18 @@ extend type Query {
 		slug: String! @scope(name: "byGenre")
 	): [Track!]! @paginate(defaultCount: 20, model: "Track") @cache(maxAge: 300)
 
-	relatedTracks(input: RelatedTracksInput!): [Track!]
+	relatedTracks(input: RelatedTracksInput!): [Track]!
 		@field(resolver: "RelatedTracksQuery")
 		@cache(maxAge: 300)
 
 	track(hash: String! @eq): Track @find @cache(maxAge: 300)
 
 	# Playlists
-	playlists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Playlist!]!
+	playlists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Playlist]!
 		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Playlist")
 		@cache(maxAge: 300)
 	playlist(hash: String! @eq): Playlist @find @cache(maxAge: 300)
-	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]
+	randomPlaylists(input: RandomPlaylistsInput!): [Playlist!]!
 		@field(resolver: "RandomPlaylistsQuery")
 
 	# Users
@@ -59,16 +59,16 @@ extend type Query {
 	artists(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Artist!]!
 		@paginate(defaultCount: 20, model: "Artist")
 		@cache(maxAge: 300)
-	artist(hash: String!): Artist @field(resolver: "SingleArtistQuery")
-	randomArtists(input: RandomArtistsInput!): [Artist!]
+	artist(hash: String!): Artist! @field(resolver: "SingleArtistQuery")
+	randomArtists(input: RandomArtistsInput!): [Artist!]!
 		@field(resolver: "RandomArtistsQuery")
 
 	#Albums
-	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album!]!
+	albums(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Album]!
 		@paginate(defaultCount: 20, scopes: ["hasTracks"], model: "Album")
 		@cache(maxAge: 300)
 	album(hash: String! @eq): Album @find @cache(maxAge: 300)
-	randomAlbums(input: RandomAlbumsInput!): [Album!]
+	randomAlbums(input: RandomAlbumsInput!): [Album!]!
 		@field(resolver: "RandomAlbumsQuery")
 
 	# Facebook Login URL
@@ -127,9 +127,9 @@ type Mutation @guard(checks: ["auth:api"]) {
 		@field(resolver: "CreatePlaylistMutation")
 
 	# Play/Download stats
-	updateDownloadCount(input: DownloadInput! @spread): Boolean
+	updateDownloadCount(input: DownloadInput! @spread): Boolean!
 		@field(resolver: "UpdateDownloadCountMutation")
-	updatePlayCount(input: PlayInput! @spread): Boolean
+	updatePlayCount(input: PlayInput! @spread): Boolean!
 		@field(resolver: "UpdatePlayCountMutation")
 }
 
@@ -140,191 +140,7 @@ extend type Mutation {
 		@field(resolver: "HandleFacebookConnectMutation")
 }
 
-type facebookLoginUrl {
-	url: String!
-}
-
-type LogOutSuccess {
-	success: Boolean
-}
-
-type UploadUrl {
-	signedUrl: String!
-	filename: String!
-}
-
-type SearchResults {
-	tracks: [Track!]!
-	artists: [Artist!]!
-	albums: [Album!]!
-}
-
-input TrackInput {
-	title: String!
-	audioName: String!
-	poster: String!
-	detail: String
-	lyrics: String
-	audioFileSize: Int!
-	artistId: Int!
-	genreId: Int!
-	img_bucket: String!
-	audio_bucket: String!
-	allowDownload: Boolean
-	album_id: String
-	number: Int
-}
-
-input GenreInput {
-	name: String!
-}
-
-input AddTrackToAlbumInput {
-	album_id: String!
-	track_hash: String!
-	track_number: Int!
-}
-
-input ArtistInput {
-	name: String!
-	stage_name: String!
-	poster: String
-	img_bucket: String!
-	bio: String
-	facebook: String
-	twitter: String
-	instagram: String
-	youtube: String
-}
-
-input AlbumInput {
-	title: String!
-	release_year: Int!
-	artist_id: Int!
-	cover: String!
-	detail: String
-	img_bucket: String!
-}
-
-input RegisterInput {
-	name: String! @rules(apply: ["required", "string"])
-	email: String! @rules(apply: ["required", "email"])
-	password: String! @rules(apply: ["required", "min:6"]) @hash
-	telephone: String @rules(apply: ["string"])
-}
-
-input UpdateUserInput {
-	id: ID!
-	name: String
-	email: String
-	password: String
-	telephone: String
-	avatar: String
-	img_bucket: String
-}
-
-input LoginInput {
-	email: String! @rules(apply: ["required", "email"])
-	password: String!
-		@rules(
-			apply: ["required", "min:6"]
-			messages: { min: "The password you provided is too short." }
-		)
-}
-
-type LoginPayload {
-	data: User!
-	token: String!
-}
-
-type DeleteAlbumResponse {
-	success: Boolean
-}
-
-type DeleteTrackResponse {
-	success: Boolean
-}
-
-type DeleteArtistResponse {
-	success: Boolean
-}
-
-type DeletePlaylistResponse {
-	success: Boolean
-}
-
-type DeleteAlbumTrackResponse {
-	success: Boolean
-}
-
-type DeletePlaylistTrackResponse {
-	success: Boolean
-}
-
-type AddTrackToAlbumResponse {
-	success: Boolean
-}
-
-type AddTrackToPlaylistResponse {
-	success: Boolean
-}
-
-type facebookLoginPayload {
-	data: User!
-	token: String!
-}
-
-input OrderByClause {
-	column: String!
-	order: SortOrder!
-}
-
-input RelatedTracksInput {
-	hash: String!
-	first: Int!
-}
-
-input RandomArtistsInput {
-	hash: String!
-	first: Int!
-}
-
-input RandomAlbumsInput {
-	hash: String!
-	first: Int!
-}
-
-input RandomPlaylistsInput {
-	hash: String!
-	first: Int!
-}
-
-input DownloadInput {
-	hash: String!
-	type: String!
-}
-
-input PlayInput {
-	hash: String!
-	type: String!
-}
-
-type Download {
-	url: String!
-}
-
-input UploadUrlInput {
-	name: String!
-	bucket: String!
-	public: Boolean
-	attachment: Boolean
-}
-
-enum SortOrder {
-	ASC
-	DESC
-}
-
+# Types
 type User {
 	id: ID!
 	name: String!
@@ -416,4 +232,191 @@ type Genre {
 	tracks: [Track!]! @hasMany(type: "paginator", defaultCount: 20)
 	created_at: DateTime!
 	updated_at: DateTime!
+}
+
+type facebookLoginUrl {
+	url: String!
+}
+
+type LogOutSuccess {
+	success: Boolean!
+}
+
+type UploadUrl {
+	signedUrl: String!
+	filename: String!
+}
+
+type SearchResults {
+	tracks: [Track!]!
+	artists: [Artist!]!
+	albums: [Album!]!
+}
+
+type LoginPayload {
+	data: User!
+	token: String!
+}
+
+type DeleteAlbumResponse {
+	success: Boolean!
+}
+
+type DeleteTrackResponse {
+	success: Boolean!
+}
+
+type DeleteArtistResponse {
+	success: Boolean!
+}
+
+type DeletePlaylistResponse {
+	success: Boolean!
+}
+
+type DeleteAlbumTrackResponse {
+	success: Boolean!
+}
+
+type DeletePlaylistTrackResponse {
+	success: Boolean!
+}
+
+type AddTrackToAlbumResponse {
+	success: Boolean!
+}
+
+type AddTrackToPlaylistResponse {
+	success: Boolean!
+}
+
+type facebookLoginPayload {
+	data: User!
+	token: String!
+}
+
+type Download {
+	url: String!
+}
+
+# Inputs
+input TrackInput {
+	title: String!
+	audioName: String!
+	poster: String!
+	detail: String
+	lyrics: String
+	audioFileSize: Int!
+	artistId: Int!
+	genreId: Int!
+	img_bucket: String!
+	audio_bucket: String!
+	allowDownload: Boolean
+	album_id: String
+	number: Int
+}
+
+input GenreInput {
+	name: String!
+}
+
+input AddTrackToAlbumInput {
+	album_id: String!
+	track_hash: String!
+	track_number: Int!
+}
+
+input ArtistInput {
+	name: String!
+	stage_name: String!
+	poster: String
+	img_bucket: String!
+	bio: String
+	facebook: String
+	twitter: String
+	instagram: String
+	youtube: String
+}
+
+input AlbumInput {
+	title: String!
+	release_year: Int!
+	artist_id: Int!
+	cover: String!
+	detail: String
+	img_bucket: String!
+}
+
+input RegisterInput {
+	name: String! @rules(apply: ["required", "string"])
+	email: String! @rules(apply: ["required", "email"])
+	password: String! @rules(apply: ["required", "min:6"]) @hash
+	telephone: String @rules(apply: ["string"])
+}
+
+input UpdateUserInput {
+	id: ID!
+	name: String
+	email: String
+	password: String
+	telephone: String
+	avatar: String
+	img_bucket: String
+}
+
+input LoginInput {
+	email: String! @rules(apply: ["required", "email"])
+	password: String!
+		@rules(
+			apply: ["required", "min:6"]
+			messages: { min: "The password you provided is too short." }
+		)
+}
+
+input OrderByClause {
+	column: String!
+	order: SortOrder!
+}
+
+input RelatedTracksInput {
+	hash: String!
+	first: Int!
+}
+
+input RandomArtistsInput {
+	hash: String!
+	first: Int!
+}
+
+input RandomAlbumsInput {
+	hash: String!
+	first: Int!
+}
+
+input RandomPlaylistsInput {
+	hash: String!
+	first: Int!
+}
+
+input DownloadInput {
+	hash: String!
+	type: String!
+}
+
+input PlayInput {
+	hash: String!
+	type: String!
+}
+
+input UploadUrlInput {
+	name: String!
+	bucket: String!
+	public: Boolean
+	attachment: Boolean
+}
+
+# Enums
+enum SortOrder {
+	ASC
+	DESC
 }

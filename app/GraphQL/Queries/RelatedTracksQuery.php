@@ -20,6 +20,6 @@ class RelatedTracksQuery
         return $relatedTracks;
       }
 
-      return null;
+      return [];
     }
 }

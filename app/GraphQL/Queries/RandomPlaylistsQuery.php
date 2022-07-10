@@ -1,7 +1,5 @@
 <?php
-
 namespace App\GraphQL\Queries;
-
 
 use App\Models\Playlist;
 use GraphQL\Type\Definition\ResolveInfo;

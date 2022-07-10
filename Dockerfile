@@ -56,6 +56,7 @@ RUN if ! grep -Fq "laravel/octane" /var/www/html/composer.json; then \
 # clear Laravel cache that may be left over
 RUN composer dump-autoload \
     && php artisan optimize:clear \
+    && php artisan config:cache \
     && chmod -R ug+w /var/www/html/storage \
     && chmod -R 755 /var/www/html
 

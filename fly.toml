@@ -16,7 +16,6 @@ processes = []
   DB_USERNAME = "mp3pam_api_laravel"
   DB_PASSWORD = "yNhvZNu5IUcxQWy"
 
-  APP_DEBUG = false
   APP_LOG_LEVEL = "info"
 
   BROADCAST_DRIVER = "log"
@@ -45,9 +44,6 @@ processes = []
   # Search
   SCOUT_DRIVER = "tntsearch"
   TNTSEARCH_AS_YOU_TYPE = true
-
-  # Lighthouse Cache
-  # LIGHTHOUSE_CACHE_ENABLE = false
 
   # WASABI
   WASABI_KEY = "AR6K1TTHKLAGMSA1J9OU"
